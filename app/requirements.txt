@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+slack-bolt
+redis
+python-dotenv
+aiohttp

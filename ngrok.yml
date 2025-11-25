@@ -1,0 +1,11 @@
+version: "2"
+# This authtoken is read from the NGROK_AUTHTOKEN environment variable.
+authtoken: "2Xw6JhUnI8vjHL0g2EV9DSyYdbZ_zfvVfK7rqMA75qJFUYuv"
+
+tunnels:
+  blossombot-http:
+    proto: http
+    addr: 40080
+  redisinsight-ui:
+    proto: http
+    addr: 5540   # RedisInsight local port
