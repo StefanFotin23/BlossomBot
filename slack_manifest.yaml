@@ -1,0 +1,28 @@
+display_information:
+  name: BlossomBot
+  description: A Slack bot that acts as a customer support agent for a flower shop.
+  background_color: "#2f6327"
+features:
+  bot_user:
+    display_name: BlossomBot
+    always_online: true
+oauth_config:
+  scopes:
+    bot:
+      - app_mentions:read
+      - chat:write
+      - im:history
+      - im:read
+      - im:write
+      - reactions:read
+settings:
+  event_subscriptions:
+    request_url: https://your-app-url.com/slack/events
+    bot_events:
+      - message.im
+      - reaction_added
+  interactivity:
+    is_enabled: false
+  org_deploy_enabled: false
+  socket_mode_enabled: false
+  token_rotation_enabled: false
