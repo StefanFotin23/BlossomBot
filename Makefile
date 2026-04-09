@@ -6,7 +6,7 @@
 # --- Variables ---
 CLUSTER_NAME    := blossombot-cluster
 K8S_DIR         := k8s
-NGROK_CONFIG=ngrok.yml
+NGROK_CONFIG	:= ngrok.yml
 NGROK_LOG       := ngrok.log
 
 # DOCKER_HUB_USER is expected to be set in the .env file
