@@ -6,6 +6,3 @@ tunnels:
   blossombot-http:
     proto: http
     addr: 40080
-  redisinsight-ui:
-    proto: http
-    addr: 5540   # RedisInsight local port

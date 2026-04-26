@@ -1,17 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: blossombot-ingress
+  name: qdrant-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - http:
       paths:
-      - path: /
+      - path: /qdrant
         pathType: Prefix
         backend:
           service:
-            name: chat-app
+            name: qdrant
             port:
-              number: 80
+              number: 6333
