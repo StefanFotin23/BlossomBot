@@ -15,10 +15,3 @@ spec:
             name: chat-app
             port:
               number: 80
-      - path: /redis-ui
-        pathType: Prefix
-        backend:
-          service:
-            name: redisinsight-ui
-            port:
-              number: 5540
