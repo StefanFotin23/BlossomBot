@@ -1,6 +1,7 @@
 fastapi
 uvicorn
 slack-bolt
-redis
 python-dotenv
 aiohttp
+qdrant-client
+pika
