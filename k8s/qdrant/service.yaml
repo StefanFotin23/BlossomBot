@@ -11,9 +11,10 @@ spec:
     - protocol: TCP
       port: 6333
       targetPort: 6333
+      nodePort: 30081 # Assigned NodePort
       name: http-grpc
     - protocol: TCP
       port: 6334
       targetPort: 6334
       name: grpc
-  type: ClusterIP
+  type: NodePort # Changed from ClusterIP

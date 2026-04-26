@@ -15,3 +15,9 @@ nodes:
   - containerPort: 443
     hostPort: 40443
     protocol: TCP
+  - containerPort: 30081 # NodePort for Qdrant
+    hostPort: 40081      # Host port for Qdrant
+    protocol: TCP
+  - containerPort: 30082 # NodePort for Ollama
+    hostPort: 40082      # Host port for Ollama
+    protocol: TCP

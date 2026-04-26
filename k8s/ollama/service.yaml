@@ -11,5 +11,6 @@ spec:
     - protocol: TCP
       port: 11434
       targetPort: 11434
+      nodePort: 30082 # Assigned NodePort
       name: http
-  type: ClusterIP
+  type: NodePort # Changed from ClusterIP

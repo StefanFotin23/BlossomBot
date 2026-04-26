@@ -12,7 +12,7 @@ NGROK_LOG       := ngrok.log
 # DOCKER_HUB_USER is expected to be set in the .env file
 PROD_IMAGE_NAME := $(DOCKER_HUB_USER)/blossombot
 
-.PHONY: up down logs shell ngrok ngrok-down build-image status
+.PHONY: up down logs shell ngrok ngrok-down build-app-image load-app-image-to-kind push-app-image status
 
 # ==============================================================================
 # KIND LOCAL SIMULATION
@@ -30,7 +30,8 @@ up:
 	@kubectl wait --namespace ingress-nginx \
 	  --for=condition=available deployment/ingress-nginx-controller \
 	  --timeout=120s
-	@make build-image
+	@make build-app-image
+	@make load-app-image-to-kind
 	@echo "--- Deploying application ---"
 	@sleep 30
 	@make update
@@ -48,13 +49,21 @@ down:
 	@kind delete cluster --name $(CLUSTER_NAME) || true
 
 # ==============================================================================
-# DOCKER HUB / PRODUCTION WORKFLOW
+# DOCKER HUB / PRODUCTION WORKFLOW (for building and pushing, or for local Kind load)
 # ==============================================================================
 
-# Builds and pushes the image to Docker Hub.
-build-image:
+# Builds the application image.
+build-app-image:
 	@echo "--- Building Docker image for local use ---"
 	@docker build -t $(PROD_IMAGE_NAME) .
+
+# Loads the application image into the Kind cluster.
+load-app-image-to-kind:
+	@echo "--- Loading Docker image into Kind cluster ---"
+	@kind load docker-image $(PROD_IMAGE_NAME) --name $(CLUSTER_NAME)
+
+push-app-image:
+	@echo "--- Pushing Docker image to Docker Hub ---"
 	@docker login
 	@docker push $(PROD_IMAGE_NAME)
 
