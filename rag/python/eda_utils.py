@@ -2,6 +2,8 @@ from IPython.display import display
 from bs4 import BeautifulSoup
 import pandas as pd
 import numpy as np
+import json
+import uuid
 import re
 import os
 
@@ -327,3 +329,59 @@ def compress_variations(df, column_name='Variations'):
     
     print(" ✅ Variantele au fost comprimate cu succes!")
     return df
+
+def export_for_qdrant(df_clean):
+    print("📦 Pregătim documentele pentru Qdrant...")
+    qdrant_documents = []
+    
+    # Helper 1: Transformă textul în listă
+    def parse_list(val):
+        if pd.isna(val) or str(val).strip() == "": return []
+        return [item.strip() for item in str(val).replace(';', ',').split(',') if item.strip()]
+
+    # Helper 2: Extrage "Prețul de pornire" (primul preț din listă)
+    def extract_base_price(price_val):
+        if pd.isna(price_val) or str(price_val).strip() == "":
+            return 0.0
+        try:
+            # Desparte string-ul după ';' și ia primul element (ex: din '500 ; 550' ia '500')
+            first_price_str = str(price_val).split(';')[0].strip()
+            return float(first_price_str)
+        except ValueError:
+            return 0.0 # Măsură de siguranță dacă textul nu e număr deloc
+
+    for index, row in df_clean.iterrows():
+        # 1. TEXTUL SEMANTIC
+        semantic_text = f"Produs: {row['Title']}.\n"
+        if pd.notna(row.get('Type')): semantic_text += f"Tip: {row['Type']}.\n"
+        if pd.notna(row.get('Flowers Type')): semantic_text += f"Flori: {row['Flowers Type']}.\n"
+        if pd.notna(row.get('Colors')): semantic_text += f"Culori: {row['Colors']}.\n"
+        if pd.notna(row.get('Dimensiune')): semantic_text += f"Dimensiune: {row['Dimensiune']}.\n"
+        if pd.notna(row.get('Event Type')): semantic_text += f"Evenimente: {row['Event Type']}.\n"
+        if pd.notna(row.get('Other_Specs')): semantic_text += f"Extra: {row['Other_Specs']}.\n"
+        if pd.notna(row.get('Body (HTML)')): semantic_text += f"Descriere: {row['Body (HTML)']}"
+        
+        # 2. PAYLOAD-UL
+        payload = {
+            "title": str(row['Title']),
+            "handle": str(row.get('Handle', f'produs-{index}')),
+            # Folosim noua funcție aici:
+            "price": extract_base_price(row.get('Variant Price')),
+            "category": str(row['Type']) if pd.notna(row.get('Type')) else "",
+            "dimensiune": str(row['Dimensiune']) if pd.notna(row.get('Dimensiune')) else "",
+            "event_type": parse_list(row.get('Event Type')),
+            "tags": parse_list(row.get('All_Tags')),
+            "page_content": semantic_text 
+        }
+
+        qdrant_documents.append({
+            "id": str(uuid.uuid4()),
+            "payload": payload,
+            "text_to_embed": semantic_text 
+        })
+        
+    with open('qdrant_payload.json', 'w', encoding='utf-8') as f:
+        json.dump(qdrant_documents, f, ensure_ascii=False, indent=2)
+        
+    print(f"✅ Gata! Am exportat {len(qdrant_documents)} documente fără erori.")
+    return qdrant_documents
