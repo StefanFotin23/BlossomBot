@@ -12,69 +12,53 @@ from qdrant_client.http.models import VectorParams, Distance, PointStruct, Filte
 # ==========================================
 # CONFIGURĂRI GLOBALE
 # ==========================================
-os.environ["TRANSFORMERS_TRUST_REMOTE_CODE"] = "1"
-
 COLLECTION_NAME = "city_flowers_catalog"
 
-# Astea sunt valorile default, dacă nu se trimit altele în funcții
 DEFAULT_QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
 DEFAULT_QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", None)
 
-# Modele SOTA NLP
 EMBEDDING_MODEL_NAME = 'paraphrase-multilingual-MiniLM-L12-v2'
 VECTOR_SIZE = 384
 
-# Modelul mai ușor pentru reranking (ca să nu mai iei eroare de spațiu)
-RERANKER_MODEL_NAME = 'BAAI/bge-reranker-v2-minicpm-layerwise'
+# SOLUȚIA: Utilizăm un model standard de Cross-Encoder care nu necesită cod custom
+RERANKER_MODEL_NAME = 'cross-encoder/nli-distilroberta-base'
 
-# Inițializare leneșă (Lazy Loading) pentru modele
 _embedding_model = None
 _reranker_model = None
 _qdrant_client = None
 
 def get_qdrant_client(url=None, api_key=None):
-    """
-    Se conectează la Qdrant folosind URL-ul dinamic.
-    Dacă nu primește URL, folosește variabila de mediu sau localhost.
-    """
     global _qdrant_client
-    
-    # Stabilim URL-ul și API Key-ul finale
     final_url = url if url is not None else DEFAULT_QDRANT_URL
     final_key = api_key if api_key is not None else DEFAULT_QDRANT_API_KEY
     
-    # Ne conectăm la Qdrant
     print(f"🔌 Ne conectăm la Qdrant ({final_url})...")
     _qdrant_client = QdrantClient(url=final_url, api_key=final_key)
-        
     return _qdrant_client
 
 def get_models():
-    """Încarcă modelele NLP doar când sunt apelate prima dată."""
+    """Încarcă modelele standard."""
     global _embedding_model, _reranker_model
+    
     if _embedding_model is None:
         print(f"🧠 Încărcăm modelul de Embedding: {EMBEDDING_MODEL_NAME}...")
         _embedding_model = SentenceTransformer(EMBEDDING_MODEL_NAME)
+        
     if _reranker_model is None:
         print(f"🎯 Încărcăm modelul SOTA de Reranking: {RERANKER_MODEL_NAME}...")
         
-        # ==========================================
-        # MODIFICAREA 2: Adăugăm flag-ul direct în CrossEncoder
-        # ==========================================
+        # Oprim fast tokenizer pentru a evita bug-ul de serializare din Windows/Rust
         _reranker_model = CrossEncoder(
             RERANKER_MODEL_NAME, 
-            trust_remote_code=True
+            tokenizer_args={"use_fast": False}
         )
+        
     return _embedding_model, _reranker_model
 
 # ==========================================
 # 1. CREARE ȘI INDEXARE BAZĂ DE DATE (MODEL BUILDING)
 # ==========================================
 def build_and_index_rag(df_clean: pd.DataFrame, output_json: str = 'qdrant_payload.json', qdrant_url: str = None, qdrant_api_key: str = None):
-    """
-    Pasul complet: Creează JSON-ul din DataFrame și uploadează totul în Qdrant.
-    Acum acceptă qdrant_url dinamic!
-    """
     print("📦 Construim Payload-ul și Vectorii...")
     qdrant_documents = []
     
@@ -88,13 +72,11 @@ def build_and_index_rag(df_clean: pd.DataFrame, output_json: str = 'qdrant_paylo
         except ValueError: return 0.0
 
     for index, row in df_clean.iterrows():
-        # Construire Text Semantic
         semantic_text = f"Produs: {row.get('Title', '')}.\n"
         for col in ['Type', 'Flowers Type', 'Colors', 'Dimensiune', 'Event Type', 'Body (HTML)']:
             if pd.notna(row.get(col)):
                 semantic_text += f"{col}: {row[col]}\n"
         
-        # Construire Payload (Filtre JSON)
         payload = {
             "title": str(row.get('Title', '')),
             "handle": str(row.get('Handle', f'produs-{index}')),
@@ -112,15 +94,11 @@ def build_and_index_rag(df_clean: pd.DataFrame, output_json: str = 'qdrant_paylo
             "text_to_embed": semantic_text 
         })
         
-    # Salvăm backup JSON
     with open(output_json, 'w', encoding='utf-8') as f:
         json.dump(qdrant_documents, f, ensure_ascii=False, indent=2)
     print(f"💾 Backup salvat în {output_json}.")
 
-    # --- Începem Upload-ul în Qdrant ---
     embed_model, _ = get_models()
-    
-    # FOLOSIM URL-UL DINAMIC AICI
     client = get_qdrant_client(url=qdrant_url, api_key=qdrant_api_key)
 
     print(f"📁 Pregătim colecția '{COLLECTION_NAME}'...")
@@ -146,12 +124,6 @@ def build_and_index_rag(df_clean: pd.DataFrame, output_json: str = 'qdrant_paylo
 # 2. SOTA HYBRID SEARCH (CU RERANKING)
 # ==========================================
 def sota_hybrid_search(state_json: Dict[str, Any], final_top_k: int = 3, qdrant_url: str = None, qdrant_api_key: str = None) -> List[Dict]:
-    """
-    Execută filtrare pe JSON, căutare vectorială extinsă, apoi folosește 
-    un Cross-Encoder pentru a sorta cele mai bune rezultate.
-    Acum acceptă qdrant_url dinamic!
-    """
-    # FOLOSIM URL-UL DINAMIC AICI
     client = get_qdrant_client(url=qdrant_url, api_key=qdrant_api_key)
     embed_model, reranker_model = get_models()
     
@@ -161,7 +133,6 @@ def sota_hybrid_search(state_json: Dict[str, Any], final_top_k: int = 3, qdrant_
     if not semantic_query.strip():
         return []
 
-    # 1. CONSTRUIRE FILTRE QDRANT
     must_conditions = []
     if filters.get("price_max"):
         must_conditions.append(FieldCondition(key="price", range=Range(lte=float(filters["price_max"]))))
@@ -172,21 +143,34 @@ def sota_hybrid_search(state_json: Dict[str, Any], final_top_k: int = 3, qdrant_
     
     qdrant_filter = Filter(must=must_conditions) if must_conditions else None
 
-    # 2. CĂUTARE VECTORIALĂ
     pool_size = final_top_k * 5 
     query_vector = embed_model.encode(semantic_query).tolist()
     
-    initial_results = client.search(
-        collection_name=COLLECTION_NAME,
-        query_vector=query_vector,
-        query_filter=qdrant_filter,
-        limit=pool_size
-    )
+    # Siguranță pentru compatibilitate cu versiuni diferite de qdrant-client
+    try:
+        initial_results = client.search(
+            collection_name=COLLECTION_NAME,
+            query_vector=query_vector,
+            query_filter=qdrant_filter,
+            limit=pool_size
+        )
+    except AttributeError:
+        # Fallback pentru versiuni mai vechi sau metode alternative
+        # qdrant_client uneori expune metodele via .qdrant() sau .http.collections_api
+        try:
+             initial_results = client.qdrant().search(
+                collection_name=COLLECTION_NAME,
+                query_vector=query_vector,
+                query_filter=qdrant_filter,
+                limit=pool_size
+            )
+        except Exception as e:
+             print(f"❌ Eroare la căutarea în Qdrant. Verifică versiunea librăriei 'qdrant-client'. Detalii: {e}")
+             return []
 
     if not initial_results:
         return []
 
-    # 3. SOTA RERANKING (Cross-Encoder)
     rerank_pairs = [[semantic_query, hit.payload.get("page_content", "")] for hit in initial_results]
     cross_scores = reranker_model.predict(rerank_pairs)
 
@@ -195,7 +179,6 @@ def sota_hybrid_search(state_json: Dict[str, Any], final_top_k: int = 3, qdrant_
         
     reranked_results = sorted(initial_results, key=lambda x: x.cross_score, reverse=True)
 
-    # 4. FORMATĂM TOP K-UL FINAL
     final_output = []
     for hit in reranked_results[:final_top_k]:
         final_output.append({
