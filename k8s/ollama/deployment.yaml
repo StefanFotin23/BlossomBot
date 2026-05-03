@@ -55,7 +55,17 @@ spec:
       initContainers:
       - name: pull-romistral-model
         image: ollama/ollama:latest # Use the same Ollama image
-        command: ["ollama", "pull", "romistral"] # Command to pull the model
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            ollama serve &
+            SERVER_PID=$!
+            until ollama list > /dev/null 2>&1; do
+              echo "Waiting for ollama server..."
+              sleep 2
+            done
+            ollama pull romistral
+            kill $SERVER_PID
         volumeMounts:
         - name: ollama-data
           mountPath: /root/.ollama # Mount the same volume to store the model

@@ -38,10 +38,10 @@ up:
 	@echo "Deployment done!"
 
 update:
-	@kubectl apply -f $(K8S_DIR)/
+	@kubectl apply -f $(K8S_DIR)/ --recursive
 
 status:
-	@kubectl get all --all-namespaces -o wide
+	@kubectl get all -o wide
 
 # Deletes the kind cluster and stops the ngrok tunnel.
 down:
