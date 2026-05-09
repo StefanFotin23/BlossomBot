@@ -1,0 +1,10 @@
+{
+  "filters": {
+    "price_max": "număr (float) sau null",
+    "category": "string (ex: 'Ambalare Cadou', 'Buchete Flori', etc.) sau null",
+    "dimensiune": "string (ex: 'Mica', 'Medie', 'Mare') sau null",
+    "event_type": "string (ex: 'Aniversare', '8 Martie', 'Cadou Iubita/Sotie') sau null",
+    "tags": "string (un tag specific cautat) sau null"
+  },
+  "semantic_query": "string (rezumatul vizual, culorile și tipul florilor dorite)"
+}
