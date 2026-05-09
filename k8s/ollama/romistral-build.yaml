@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: romistral-builder
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+
+      volumes:
+        - name: ollama-data
+          persistentVolumeClaim:
+            claimName: ollama-pvc
+
+      containers:
+        - name: builder
+          image: python:3.10
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              set -e
+
+              echo "=== Installing dependencies ==="
+              apt-get update && apt-get install -y git git-lfs curl
+              git lfs install
+
+              echo "=== Cloning Hugging Face model ==="
+              git clone https://huggingface.co/OpenLLM-Ro/RoMistral-7b-Instruct
+
+              echo "=== Cloning llama.cpp ==="
+              git clone https://github.com/ggml-org/llama.cpp
+
+              cd llama.cpp
+
+              echo "=== Installing Python deps ==="
+              pip install --no-cache-dir -r requirements.txt
+
+              echo "=== Converting HF -> GGUF ==="
+              python convert_hf_to_gguf.py \
+                ../RoMistral-7b-Instruct \
+                --outtype q4_k_m
+
+              echo "=== Installing Ollama CLI ==="
+              curl -fsSL https://ollama.com/install.sh | sh
+
+              echo "=== Creating Modelfile safely ==="
+              echo "FROM ./romistral-7b-instruct-q4_k_m.gguf" > Modelfile
+
+              echo "=== Registering model in Ollama ==="
+              ollama create romistral -f Modelfile
+
+              echo "=== Done ==="
+          volumeMounts:
+            - name: ollama-data
+              mountPath: /root/.ollama

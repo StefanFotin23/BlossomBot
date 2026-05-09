@@ -17,6 +17,7 @@ spec:
       containers:
       - name: ollama
         image: ollama/ollama:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 11434
         env:
@@ -24,48 +25,37 @@ spec:
           value: "0.0.0.0"
         resources:
           requests:
-            cpu: "250m"
-            memory: "512Mi"
-          limits:
             cpu: "500m"
-            memory: "1Gi"
+            memory: "4Gi"
+          limits:
+            cpu: "2"
+            memory: "8Gi"
         volumeMounts:
         - name: ollama-data
           mountPath: /root/.ollama
+        startupProbe:
+          httpGet:
+            path: /api/tags
+            port: 11434
+          failureThreshold: 30
+          periodSeconds: 10
         livenessProbe:
           httpGet:
-            path: /
+            path: /api/tags
             port: 11434
-          initialDelaySeconds: 30 # Ollama might take longer to start or load models
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
+          initialDelaySeconds: 60
+          periodSeconds: 20
+          timeoutSeconds: 10
+          failureThreshold: 5
         readinessProbe:
           httpGet:
-            path: /
+            path: /api/tags
             port: 11434
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 20
+          timeoutSeconds: 10
+          failureThreshold: 5
       volumes:
       - name: ollama-data
         persistentVolumeClaim:
           claimName: ollama-pvc
-      initContainers:
-      - name: pull-romistral-model
-        image: ollama/ollama:latest # Use the same Ollama image
-        command: ["/bin/sh", "-c"]
-        args:
-          - |
-            ollama serve &
-            SERVER_PID=$!
-            until ollama list > /dev/null 2>&1; do
-              echo "Waiting for ollama server..."
-              sleep 2
-            done
-            ollama pull romistral
-            kill $SERVER_PID
-        volumeMounts:
-        - name: ollama-data
-          mountPath: /root/.ollama # Mount the same volume to store the model
