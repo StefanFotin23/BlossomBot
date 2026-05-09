@@ -330,7 +330,7 @@ def compress_variations(df, column_name='Variations'):
     print(" ✅ Variantele au fost comprimate cu succes!")
     return df
 
-def export_for_qdrant(df_clean):
+def export_for_qdrant(df_clean, output_json='qdrant_payload.json'):
     print("📦 Pregătim documentele pentru Qdrant...")
     qdrant_documents = []
     
@@ -380,7 +380,7 @@ def export_for_qdrant(df_clean):
             "text_to_embed": semantic_text 
         })
         
-    with open('qdrant_payload.json', 'w', encoding='utf-8') as f:
+    with open(output_json, 'w', encoding='utf-8') as f:
         json.dump(qdrant_documents, f, ensure_ascii=False, indent=2)
         
     print(f"✅ Gata! Am exportat {len(qdrant_documents)} documente fără erori.")
