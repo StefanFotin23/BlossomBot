@@ -1,5 +1,6 @@
 import os
 import requests
+import random
 import json
 import re
 from typing import Dict, Any
@@ -72,27 +73,28 @@ def extract_filters(user_message: str, ollama_url: str = None, model_name: str =
 # 2. MISTRAL SALES AGENT (Context -> Răspuns Natural)
 # ==========================================
 def generate_conversational_response(user_message: str, rag_context: str, ollama_url: str = None, model_name: str = None) -> str:
-    """Preia lista de produse din Qdrant și formulează un răspuns elegant pentru utilizator."""
     final_url = ollama_url if ollama_url is not None else DEFAULT_OLLAMA_URL
     final_model = model_name if model_name is not None else DEFAULT_MODEL_NAME
     
+    # Prompt scurt care forțează un format fix
     system_prompt = (
-        "Ești un asistent de vânzări politicos, empatic și profesionist pentru o florărie online premium. "
-        "Sarcina ta este să recomanzi clientului florile potrivite BAZÂNDU-TE STRICT pe 'PRODUSE RECOMANDATE' de mai jos. "
-        "Formatează răspunsul frumos, folosește diacritice, și fii persuasiv. "
-        "Nu inventa produse, link-uri sau prețuri care nu apar în textul furnizat. "
-        "Dacă nu ai primit produse potrivite în context, cere-ți scuze politicos și roagă clientul să modifice preferințele."
+        "Ești un asistent concis pentru florăria City Flowers. "
+        "Sarcina ta: Salută clientul, confirmă că ai găsit opțiuni pentru cererea lui și prezintă-le sub formă de listă numerotată. "
+        "Reguli: Maxim 3 propoziții de introducere. Folosește STRICT datele din context. "
+        "Format: [Introducere scurtă] \n\nIată recomandările noastre:\n[Lista numerotată cu Nume, Preț și Link]"
     )
     
-    full_prompt = f"{system_prompt}\n\n[PRODUSE RECOMANDATE DIN BAZA DE DATE]\n{rag_context}\n\nMesaj Client: {user_message}\nRăspunsul Tău:"
-    
+    full_prompt = f"{system_prompt}\n\nPRODUSE:\n{rag_context}\n\nCLIENT: {user_message}\nASISTENT:"
+
     payload = {
         "model": final_model,
         "prompt": full_prompt,
         "stream": False,
-        # Aici NU mai avem format='json', vrem text normal
         "options": {
-            "temperature": 0.4 # Oferim puțină creativitate pentru un discurs mai prietenos și uman
+            "temperature": 0.0,  # Viteză maximă, zero creativitate inutilă
+            "num_predict": 250,  # Limităm lungimea răspunsului ca să nu o ia pe arătură
+            "top_k": 20,
+            "top_p": 0.9
         }
     }
     
@@ -102,3 +104,54 @@ def generate_conversational_response(user_message: str, rag_context: str, ollama
         return response.json().get("response", "").strip()
     except Exception as e:
         return f"Îmi cer scuze, întâmpinăm o problemă tehnică de comunicare. Vă rugăm să reîncercați. (Detalii eroare: {e})"
+
+def generate_hybrid_response(rag_results):
+    intros = [
+        "Bună! Am găsit câteva opțiuni superbe care se încadrează perfect în dorințele tale:",
+        "Vă mulțumim pentru solicitare! Iată selecția noastră de flori elegante pentru această ocazie:",
+        "O alegere minunată! Am selectat pentru dumneavoastră cele mai proaspete flori din stoc:",
+        "Iată propunerile noastre care respectă bugetul și preferințele menționate:",
+        "Ne bucurăm să vă ajutăm! Am pregătit o listă cu cele mai rafinate variante pentru dumneavoastră:",
+        "Specialiștii noștri au ales câteva buchete deosebite care s-ar potrivi de minune cu cererea dumneavoastră:",
+        "Bună ziua! Iată ce v-am pregătit pentru a transforma această ocazie într-un moment memorabil:",
+        "Am analizat cu atenție preferințele dumneavoastră și iată cele mai bune recomandări:",
+        "Vă propunem câteva aranjamente florale de excepție care respectă întocmai criteriile selectate:",
+        "Căutarea a luat sfârșit! Iată cele mai frumoase flori care se potrivesc bugetului dumneavoastră:",
+        "Salutări! Am selectat special pentru dumneavoastră aceste variante pline de prospețime și stil:",
+        "Pentru o ocazie atât de specială, am ales câteva buchete care emană eleganță și rafinament:",
+        "Iată propunerile noastre florale, create pentru a impresiona prin culoare și parfum:",
+        "Ne-am uitat în atelierul nostru și am găsit aceste opțiuni perfecte pentru ceea ce căutați:",
+        "Vă invităm să descoperiți selecția noastră de flori, atent alese pentru a se încadra în bugetul stabilit:",
+        "Am găsit câteva combinații florale unice care vor aduce cu siguranță un zâmbet persoanei dragi:",
+        "Echipa noastră a pregătit următoarele recomandări premium pentru solicitarea dumneavoastră:",
+        "Suntem încântați să vă prezentăm aceste variante florale care îmbină calitatea cu eleganța:",
+        "Iată selecția noastră curatoriată, gândită special pentru a răspunde nevoilor dumneavoastră:",
+        "Vă prezentăm cele mai apreciate buchete din colecția noastră care se potrivesc cerințelor actuale:"
+    ]
+    
+    selected_intro = random.choice(intros)
+    items_text = ""
+    
+    for i, res in enumerate(rag_results, 1):
+        # 1. Extragem datele de bază
+        title = res.get('title', 'Produs necunoscut')
+        price = res.get('price', 'Preț indisponibil')
+        imageUrl = res.get('Image Src', '')
+        
+        # 3. Extragem o scurtă descriere din string-ul 'context'
+        # Ne folosim de faptul că descrierea lungă începe după "Body (HTML):"
+        context_str = res.get('context', '')
+        if "Body (HTML):" in context_str:
+            # Luăm doar textul de după "Body (HTML):" și curățăm spațiile
+            full_desc = context_str.split("Body (HTML):")[1].strip()
+            # Tăiem la primele 150 de caractere ca să nu inundăm clientul cu text
+            short_desc = full_desc[:150] + "..." if len(full_desc) > 150 else full_desc
+        else:
+            short_desc = "Detalii suplimentare direct pe pagina produsului."
+        
+        # 4. Asamblăm textul produsului
+        items_text += f"{i}. **{title}** - Preț: {price} lei\n   Detalii: {short_desc}\n   Image: {imageUrl}\n\n"
+    
+    footer = "Doriți să adăugăm și o felicitare personalizată la acest buchet?"
+    
+    return f"{selected_intro}\n\n{items_text}{footer}"
