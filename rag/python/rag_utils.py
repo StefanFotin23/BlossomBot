@@ -21,11 +21,18 @@ EMBEDDING_MODEL_NAME = 'paraphrase-multilingual-MiniLM-L12-v2'
 VECTOR_SIZE = 384
 
 # SOLUȚIA: Utilizăm un model standard de Cross-Encoder care nu necesită cod custom
-RERANKER_MODEL_NAME = 'cross-encoder/nli-distilroberta-base'
+RERANKER_MODEL_NAME = 'cross-encoder/ms-marco-MiniLM-L-6-v2'
 
 _embedding_model = None
 _reranker_model = None
 _qdrant_client = None
+
+def format_context_for_mistral(results: List[Dict]) -> str:
+    if not results: return "Nu am găsit produse potrivite."
+    out = "PRODUSE RECOMANDATE (din baza de date):\n"
+    for i, r in enumerate(results, 1):
+        out += f"{i}. {r['title']} | Preț: {r['price']} RON\nDetalii: {r['context']}\n---\n"
+    return out
 
 def get_qdrant_client(url=None, api_key=None):
     global _qdrant_client
@@ -133,6 +140,7 @@ def sota_hybrid_search(state_json: Dict[str, Any], final_top_k: int = 3, qdrant_
     if not semantic_query.strip():
         return []
 
+    # 1. Construim filtrele Qdrant
     must_conditions = []
     if filters.get("price_max"):
         must_conditions.append(FieldCondition(key="price", range=Range(lte=float(filters["price_max"]))))
@@ -143,57 +151,42 @@ def sota_hybrid_search(state_json: Dict[str, Any], final_top_k: int = 3, qdrant_
     
     qdrant_filter = Filter(must=must_conditions) if must_conditions else None
 
+    # 2. Căutare vectorială inițială
     pool_size = final_top_k * 5 
     query_vector = embed_model.encode(semantic_query).tolist()
     
-    # Siguranță pentru compatibilitate cu versiuni diferite de qdrant-client
     try:
-        initial_results = client.search(
+        response = client.query_points(
             collection_name=COLLECTION_NAME,
-            query_vector=query_vector,
+            query=query_vector,
             query_filter=qdrant_filter,
             limit=pool_size
         )
-    except AttributeError:
-        # Fallback pentru versiuni mai vechi sau metode alternative
-        # qdrant_client uneori expune metodele via .qdrant() sau .http.collections_api
-        try:
-             initial_results = client.qdrant().search(
-                collection_name=COLLECTION_NAME,
-                query_vector=query_vector,
-                query_filter=qdrant_filter,
-                limit=pool_size
-            )
-        except Exception as e:
-             print(f"❌ Eroare la căutarea în Qdrant. Verifică versiunea librăriei 'qdrant-client'. Detalii: {e}")
-             return []
+        initial_results = response.points 
+    except Exception as e:
+        print(f"❌ Eroare la interogarea Qdrant: {e}")
+        return []
 
     if not initial_results:
         return []
 
+    # 3. Reranking cu Cross-Encoder
     rerank_pairs = [[semantic_query, hit.payload.get("page_content", "")] for hit in initial_results]
     cross_scores = reranker_model.predict(rerank_pairs)
 
+    # 4. Extragem datele în dicționare standard Python (ocolim restricțiile Pydantic)
+    combined_results = []
     for i, hit in enumerate(initial_results):
-        hit.cross_score = cross_scores[i]
-        
-    reranked_results = sorted(initial_results, key=lambda x: x.cross_score, reverse=True)
-
-    final_output = []
-    for hit in reranked_results[:final_top_k]:
-        final_output.append({
-            "score": round(float(hit.cross_score), 4),
+        combined_results.append({
+            "score": round(float(cross_scores[i]) if not isinstance(cross_scores[i], (list, tuple)) and getattr(cross_scores[i], "size", 1) == 1 else float(max(cross_scores[i])), 4),
             "title": hit.payload.get("title"),
             "price": hit.payload.get("price"),
             "handle": hit.payload.get("handle"),
             "context": hit.payload.get("page_content") 
         })
         
-    return final_output
-
-def format_context_for_mistral(results: List[Dict]) -> str:
-    if not results: return "Nu am găsit produse potrivite."
-    out = "PRODUSE RECOMANDATE (din baza de date):\n"
-    for i, r in enumerate(results, 1):
-        out += f"{i}. {r['title']} | Preț: {r['price']} RON\nDetalii: {r['context']}\n---\n"
-    return out
+    # 5. Sortăm descrescător după precizia Cross-Encoder-ului
+    reranked_results = sorted(combined_results, key=lambda x: x["score"], reverse=True)
+        
+    # 6. Returnăm doar Top K cerut de Mistral
+    return reranked_results[:final_top_k]
