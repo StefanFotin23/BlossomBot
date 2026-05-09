@@ -2,54 +2,108 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: romistral-builder
+  labels:
+    app: romistral-builder
 spec:
+  backoffLimit: 0 # We want to see failures clearly, and it's idempotent anyway
   template:
+    metadata:
+      labels:
+        app: romistral-builder
     spec:
       restartPolicy: Never
-
-      volumes:
-        - name: ollama-data
-          persistentVolumeClaim:
-            claimName: ollama-pvc
-
       containers:
         - name: builder
           image: python:3.10
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "4"
+              memory: "6Gi"
           command: ["/bin/bash", "-c"]
           args:
             - |
               set -e
+              apt-get update && apt-get install -y zstd git git-lfs build-essential cmake curl
 
-              echo "=== Installing dependencies ==="
-              apt-get update && apt-get install -y git git-lfs curl
-              git lfs install
+              # Use the PVC mount for everything to ensure caching
+              WORKSPACE="/root/.ollama/build-cache"
+              mkdir -p "$WORKSPACE"
+              cd "$WORKSPACE"
 
-              echo "=== Cloning Hugging Face model ==="
-              git clone https://huggingface.co/OpenLLM-Ro/RoMistral-7b-Instruct
+              echo "=== Installing Ollama CLI (required for check/registration) ==="
+              if ! command -v ollama &> /dev/null; then
+                curl -fsSL https://ollama.com/install.sh | sh
+              fi
 
-              echo "=== Cloning llama.cpp ==="
-              git clone https://github.com/ggml-org/llama.cpp
+              # Start a temporary local ollama server to check/register models
+              ollama serve &
+              OLLAMA_PID=$!
+              sleep 10
 
-              cd llama.cpp
+              if ollama list | grep -q "romistral"; then
+                echo "=== SUCCESS: Model 'romistral' already exists in Ollama. Skipping build. ==="
+                kill $OLLAMA_PID
+                exit 0
+              fi
 
-              echo "=== Installing Python deps ==="
-              pip install --no-cache-dir -r requirements.txt
+              if [ ! -f "romistral-7b-q4_k_m.gguf" ]; then
+                echo "=== GGUF not found. Starting build process... ==="
 
-              echo "=== Converting HF -> GGUF ==="
-              python convert_hf_to_gguf.py \
-                ../RoMistral-7b-Instruct \
-                --outtype q4_k_m
+                echo "=== Installing dependencies ==="
+                apt-get update && apt-get install -y git git-lfs build-essential cmake
+                git lfs install
 
-              echo "=== Installing Ollama CLI ==="
-              curl -fsSL https://ollama.com/install.sh | sh
+                echo "=== Cloning Hugging Face model (15GB) ==="
+                if [ ! -d "RoMistral-7b-Instruct" ]; then
+                  git clone https://huggingface.co/OpenLLM-Ro/RoMistral-7b-Instruct
+                fi
 
-              echo "=== Creating Modelfile safely ==="
-              echo "FROM ./romistral-7b-instruct-q4_k_m.gguf" > Modelfile
+                echo "=== Cloning and building llama.cpp ==="
+                if [ ! -d "llama.cpp" ]; then
+                  git clone https://github.com/ggml-org/llama.cpp
+                fi
+                cd llama.cpp
+                cmake -B build
+                cmake --build build --config Release -j$(nproc)
+                cd ..
 
-              echo "=== Registering model in Ollama ==="
+                echo "=== Installing Python deps ==="
+                pip install --no-cache-dir -r llama.cpp/requirements.txt
+
+                echo "=== Converting HF -> GGUF (F16) ==="
+                python llama.cpp/convert_hf_to_gguf.py \
+                  RoMistral-7b-Instruct \
+                  --outtype f16 \
+                  --outfile romistral-7b-f16.gguf
+
+                echo "=== Quantizing (Q4_K_M) ==="
+                ./llama.cpp/build/bin/llama-quantize \
+                  romistral-7b-f16.gguf \
+                  romistral-7b-q4_k_m.gguf \
+                  Q4_K_M
+
+                echo "=== CLEANUP: Removing 15GB+ of source and temporary files ==="
+                rm -rf RoMistral-7b-Instruct
+                rm -rf llama.cpp
+                rm -f romistral-7b-f16.gguf
+              else
+                echo "=== Found cached GGUF file. Skipping conversion/quantization. ==="
+              fi
+
+              echo "=== Registering model with Ollama ==="
+              echo "FROM ./romistral-7b-q4_k_m.gguf" > Modelfile
               ollama create romistral -f Modelfile
 
-              echo "=== Done ==="
+              echo "=== Final Cleanup ==="
+              kill $OLLAMA_PID
+              echo "=== Done! ==="
           volumeMounts:
             - name: ollama-data
               mountPath: /root/.ollama
+      volumes:
+        - name: ollama-data
+          persistentVolumeClaim:
+            claimName: ollama-pvc

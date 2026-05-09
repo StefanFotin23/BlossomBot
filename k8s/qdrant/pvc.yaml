@@ -4,10 +4,11 @@ metadata:
   name: qdrant-pvc
   labels:
     app: qdrant
+    component: storage
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi # Qdrant might need more storage for vectors
-  storageClassName: local-path # Assuming local-path StorageClass is available
+      storage: 5Gi
+  storageClassName: local-path
