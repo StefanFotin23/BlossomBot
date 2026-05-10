@@ -17,6 +17,7 @@ spec:
       containers:
       - name: chat-app
         image: stefanfotin23/blossombot
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
         env:
