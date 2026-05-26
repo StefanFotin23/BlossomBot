@@ -3,21 +3,31 @@ import requests
 import random
 import json
 import re
+from google import genai
 from typing import Dict, Any
 
-# ==========================================
-# CONFIGURĂRI GLOBALE / MACROS (Fallback)
-# ==========================================
-DEFAULT_OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
-DEFAULT_MODEL_NAME = os.getenv("MISTRAL_MODEL", "romistral")
-DEFAULT_TEMPLATE_DIR = os.getenv("TEMPLATE_DIR", "./")
+OLLAMA_OPTIMIZED_OPTIONS = {
+    "num_ctx": 2048,        # Limitează contextul pentru a nu umple VRAM-ul
+    "num_gpu": 99,          # Forțează toate straturile pe GPU
+    "temperature": 0.1,     # Determinism pentru extracție și stări
+    "num_predict": 150,     # Limitează lungimea output-ului pentru latență mică
+    "low_vram": True        # Hint pentru Ollama să fie conservator
+}
+
+GEMINI_MODEL_NAME = "gemini-2.5-flash"
+
+def getApiClient(api_key: str = None):
+    """Inițializează și returnează clientul GenAI dacă api_key este prezent."""
+    if api_key:
+        return genai.Client(api_key=api_key)
+    return None
 
 # ==========================================
-# 1. MISTRAL ROUTER (Text -> JSON pentru RAG)
+# 1. ROUTER (Text -> JSON pentru RAG)
 # ==========================================
 def _build_router_prompt(template_dir: str = None) -> str:
     """Metodă internă care asamblează promptul dinamic pe baza fișierelor."""
-    t_dir = template_dir if template_dir is not None else DEFAULT_TEMPLATE_DIR
+    t_dir = template_dir if template_dir is not None else "rag/template"
     schema_path = os.path.join(t_dir, "query_template.json")
     prompt_path = os.path.join(t_dir, "prompt_router.txt")
     
@@ -31,29 +41,43 @@ def _build_router_prompt(template_dir: str = None) -> str:
     except FileNotFoundError as e:
         raise FileNotFoundError(f"❌ Lipsesc fișierele template în {t_dir}! Detalii: {e}")
 
-def extract_filters(user_message: str, ollama_url: str = None, model_name: str = None, template_dir: str = None) -> Dict[str, Any]:
+def extract_filters(user_message: str, ollama_url: str = None, model_name: str = None, template_dir: str = None, api_key: str = None) -> Dict[str, Any]:
     """Interoghează LLM-ul cu temperatura 0 și forțează output JSON pentru căutarea Qdrant."""
-    final_url = ollama_url if ollama_url is not None else DEFAULT_OLLAMA_URL
-    final_model = model_name if model_name is not None else DEFAULT_MODEL_NAME
-    
+    client = getApiClient(api_key)
+
     system_prompt = _build_router_prompt(template_dir)
     full_prompt = f"{system_prompt}\n\nMesaj client: {user_message}\nOutput JSON:"
     
-    payload = {
-        "model": final_model,
-        "prompt": full_prompt,
-        "stream": False,
-        "format": "json", # Obligăm modelul să emită doar JSON
-        "options": {
-            "temperature": 0.0 # Vrem precizie absolută
+    llm_output = ""
+    if client:
+        try:
+            response = client.models.generate_content(
+                model=GEMINI_MODEL_NAME,
+                contents=full_prompt
+            )
+            llm_output = response.text
+        except Exception as e:
+            print(f"⚠️ Eroare la Gemini Router: {e}")
+            return {"filters": {}, "semantic_query": user_message}
+    else:
+        agent_options = OLLAMA_OPTIMIZED_OPTIONS.copy()
+        payload = {
+            "model": model_name,
+            "prompt": full_prompt,
+            "stream": False,
+            "format": "json", # Obligăm modelul să emită doar JSON
+            "options": agent_options
         }
-    }
-    
-    try:
-        response = requests.post(final_url, json=payload)
-        response.raise_for_status()
         
-        llm_output = response.json().get("response", "")
+        try:
+            response = requests.post(ollama_url, json=payload)
+            response.raise_for_status()
+            llm_output = response.json().get("response", "")
+        except Exception as e:
+            print(f"⚠️ Eroare la Router Ollama: {e}")
+            return {"filters": {}, "semantic_query": user_message}
+
+    try:
         llm_output = re.sub(r"```json|```", "", llm_output).strip()
         parsed_json = json.loads(llm_output)
         
@@ -62,48 +86,55 @@ def extract_filters(user_message: str, ollama_url: str = None, model_name: str =
             parsed_json["filters"] = {k: v for k, v in parsed_json["filters"].items() if v is not None}
             
         return parsed_json
-
     except Exception as e:
-        print(f"⚠️ Eroare la Mistral Router: {e}")
-        # Returnăm un fallback util care să nu blocheze aplicația
+        print(f"⚠️ Eroare la procesare output JSON: {e}")
         return {"filters": {}, "semantic_query": user_message}
 
 
 # ==========================================
-# 2. MISTRAL SALES AGENT (Context -> Răspuns Natural)
+# 2. SALES AGENT (Context -> Răspuns Natural)
 # ==========================================
-def generate_conversational_response(user_message: str, rag_context: str, ollama_url: str = None, model_name: str = None) -> str:
-    final_url = ollama_url if ollama_url is not None else DEFAULT_OLLAMA_URL
-    final_model = model_name if model_name is not None else DEFAULT_MODEL_NAME
-    
-    # Prompt scurt care forțează un format fix
+def generate_conversational_response(user_message: str, rag_context: str, ollama_url: str = None, model_name: str = None, api_key: str = None) -> str:
+    client = getApiClient(api_key)
+
     system_prompt = (
-        "Ești un asistent concis pentru florăria City Flowers. "
-        "Sarcina ta: Salută clientul, confirmă că ai găsit opțiuni pentru cererea lui și prezintă-le sub formă de listă numerotată. "
-        "Reguli: Maxim 3 propoziții de introducere. Folosește STRICT datele din context. "
-        "Format: [Introducere scurtă] \n\nIată recomandările noastre:\n[Lista numerotată cu Nume, Preț și Link]"
+        "Ești un asistent amabil și profesionist al florăriei City Flowers. "
+        "Sarcina ta este să prezinți clientului opțiunile găsite într-un mod atractiv și util. "
+        "Reguli: \n"
+        "1. Salută clientul și confirmă că ai găsit câteva variante superbe care se potrivesc cererii lui. \n"
+        "2. Prezintă produsele într-o listă numerotată, menționând Numele, Prețul și o scurtă descriere pentru fiecare. \n"
+        "3. Folosește STRICT informațiile din contextul PRODUSE furnizat mai jos. \n"
+        "4. Încheie oferindu-te să ajuți cu alte detalii sau cu plasarea comenzii."
     )
     
     full_prompt = f"{system_prompt}\n\nPRODUSE:\n{rag_context}\n\nCLIENT: {user_message}\nASISTENT:"
 
-    payload = {
-        "model": final_model,
-        "prompt": full_prompt,
-        "stream": False,
-        "options": {
-            "temperature": 0.0,  # Viteză maximă, zero creativitate inutilă
-            "num_predict": 250,  # Limităm lungimea răspunsului ca să nu o ia pe arătură
-            "top_k": 20,
-            "top_p": 0.9
+    if client:
+        try:
+            response = client.models.generate_content(
+                model=GEMINI_MODEL_NAME,
+                contents=full_prompt
+            )
+            return response.text.strip()
+        except Exception as e:
+            return f"Îmi cer scuze, întâmpinăm o problemă tehnică cu Gemini. (Detalii eroare: {e})"
+    else:
+        agent_options = OLLAMA_OPTIMIZED_OPTIONS.copy()
+        agent_options["temperature"] = 0.2 # Puțin mai relaxat pentru vorbire
+
+        payload = {
+            "model": model_name,
+            "prompt": full_prompt,
+            "stream": False,
+            "options": agent_options
         }
-    }
-    
-    try:
-        response = requests.post(final_url, json=payload)
-        response.raise_for_status()
-        return response.json().get("response", "").strip()
-    except Exception as e:
-        return f"Îmi cer scuze, întâmpinăm o problemă tehnică de comunicare. Vă rugăm să reîncercați. (Detalii eroare: {e})"
+        
+        try:
+            response = requests.post(ollama_url, json=payload)
+            response.raise_for_status()
+            return response.json().get("response", "").strip()
+        except Exception as e:
+            return f"Îmi cer scuze, întâmpinăm o problemă tehnică de comunicare. Vă rugăm să reîncercați. (Detalii eroare: {e})"
 
 def generate_hybrid_response(rag_results):
     intros = [
