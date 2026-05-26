@@ -27,7 +27,7 @@ _embedding_model = None
 _reranker_model = None
 _qdrant_client = None
 
-def format_context_for_mistral(results: List[Dict]) -> str:
+def format_context_for_llm(results: List[Dict]) -> str:
     if not results: return "Nu am găsit produse potrivite."
     out = "PRODUSE RECOMANDATE (din baza de date):\n"
     for i, r in enumerate(results, 1):
@@ -188,5 +188,5 @@ def sota_hybrid_search(state_json: Dict[str, Any], final_top_k: int = 3, qdrant_
     # 5. Sortăm descrescător după precizia Cross-Encoder-ului
     reranked_results = sorted(combined_results, key=lambda x: x["score"], reverse=True)
         
-    # 6. Returnăm doar Top K cerut de Mistral
+    # 6. Returnăm doar Top K
     return reranked_results[:final_top_k]

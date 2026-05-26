@@ -10,7 +10,7 @@ nodes:
         node-labels: "ingress-ready=true"
   extraPortMappings:
   - containerPort: 80
-    hostPort: 40080
+    hostPort: 45080
     protocol: TCP
   - containerPort: 443
     hostPort: 40443
@@ -21,3 +21,15 @@ nodes:
   - containerPort: 30082 # NodePort for Ollama
     hostPort: 40082      # Host port for Ollama
     protocol: TCP
+  extraMounts:
+  - hostPath: /var/run/nvidia-container-toolkit.sock
+    containerPath: /var/run/nvidia-container-toolkit.sock
+
+# ACEASTA ESTE SECȚIUNEA PENTRU GPU
+containerdConfigPatches:
+- |
+  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
+    privileged_without_host_pkgs = false
+    runtime_type = "io.containerd.runtime.v1.linux"
+    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
+      BinaryName = "/usr/bin/nvidia-container-runtime"

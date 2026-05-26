@@ -11,14 +11,12 @@ NGROK_LOG       := ngrok.log
 
 # DOCKER_HUB_USER is expected to be set in the .env file
 PROD_IMAGE_NAME := $(DOCKER_HUB_USER)/blossombot
-BUILDER_IMAGE_NAME := $(DOCKER_HUB_USER)/romistral-builder:latest
 
 .PHONY: up create-cluster delete-cluster logs shell ngrok ngrok-down \
         build-app-image load-app-image-to-kind push-app-image \
-        build-builder-image load-builder-image-to-kind push-builder-image \
         status update install-ingress build-and-push-docker-images \
-        restart-chat restart-ollama restart-qdrant restart-rabbitmq \
-        restart-builder restart-all clean-apps pause-cluster resume-cluster
+        restart-chat restart-qdrant restart-rabbitmq restart-all \
+		clean-apps pause-cluster resume-cluster restart-cluster
 
 # ==============================================================================
 # KIND LOCAL SIMULATION
@@ -39,7 +37,13 @@ resume-cluster:
 	@echo "Cluster is booting up. Run 'make status' to check readiness."
 
 # Creates cluster, installs ingress, builds image, loads it, and deploys the app.
+delete-resources:
+	@echo "--- Deleting all Kubernetes resources ---"
+	@kubectl delete all --all || true
+	@echo "All resources deleted."
+
 up:
+	@ollama pull qwen2.5:0.5b
 	@make build-and-push-docker-images
 	@echo "--- Deploying application ---"
 	@sleep 30
@@ -56,6 +60,7 @@ create-cluster:
 	@echo "--- Creating kind cluster with Ingress ports ---"
 	@kind create cluster --name $(CLUSTER_NAME) --config kind-config.yaml
 	@make install-ingress
+	@kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.17.1/deployments/static/nvidia-device-plugin.yml
 
 delete-cluster:
 	@echo "--- Deleting kind cluster ---"
@@ -73,21 +78,14 @@ install-ingress:
 build-and-push-docker-images:
 	@echo "--- Building Docker Images ---"
 	@make build-app-image
-	@make build-builder-image
 	@echo "--- Loading Images into Kind cluster ---"
 	@make load-app-image-to-kind
-	@make load-builder-image-to-kind
 	@echo "--- Pushing Images to Docker Hub ---"
 	@make push-app-image
-	@make push-builder-image
 
 restart-chat:
 	@echo "--- Restarting Chat App ---"
 	@kubectl rollout restart deployment chat-app
-
-restart-ollama:
-	@echo "--- Restarting Ollama (Reloading models in RAM) ---"
-	@kubectl rollout restart deployment ollama
 
 restart-qdrant:
 	@echo "--- Restarting Qdrant Vector DB ---"
@@ -97,20 +95,15 @@ restart-rabbitmq:
 	@echo "--- Restarting RabbitMQ ---"
 	@kubectl rollout restart deployment rabbitmq
 
-# Resetarea Builder-ului (Job-ul trebuie șters pentru a rula din nou)
-restart-builder:
-	@echo "--- Resetting Romistral Builder Job ---"
-	@kubectl delete job romistral-builder --ignore-not-found
-
 restart-all:
 	@echo "--- RESTARTING ALL COMPONENTS ---"
 	@make restart-chat
-	@make restart-ollama
 	@make restart-qdrant
 	@make restart-rabbitmq
-	@make restart-builder
 	@make update
 	@echo "All deployments have been triggered to restart."
+
+restart-cluster: delete-cluster create-cluster up
 
 # ==============================================================================
 # DOCKER HUB / PRODUCTION WORKFLOW (for building and pushing, or for local Kind load)
@@ -130,18 +123,6 @@ push-app-image:
 	@echo "--- Pushing Docker image to Docker Hub ---"
 	@docker login
 	@docker push $(PROD_IMAGE_NAME)
-
-build-builder-image:
-	@echo "--- Building Romistral Builder image ---"
-	@docker build -t $(BUILDER_IMAGE_NAME) -f Dockerfile.builder .
-
-load-builder-image-to-kind:
-	@kind load docker-image $(BUILDER_IMAGE_NAME) --name $(CLUSTER_NAME)
-
-push-builder-image:
-	@echo "--- Pushing Romistral Builder image to Docker Hub ---"
-	@docker login
-	@docker push $(BUILDER_IMAGE_NAME)
 
 # ==============================================================================
 # UTILITIES
