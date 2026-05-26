@@ -25,11 +25,11 @@ spec:
           value: "/qdrant/data"
         resources:
           requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
             memory: "512Mi"
             cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
         volumeMounts:
         - name: qdrant-data
           mountPath: /qdrant/data

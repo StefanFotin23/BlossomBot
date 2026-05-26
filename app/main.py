@@ -10,6 +10,10 @@ from qdrant_client import QdrantClient
 
 from app import bot
 from app.config import Config
+from app.logger import get_logger
+
+# Initialize logger
+logger = get_logger(__name__)
 
 # Validate configuration at startup
 Config.validate()
@@ -46,10 +50,10 @@ def _blocking_publish_purchase(purchase_data):
             )
         )
         connection.close()
-        print(f"✅ Purchase published to RabbitMQ: {purchase_data['user_id']}")
+        logger.info(f"Purchase event published to RabbitMQ for user: {purchase_data['user_id']}")
         return True
     except Exception as e:
-        print(f"❌ Failed to publish to RabbitMQ: {e}")
+        logger.error(f"Failed to publish purchase event to RabbitMQ: {e}")
         return False
 
 async def publish_purchase(purchase_data):
@@ -60,11 +64,13 @@ async def publish_purchase(purchase_data):
 # --- Register Slack Events via Gateway ---
 @slack_app.event("message")
 async def handle_message_events(body, say):
+    logger.debug(f"Received message event: {body}")
     await bot.handle_message(body, say, publish_purchase_callback=publish_purchase)
 
 @slack_app.event("app_mention")
 async def handle_app_mention_events(body, say):
     user = body['event']['user']
+    logger.info(f"App mentioned by user: {user}")
     await say(f"Salutare <@{user}>! Te rog trimite-mi un mesaj direct (DM) ca să te pot ajuta cu alegerea florilor.")
 
 # --- Dependency Clients ---
@@ -80,6 +86,7 @@ def _blocking_check_rabbitmq_health():
         connection.close()
         return {"status": "ok"}
     except Exception as e:
+        logger.error(f"RabbitMQ health check failed: {e}")
         return {"status": "error", "message": str(e)}
 
 async def check_rabbitmq_health():
@@ -91,6 +98,7 @@ async def check_qdrant_health():
         qdrant_client.get_collections()
         return {"status": "ok"}
     except Exception as e:
+        logger.error(f"Qdrant health check failed: {e}")
         return {"status": "error", "message": str(e)}
 
 async def check_ollama_health():
@@ -100,6 +108,7 @@ async def check_ollama_health():
         response.raise_for_status()
         return {"status": "ok"}
     except Exception as e:
+        logger.error(f"Ollama health check failed: {e}")
         return {"status": "error", "message": str(e)}
 
 # --- API Endpoints ---
@@ -133,10 +142,12 @@ async def healthz():
             break
             
     if overall_status == "error":
+        logger.warning(f"Health check failed with details: {details}")
         raise HTTPException(status_code=500, detail=details)
     return {"status": "ok", "details": details}
 
 @app.on_event("shutdown")
 async def shutdown_event():
+    logger.info("Application shutting down...")
     await http_client.aclose()
     executor.shutdown(wait=True)
