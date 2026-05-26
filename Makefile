@@ -43,11 +43,15 @@ delete-resources:
 	@echo "All resources deleted."
 
 up:
+	@echo "--- Preparing Ollama ---"
 	@ollama pull qwen2.5:0.5b
+	@ollama create blossombot -f ollama/Modelfile || true
 	@make build-and-push-docker-images
 	@echo "--- Deploying application ---"
-	@sleep 30
 	@make update
+	@echo "--- Waiting for pods to be ready ---"
+	@kubectl wait --for=condition=ready pod -l app=chat-app --timeout=180s || echo "Wait failed, checking status..."
+	@make status
 	@echo "Deployment done!"
 
 update:
@@ -139,9 +143,9 @@ shell:
 # Starts ngrok and captures the public URL.
 ngrok: ngrok-down
 	@echo "--- Starting ngrok using $(NGROK_CONFIG) ---"
-	@ngrok start --all --config $(NGROK_CONFIG) > $(NGROK_LOG) 2>&1 &
-	@sleep 3
-	@cat ngrok.log
+	@ngrok start --all --config $(NGROK_CONFIG) --log=stdout > $(NGROK_LOG) 2>&1 &
+	@sleep 5
+	@grep -o "url=https://[a-z0-9.-]*" $(NGROK_LOG) || cat $(NGROK_LOG)
 
 # Stop any running ngrok process
 ngrok-down:

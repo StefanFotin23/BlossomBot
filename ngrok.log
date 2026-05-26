@@ -1,0 +1,19 @@
+t=2026-05-27T00:56:57+0300 lvl=info msg="open config file" path=/mnt/c/Users/andre/Desktop/masters_project/ngrok.yml err=nil
+t=2026-05-27T00:56:57+0300 lvl=info msg="FIPS 140 mode" enabled=false
+t=2026-05-27T00:56:57+0300 lvl=info msg="starting web service" obj=web addr=127.0.0.1:4040 allow_hosts=[]
+t=2026-05-27T00:56:58+0300 lvl=info msg="client session established" obj=tunnels.session
+t=2026-05-27T00:56:58+0300 lvl=info msg="tunnel session started" obj=tunnels.session
+t=2026-05-27T00:56:58+0300 lvl=info msg="update available" obj=updater
+t=2026-05-27T00:56:59+0300 lvl=info msg="started tunnel" obj=tunnels name=blossombot-http addr=http://localhost:45080 url=https://6aab-82-76-155-122.ngrok-free.app
+t=2026-05-27T00:57:27+0300 lvl=info msg="join connections" obj=join id=ea388f2add30 l=127.0.0.1:45080 r=3.92.30.215:24186
+t=2026-05-27T00:57:30+0300 lvl=info msg="join connections" obj=join id=84a83ae90a27 l=127.0.0.1:45080 r=54.91.61.250:52496
+t=2026-05-27T00:57:35+0300 lvl=info msg="join connections" obj=join id=1b10733e1e54 l=127.0.0.1:45080 r=13.221.84.137:28054
+t=2026-05-27T00:57:44+0300 lvl=info msg="join connections" obj=join id=bf9412f41cae l=127.0.0.1:45080 r=3.82.165.34:34190
+t=2026-05-27T00:57:48+0300 lvl=info msg="join connections" obj=join id=befbf2169df9 l=127.0.0.1:45080 r=98.84.149.22:17766
+t=2026-05-27T00:57:59+0300 lvl=info msg="join connections" obj=join id=7b0bc67790a6 l=127.0.0.1:45080 r=184.72.185.50:13946
+t=2026-05-27T00:58:02+0300 lvl=info msg="join connections" obj=join id=95731787119a l=127.0.0.1:45080 r=54.224.232.252:32362
+t=2026-05-27T00:58:11+0300 lvl=info msg="join connections" obj=join id=17679e98ac87 l=127.0.0.1:45080 r=100.53.93.136:41048
+t=2026-05-27T00:58:19+0300 lvl=info msg="join connections" obj=join id=26e48598a524 l=127.0.0.1:45080 r=100.29.35.211:45028
+t=2026-05-27T00:58:23+0300 lvl=info msg="join connections" obj=join id=bbbea52798d5 l=127.0.0.1:45080 r=3.83.149.112:24656
+t=2026-05-27T00:59:26+0300 lvl=info msg="join connections" obj=join id=8e4a22bdd90c l=127.0.0.1:45080 r=3.93.39.85:62842
+t=2026-05-27T01:04:26+0300 lvl=info msg="join connections" obj=join id=4b4bc73e15c8 l=127.0.0.1:45080 r=32.192.192.246:47472

@@ -5,4 +5,4 @@ authtoken: "2Xw6JhUnI8vjHL0g2EV9DSyYdbZ_zfvVfK7rqMA75qJFUYuv"
 tunnels:
   blossombot-http:
     proto: http
-    addr: 40080
+    addr: 45080
