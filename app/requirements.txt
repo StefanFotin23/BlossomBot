@@ -1,3 +1,4 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
 fastapi
 uvicorn
 slack-bolt
@@ -12,4 +13,5 @@ sentence-transformers
 beautifulsoup4
 google-genai
 requests
-torch
+torch --index-url https://download.pytorch.org/whl/cpu
+torchvision --index-url https://download.pytorch.org/whl/cpu

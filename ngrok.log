@@ -17,3 +17,28 @@ t=2026-05-27T00:58:19+0300 lvl=info msg="join connections" obj=join id=26e48598a
 t=2026-05-27T00:58:23+0300 lvl=info msg="join connections" obj=join id=bbbea52798d5 l=127.0.0.1:45080 r=3.83.149.112:24656
 t=2026-05-27T00:59:26+0300 lvl=info msg="join connections" obj=join id=8e4a22bdd90c l=127.0.0.1:45080 r=3.93.39.85:62842
 t=2026-05-27T01:04:26+0300 lvl=info msg="join connections" obj=join id=4b4bc73e15c8 l=127.0.0.1:45080 r=32.192.192.246:47472
+t=2026-05-27T06:44:45+0300 lvl=info msg="update available" obj=updater
+t=2026-05-27T12:31:17+0300 lvl=info msg="update available" obj=updater
+t=2026-05-27T18:16:37+0300 lvl=info msg="update available" obj=updater
+t=2026-05-27T23:47:14+0300 lvl=info msg="join connections" obj=join id=ba847e37de13 l=127.0.0.1:45080 r=54.209.88.215:15910
+t=2026-05-27T23:47:17+0300 lvl=info msg="join connections" obj=join id=df9735f18275 l=127.0.0.1:45080 r=98.89.0.72:35782
+t=2026-05-27T23:47:45+0300 lvl=info msg="join connections" obj=join id=07099bb16bb5 l=127.0.0.1:45080 r=35.175.194.13:19436
+t=2026-05-27T23:47:47+0300 lvl=info msg="join connections" obj=join id=2e447cba1b62 l=127.0.0.1:45080 r=34.207.251.121:39330
+t=2026-05-27T23:47:51+0300 lvl=info msg="join connections" obj=join id=d6dff486ca56 l=127.0.0.1:45080 r=3.228.17.251:38294
+t=2026-05-27T23:48:38+0300 lvl=info msg="join connections" obj=join id=25402dfe911e l=127.0.0.1:45080 r=13.222.248.223:15532
+t=2026-05-27T23:48:38+0300 lvl=info msg="join connections" obj=join id=7cdf60729103 l=127.0.0.1:45080 r=32.199.181.183:16926
+t=2026-05-27T23:48:55+0300 lvl=info msg="join connections" obj=join id=3d7a47df5a14 l=127.0.0.1:45080 r=54.167.24.212:57528
+t=2026-05-27T23:49:38+0300 lvl=info msg="join connections" obj=join id=f652b4544146 l=127.0.0.1:45080 r=13.217.224.135:19270
+t=2026-05-27T23:49:56+0300 lvl=info msg="join connections" obj=join id=ac7929f1c851 l=127.0.0.1:45080 r=44.200.95.255:26996
+t=2026-05-27T23:49:58+0300 lvl=info msg="join connections" obj=join id=1e9cb9ba4a77 l=127.0.0.1:45080 r=3.82.10.32:39382
+t=2026-05-27T23:50:02+0300 lvl=info msg="join connections" obj=join id=6d2508fed632 l=127.0.0.1:45080 r=100.48.69.70:17048
+t=2026-05-27T23:51:04+0300 lvl=info msg="join connections" obj=join id=e83c4a7eff5c l=127.0.0.1:45080 r=3.93.144.103:39560
+t=2026-05-27T23:53:55+0300 lvl=info msg="join connections" obj=join id=96771e7cae59 l=127.0.0.1:45080 r=44.197.226.62:32314
+t=2026-05-27T23:56:06+0300 lvl=info msg="join connections" obj=join id=b2fd7f6d2cfb l=127.0.0.1:45080 r=3.215.190.88:50466
+t=2026-05-28T00:00:20+0300 lvl=info msg="update available" obj=updater
+t=2026-05-28T01:42:22+0300 lvl=info msg="join connections" obj=join id=e6bbfbcb2dd4 l=127.0.0.1:45080 r=34.224.75.142:36878
+t=2026-05-28T01:42:27+0300 lvl=info msg="join connections" obj=join id=adcdb263ea38 l=127.0.0.1:45080 r=34.207.142.123:54260
+t=2026-05-28T01:43:24+0300 lvl=info msg="join connections" obj=join id=6f4c4868f7d2 l=127.0.0.1:45080 r=[2a02:2f04:c500:5c00:8339:5a65:ffd7:87d7]:54764
+t=2026-05-28T01:43:49+0300 lvl=info msg="join connections" obj=join id=036c99898cd5 l=127.0.0.1:45080 r=34.207.202.124:52882
+t=2026-05-28T01:43:53+0300 lvl=info msg="join connections" obj=join id=3dd3fcc5e223 l=127.0.0.1:45080 r=34.207.142.123:26580
+t=2026-05-28T01:43:56+0300 lvl=info msg="join connections" obj=join id=95bd9ac7572c l=127.0.0.1:45080 r=3.215.77.53:12594

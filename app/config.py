@@ -27,7 +27,12 @@ class Config:
 
     # RabbitMQ
     RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST", "localhost")
-    RABBITMQ_PORT = int(os.environ.get("RABBITMQ_PORT", "5672"))
+    # K8s sometimes sets RABBITMQ_PORT to a URL like 'tcp://...'. We want the numeric port.
+    _rmq_port = os.environ.get("RABBITMQ_PORT_NUMBER") or os.environ.get("RABBITMQ_PORT", "5672")
+    if "://" in _rmq_port:
+        RABBITMQ_PORT = 5672 # Fallback to default if it's a K8s service URL
+    else:
+        RABBITMQ_PORT = int(_rmq_port)
     PURCHASE_QUEUE = os.environ.get("PURCHASE_QUEUE", "flower_purchases")
 
     # App Settings

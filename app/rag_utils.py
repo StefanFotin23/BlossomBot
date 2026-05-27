@@ -1,6 +1,7 @@
 import os
 import json
 import uuid
+import logging
 import pandas as pd
 from typing import Dict, List, Any
 
@@ -10,6 +11,10 @@ from qdrant_client import QdrantClient
 from qdrant_client.http.models import VectorParams, Distance, PointStruct, Filter, FieldCondition, MatchValue, Range
 
 from app.config import Config
+from app.logger import get_logger
+
+# Standard logger name
+logger = get_logger(__name__)
 
 # ==========================================
 # CONFIGURĂRI GLOBALE
@@ -41,7 +46,7 @@ def get_qdrant_client(url=None, api_key=None):
     final_url = url if url is not None else DEFAULT_QDRANT_URL
     final_key = api_key if api_key is not None else DEFAULT_QDRANT_API_KEY
     
-    print(f"🔌 Ne conectăm la Qdrant ({final_url})...")
+    logger.info(f"🔌 Ne conectăm la Qdrant ({final_url})...")
     _qdrant_client = QdrantClient(url=final_url, api_key=final_key)
     return _qdrant_client
 
@@ -50,16 +55,17 @@ def get_models():
     global _embedding_model, _reranker_model
     
     if _embedding_model is None:
-        print(f"🧠 Încărcăm modelul de Embedding: {EMBEDDING_MODEL_NAME}...")
-        _embedding_model = SentenceTransformer(EMBEDDING_MODEL_NAME)
+        logger.info(f"🧠 Încărcăm modelul de Embedding: {EMBEDDING_MODEL_NAME}...")
+        _embedding_model = SentenceTransformer(EMBEDDING_MODEL_NAME, device='cpu')
         
     if _reranker_model is None:
-        print(f"🎯 Încărcăm modelul SOTA de Reranking: {RERANKER_MODEL_NAME}...")
+        logger.info(f"🎯 Încărcăm modelul SOTA de Reranking: {RERANKER_MODEL_NAME}...")
         
         # Oprim fast tokenizer pentru a evita bug-ul de serializare din Windows/Rust
         _reranker_model = CrossEncoder(
             RERANKER_MODEL_NAME, 
-            tokenizer_args={"use_fast": False}
+            tokenizer_args={"use_fast": False},
+            device='cpu'
         )
         
     return _embedding_model, _reranker_model
@@ -68,7 +74,7 @@ def get_models():
 # 1. CREARE ȘI INDEXARE BAZĂ DE DATE (MODEL BUILDING)
 # ==========================================
 def build_and_index_rag(df_clean: pd.DataFrame, output_json: str = 'qdrant_payload.json', qdrant_url: str = None, qdrant_api_key: str = None):
-    print("📦 Construim Payload-ul și Vectorii...")
+    logger.info("📦 Construim Payload-ul și Vectorii...")
     qdrant_documents = []
     
     def parse_list(val):
@@ -105,18 +111,18 @@ def build_and_index_rag(df_clean: pd.DataFrame, output_json: str = 'qdrant_paylo
         
     with open(output_json, 'w', encoding='utf-8') as f:
         json.dump(qdrant_documents, f, ensure_ascii=False, indent=2)
-    print(f"💾 Backup salvat în {output_json}.")
+    logger.info(f"💾 Backup salvat în {output_json}.")
 
     embed_model, _ = get_models()
     client = get_qdrant_client(url=qdrant_url, api_key=qdrant_api_key)
 
-    print(f"📁 Pregătim colecția '{COLLECTION_NAME}'...")
+    logger.info(f"📁 Pregătim colecția '{COLLECTION_NAME}'...")
     client.recreate_collection(
         collection_name=COLLECTION_NAME,
         vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.COSINE)
     )
 
-    print("⚙️ Generăm vectorii (Embedding)...")
+    logger.info("⚙️ Generăm vectorii (Embedding)...")
     texts_to_embed = [doc['text_to_embed'] for doc in qdrant_documents]
     embeddings = embed_model.encode(texts_to_embed, show_progress_bar=True)
 
@@ -125,9 +131,9 @@ def build_and_index_rag(df_clean: pd.DataFrame, output_json: str = 'qdrant_paylo
         for i, doc in enumerate(qdrant_documents)
     ]
 
-    print("🚀 Încărcăm în Qdrant...")
+    logger.info("🚀 Încărcăm în Qdrant...")
     client.upload_points(collection_name=COLLECTION_NAME, points=points, batch_size=100)
-    print("✅ Baza de date a fost populată cu succes!")
+    logger.info("✅ Baza de date a fost populată cu succes!")
 
 # ==========================================
 # 2. SOTA HYBRID SEARCH (CU RERANKING)
@@ -166,7 +172,7 @@ def sota_hybrid_search(state_json: Dict[str, Any], final_top_k: int = 3, qdrant_
         )
         initial_results = response.points 
     except Exception as e:
-        print(f"❌ Eroare la interogarea Qdrant: {e}")
+        logger.error(f"❌ Eroare la interogarea Qdrant: {e}")
         return []
 
     if not initial_results:

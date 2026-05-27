@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rag-indexer
+spec:
+  template:
+    spec:
+      containers:
+      - name: indexer
+        image: stefanfotin23/blossombot
+        imagePullPolicy: IfNotPresent
+        command: ["python", "-m", "app.build.build_rag"]
+        env:
+        - name: GEMINI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: slack-credentials
+              key: gemini-api-key
+        - name: QDRANT_HOST
+          value: "qdrant"
+        - name: QDRANT_PORT
+          value: "6333"
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "1000m"
+            memory: "2Gi"
+      restartPolicy: OnFailure
+  backoffLimit: 2

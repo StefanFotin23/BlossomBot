@@ -43,9 +43,6 @@ delete-resources:
 	@echo "All resources deleted."
 
 up:
-	@echo "--- Preparing Ollama ---"
-	@ollama pull qwen2.5:0.5b
-	@ollama create blossombot -f ollama/Modelfile || true
 	@make build-and-push-docker-images
 	@echo "--- Deploying application ---"
 	@make update
@@ -53,6 +50,12 @@ up:
 	@kubectl wait --for=condition=ready pod -l app=chat-app --timeout=180s || echo "Wait failed, checking status..."
 	@make status
 	@echo "Deployment done!"
+
+# Indexează datele în Qdrant folosind Job-ul K8s sau direct exec
+index-data:
+	@echo "--- Starting RAG Indexing Job ---"
+	@kubectl apply -f k8s/chat-app/job-index-rag.yaml
+	@echo "Job triggered. Check status with: kubectl get jobs"
 
 update:
 	@kubectl apply -f $(K8S_DIR)/ --recursive
@@ -115,8 +118,8 @@ restart-cluster: delete-cluster create-cluster up
 
 # Builds the application image.
 build-app-image:
-	@echo "--- Building Docker image for local use ---"
-	@docker build -t $(PROD_IMAGE_NAME) .
+	@echo "--- Building Docker image using BuildKit for caching ---"
+	@DOCKER_BUILDKIT=1 docker build --build-arg BUILDKIT_INLINE_CACHE=1 -t $(PROD_IMAGE_NAME) .
 
 # Loads the application image into the Kind cluster.
 load-app-image-to-kind:

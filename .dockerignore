@@ -1,0 +1,7 @@
+.git/
+.vscode/
+rag/
+__pycache__/
+*.pyc
+ngrok.log
+node_modules/
