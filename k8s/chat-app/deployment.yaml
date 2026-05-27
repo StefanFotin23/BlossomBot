@@ -14,6 +14,27 @@ spec:
       labels:
         app: chat-app
     spec:
+      initContainers:
+      - name: auto-indexer
+        image: stefanfotin23/blossombot
+        command: ["python", "-m", "app.build.check_qdrant"]
+        env:
+        - name: GEMINI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: slack-credentials
+              key: gemini-api-key
+        - name: QDRANT_HOST
+          value: "qdrant"
+        - name: QDRANT_PORT
+          value: "6333"
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "1000m"
+            memory: "2Gi"
       containers:
       - name: chat-app
         image: stefanfotin23/blossombot

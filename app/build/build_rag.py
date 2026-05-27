@@ -4,18 +4,21 @@ import numpy as np
 import app.build.eda_utils as eda
 import app.rag_utils as rag
 from app.config import Config
+from app.logger import get_logger
+
+logger = get_logger(__name__)
 
 def main():
-    print("🚀 Starting RAG Build Process (Production Mode)...")
+    logger.info("🚀 Starting RAG Build Process (Production Mode)...")
     
     # 1. Load data
     df = eda.load_data(Config.DATASET_PATH)
     if df is None:
-        print(f"❌ Failed to load data from {Config.DATASET_PATH}. Exiting.")
+        logger.error(f"❌ Failed to load data from {Config.DATASET_PATH}. Exiting.")
         return
 
     # 2. Clean data
-    print("🧹 Cleaning data...")
+    logger.info("🧹 Cleaning data...")
     df = eda.clean_column_names(df)
     df = eda.drop_empty_columns(df)
     
@@ -51,7 +54,7 @@ def main():
     df = eda.aggregate_by_handle(df)
     
     # 3. Build and Index RAG
-    print("📦 Building and Indexing RAG...")
+    logger.info("📦 Building and Indexing RAG...")
     # Using the template directory for payload output
     output_payload = os.path.join(Config.TEMPLATE_DIR, "qdrant_payload.json")
     
@@ -62,7 +65,7 @@ def main():
         qdrant_api_key=Config.QDRANT_API_KEY
     )
     
-    print(f"✅ RAG Build Process Completed! Payload saved to {output_payload}")
+    logger.info(f"✅ RAG Build Process Completed! Payload saved to {output_payload}")
 
 if __name__ == "__main__":
     main()

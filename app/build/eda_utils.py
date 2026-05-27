@@ -1,4 +1,3 @@
-from IPython.display import display
 from bs4 import BeautifulSoup
 import pandas as pd
 import numpy as np
@@ -6,15 +5,18 @@ import json
 import uuid
 import re
 import os
+from app.logger import get_logger
+
+logger = get_logger(__name__)
 
 def load_data(file_path):
-    print(f"Loading data from {file_path}...")
+    logger.info(f"Loading data from {file_path}...")
     try:
         df = pd.read_csv(file_path)
-        print(f"Success! Loaded {df.shape[0]} rows and {df.shape[1]} columns.")
+        logger.info(f"Success! Loaded {df.shape[0]} rows and {df.shape[1]} columns.")
         return df
     except Exception as e:
-        print(f"Error loading data: {e}")
+        logger.error(f"Error loading data: {e}")
         return None
 
 def clean_column_names(df):
@@ -27,7 +29,7 @@ def clean_column_names(df):
 def drop_empty_columns(df):
     initial_cols = df.shape[1]
     df_cleaned = df.dropna(axis=1, how='all')
-    print(f"\n--- Dropped {initial_cols - df_cleaned.shape[1]} completely empty columns ---")
+    logger.info(f"--- Dropped {initial_cols - df_cleaned.shape[1]} completely empty columns ---")
     return df_cleaned
 
 def get_high_missing_columns(df, threshold=0.8):
@@ -37,7 +39,7 @@ def get_high_missing_columns(df, threshold=0.8):
     """
     # Calculate the fraction of missing values per column
     missing_fractions = df.isnull().mean()
-    
+
     # Filter columns that exceed the threshold
     sparse_cols = missing_fractions[missing_fractions > threshold].index.tolist()
     return sparse_cols
@@ -49,35 +51,35 @@ def display_missing_info(df, min_threshold=0.9, max_threshold=1.0):
     """
     # Calculăm procentajul de valori lipsă pentru TOATE coloanele
     missing_fractions = df.isnull().mean()
-    
+
     # Creăm o "mască" (filtru) pentru intervalul dorit
     # Exemplu: > 0.50 și <= 0.90
     mask = (missing_fractions >= min_threshold) & (missing_fractions <= max_threshold)
-    
+
     # Aplicăm filtrul și sortăm descrescător din start
     target_fractions = missing_fractions[mask].sort_values(ascending=False)
-    
-    print(f"\n--- Coloane cu valori lipsă între {min_threshold*100}% și {max_threshold*100}% ({len(target_fractions)} coloane) ---")
-    
+
+    logger.info(f"--- Coloane cu valori lipsă între {min_threshold*100}% și {max_threshold*100}% ({len(target_fractions)} coloane) ---")
+
     if target_fractions.empty:
-        print("Nu s-au găsit coloane în acest interval.")
+        logger.info("Nu s-au găsit coloane în acest interval.")
         return
-        
+
     # Iterăm prin rezultate
     for col, fraction in target_fractions.items():
         pct_missing = fraction * 100
-        
+
         # Extragem datele coloanei (protecție contra coloanelor duplicate)
         col_data = df[col]
         if isinstance(col_data, pd.DataFrame):
             col_data = col_data.iloc[:, 0]
-            
+
         # Obținem numărul de valori unice și valorile în sine (fără NaN)
         n_unique = col_data.nunique(dropna=True)
         unique_vals = col_data.dropna().unique().tolist()
-        
+
         # Afișăm pe un singur rând
-        print(f"{col}: {pct_missing:.2f}% missing | {n_unique} unique: {unique_vals}")
+        logger.info(f"{col}: {pct_missing:.2f}% missing | {n_unique} unique: {unique_vals}")
 
 def aggregate_sparse_columns_to_other(df, threshold=0.9):
     """
@@ -85,14 +87,14 @@ def aggregate_sparse_columns_to_other(df, threshold=0.9):
     in the format 'Col1=val1, Col2=val2', and drops the original sparse columns.
     """
     sparse_cols = get_high_missing_columns(df, threshold)
-    
+
     if not sparse_cols:
-        print("\n--- No columns exceeded the threshold. 'Other' column will be empty. ---")
+        logger.info("--- No columns exceeded the threshold. 'Other' column will be empty. ---")
         df['Other'] = np.nan
         return df
-        
-    print(f"\n--- Aggregating {len(sparse_cols)} columns into 'Other' ---")
-    
+
+    logger.info(f"--- Aggregating {len(sparse_cols)} columns into 'Other' ---")
+
     # Helper function to process row by row
     def build_other_string(row):
         # row.items() gives us (column_name, value) pairs
@@ -102,11 +104,11 @@ def aggregate_sparse_columns_to_other(df, threshold=0.9):
 
     # Apply the helper function only to the sparse columns portion of the dataframe
     df['Other'] = df[sparse_cols].apply(build_other_string, axis=1)
-    
+
     # Drop the original sparse columns
     df_cleaned = df.drop(columns=sparse_cols)
-    
-    print(f"Success! Dropped {len(sparse_cols)} columns. Dataframe now has {df_cleaned.shape[1]} columns.")
+
+    logger.info(f"Success! Dropped {len(sparse_cols)} columns. Dataframe now has {df_cleaned.shape[1]} columns.")
     return df_cleaned
 
 def display_low_cardinality_info(df, threshold=5):
@@ -115,30 +117,30 @@ def display_low_cardinality_info(df, threshold=5):
     Displays the column name, the number of unique values, and a list of those values
     along with their percentage of appearance (excluding NaNs).
     """
-    print(f"\n--- Columns with <= {threshold} unique values ---")
+    logger.info(f"--- Columns with <= {threshold} unique values ---")
     count = 0
-    
+
     for col in df.columns:
         # Get the count of unique values, dropping NaNs so they don't count as a unique value
         n_unique = df[col].nunique(dropna=True)
-        
+
         # Check if the number of unique values is between 1 and the threshold
         if 0 < n_unique <= threshold:
             # Get the frequencies as percentages
             val_percentages = df[col].value_counts(normalize=True) * 100
-            
+
             # Create a clean, formatted list of strings like: "Value (45.2%)"
             formatted_vals = []
             for val, pct in val_percentages.items():
                 formatted_vals.append(f"'{val}' ({pct:.1f}%)")
-                
+
             # Join them together for a clean print output
             vals_string = ", ".join(formatted_vals)
-            print(f"- {col} ({n_unique} unique): [{vals_string}]")
+            logger.info(f"- {col} ({n_unique} unique): [{vals_string}]")
             count += 1
-            
+
     if count == 0:
-        print("No columns found below this threshold.")
+        logger.info("No columns found below this threshold.")
 
 def drop_low_cardinality_columns(df, threshold=1):
     """
@@ -147,29 +149,29 @@ def drop_low_cardinality_columns(df, threshold=1):
     """
     cols_to_drop = []
     dropped_details = {}
-    
+
     for col in df.columns:
         # Count unique values, ignoring NaNs
         n_unique = df[col].nunique(dropna=True)
-        
+
         # If the unique count is strictly less than the threshold
         if 0 < n_unique <= threshold:
             cols_to_drop.append(col)
             # Save the unique values just so we can print them out
             dropped_details[col] = df[col].dropna().unique().tolist()
-            
+
     # Perform the drop
     if cols_to_drop:
-        print(f"\n--- Dropping {len(cols_to_drop)} columns with < {threshold} unique values ---")
+        logger.info(f"--- Dropping {len(cols_to_drop)} columns with < {threshold} unique values ---")
         for col in cols_to_drop:
-            print(f" ❌ Dropped [{col}] - Contained: {dropped_details[col]}")
-            
+            logger.info(f" ❌ Dropped [{col}] - Contained: {dropped_details[col]}")
+
         df_cleaned = df.drop(columns=cols_to_drop)
-        print(f"\nDataframe reduced from {df.shape[1]} to {df_cleaned.shape[1]} columns.")
+        logger.info(f"Dataframe reduced from {df.shape[1]} to {df_cleaned.shape[1]} columns.")
     else:
-        print(f"\n--- No columns found with < {threshold} unique values. None dropped. ---")
+        logger.info(f"--- No columns found with < {threshold} unique values. None dropped. ---")
         df_cleaned = df
-        
+
     return df_cleaned
 
 def analyze_column(df, col_name, top_n=10):
@@ -180,73 +182,73 @@ def analyze_column(df, col_name, top_n=10):
     - Distribution of the most frequent values (counts and percentages)
     """
     if col_name not in df.columns:
-        print(f"❌ Error: Column '{col_name}' not found in the dataframe.")
+        logger.error(f"❌ Error: Column '{col_name}' not found in the dataframe.")
         return
-        
-    print(f"\n" + "="*50)
-    print(f"🔍 ANALYSIS FOR: [{col_name}]")
-    print("="*50)
-    
+
+    logger.info(f"\n" + "="*50)
+    logger.info(f"🔍 ANALYSIS FOR: [{col_name}]")
+    logger.info("="*50)
+
     # 1. Missing Values
     total_rows = len(df)
     missing_count = df[col_name].isnull().sum()
     missing_pct = (missing_count / total_rows) * 100
-    print(f"• Missing Values:  {missing_count} rows ({missing_pct:.2f}%)")
-    
+    logger.info(f"• Missing Values:  {missing_count} rows ({missing_pct:.2f}%)")
+
     # 2. Unique Values
     n_unique = df[col_name].nunique(dropna=True)
-    print(f"• Unique Values:   {n_unique}")
-    print("-" * 50)
-    
+    logger.info(f"• Unique Values:   {n_unique}")
+    logger.info("-" * 50)
+
     if n_unique == 0:
-        print("This column has no data (100% empty).")
+        logger.info("This column has no data (100% empty).")
         return
-        
+
     # 3. Value Distribution
-    print(f"📊 Top {min(top_n, n_unique)} Value Distribution:")
+    logger.info(f"📊 Top {min(top_n, n_unique)} Value Distribution:")
     counts = df[col_name].value_counts(dropna=True)
     percentages = df[col_name].value_counts(normalize=True, dropna=True) * 100
-    
+
     # Loop through the top N items and print them nicely
     display_limit = min(top_n, n_unique)
     for i, (val, count) in enumerate(counts.head(display_limit).items()):
         pct = percentages.iloc[i]
-        print(f"  {i+1:2d}. {count:4d} rows | {pct:5.1f}% | '{val}'")
-        
+        logger.info(f"  {i+1:2d}. {count:4d} rows | {pct:5.1f}% | '{val}'")
+
     # If there are more values than we displayed, show a summary note
     if n_unique > top_n:
         remaining = n_unique - top_n
-        print(f"  ... plus {remaining} other unique values.")
-    print("="*50 + "\n")
+        logger.info(f"  ... plus {remaining} other unique values.")
+    logger.info("="*50 + "\n")
 
 def clean_html_column(df, column_name='Body (HTML)'):
     """
     Parcurge o coloană cu format HTML și extrage doar textul simplu.
     """
     if column_name not in df.columns:
-        print(f"\n❌ Eroare: Coloana '{column_name}' nu a fost găsită în dataframe.")
+        logger.error(f"❌ Eroare: Coloana '{column_name}' nu a fost găsită în dataframe.")
         return df
-        
-    print(f"\n--- Extragere text din HTML pentru coloana: [{column_name}] ---")
-    
+
+    logger.info(f"--- Extragere text din HTML pentru coloana: [{column_name}] ---")
+
     def extract_text(html_content):
         # Dacă celula este goală (NaN), o lăsăm așa
         if pd.isna(html_content) or str(html_content).strip() == "":
             return np.nan
-            
+
         # Folosim BeautifulSoup pentru a parsa HTML-ul
         soup = BeautifulSoup(str(html_content), "html.parser")
-        
+
         # Extragem textul. separator=" " previne lipirea cuvintelor între paragrafe
         # strip=True șterge spațiile goale de la început și sfârșit
         clean_text = soup.get_text(separator=" ", strip=True)
-        
+
         return clean_text
 
     # Aplicăm funcția pe toată coloana
     df[column_name] = df[column_name].apply(extract_text)
-    
-    print(" ✅ HTML transformat cu succes în text simplu.")
+
+    logger.info(" ✅ HTML transformat cu succes în text simplu.")
     return df
 
 def aggregate_by_handle(df, separator=" ; "):
@@ -256,19 +258,19 @@ def aggregate_by_handle(df, separator=" ; "):
     Dacă are valori diferite (ex: SKU-uri, imagini, prețuri), le concatenează.
     """
     if 'Handle' not in df.columns:
-        print("❌ Eroare: Coloana 'Handle' nu există în DataFrame.")
+        logger.error("❌ Eroare: Coloana 'Handle' nu există în DataFrame.")
         return df
-        
-    print(f"\n--- Agregare produse după 'Handle' ---")
-    print(f"Rânduri inițiale: {len(df)}")
-    
+
+    logger.info(f"--- Agregare produse după 'Handle' ---")
+    logger.info(f"Rânduri inițiale: {len(df)}")
+
     def smart_agg(series):
         # Eliminăm valorile nule (NaN) și transformăm totul în text
         valid_items = series.dropna().astype(str)
-        
+
         # Extragem doar valorile unice, păstrând ordinea în care au apărut
         unique_items = valid_items.unique()
-        
+
         if len(unique_items) == 0:
             return np.nan
         elif len(unique_items) == 1:
@@ -277,11 +279,11 @@ def aggregate_by_handle(df, separator=" ; "):
         else:
             # Dacă sunt valori diferite (ex: imagini sau prețuri), le lipim cu separatorul dorit
             return separator.join(unique_items)
-            
+
     # Grupăm după Handle și aplicăm funcția inteligentă pe restul coloanelor
     df_agg = df.groupby('Handle', as_index=False).agg(smart_agg)
-    
-    print(f"✅ Succes! Datele au fost comprimate la {len(df_agg)} rânduri (produse unice).")
+
+    logger.info(f"✅ Succes! Datele au fost comprimate la {len(df_agg)} rânduri (produse unice).")
     return df_agg
 
 def compress_variations(df, column_name='Variations'):
@@ -290,50 +292,50 @@ def compress_variations(df, column_name='Variations'):
     și le rescrie într-un format mult mai scurt și mai lizibil.
     """
     if column_name not in df.columns:
-        print(f"❌ Eroare: Coloana '{column_name}' nu a fost găsită în DataFrame.")
+        logger.error(f"❌ Eroare: Coloana '{column_name}' nu a fost găsită în DataFrame.")
         return df
-        
-    print(f"\n--- Optimizare text pentru coloana: [{column_name}] ---")
-    
+
+    logger.info(f"--- Optimizare text pentru coloana: [{column_name}] ---")
+
     def process_cell(text):
         if pd.isna(text) or str(text).strip() == "":
             return np.nan
-            
+
         # 1. Separăm textul după ';' și curățăm eventualele spații libere
         items = [item.strip() for item in str(text).split(';') if item.strip()]
-        
+
         # Dacă există doar o singură variantă, nu avem ce comprima
         if len(items) <= 1:
             return text
-            
+
         # 2. Găsim prefixul comun tuturor variantelor
         prefix = os.path.commonprefix(items)
-        
+
         # Dacă avem un prefix relevant (mai mare de 3 caractere ca să nu fie o coincidență)
         if len(prefix) > 3:
             # 3. Extragem restul de text (sufixele) tăind prefixul din fiecare element
             suffixes = [item[len(prefix):] for item in items]
-            
+
             # Curățăm prefixul (eliminăm cratima '-' de la final dacă există)
             clean_prefix = prefix.rstrip('- _')
-            
+
             # 4. Lipim la loc sub noul format: "Prefix: varianta1; varianta2"
             # Am adăugat două puncte (": ") pentru a fi super clar la citire
             return f"{clean_prefix}: " + "; ".join(suffixes)
         else:
             # Dacă nu există nicio parte comună, returnăm textul original
             return text
-            
+
     # Aplicăm logica pe toată coloana
     df[column_name] = df[column_name].apply(process_cell)
-    
-    print(" ✅ Variantele au fost comprimate cu succes!")
+
+    logger.info(" ✅ Variantele au fost comprimate cu succes!")
     return df
 
 def export_for_qdrant(df_clean, output_json='qdrant_payload.json'):
-    print("📦 Pregătim documentele pentru Qdrant...")
+    logger.info("📦 Pregătim documentele pentru Qdrant...")
     qdrant_documents = []
-    
+
     # Helper 1: Transformă textul în listă
     def parse_list(val):
         if pd.isna(val) or str(val).strip() == "": return []
@@ -360,7 +362,7 @@ def export_for_qdrant(df_clean, output_json='qdrant_payload.json'):
         if pd.notna(row.get('Event Type')): semantic_text += f"Evenimente: {row['Event Type']}.\n"
         if pd.notna(row.get('Other_Specs')): semantic_text += f"Extra: {row['Other_Specs']}.\n"
         if pd.notna(row.get('Body (HTML)')): semantic_text += f"Descriere: {row['Body (HTML)']}"
-        
+
         # 2. PAYLOAD-UL
         payload = {
             "title": str(row['Title']),
@@ -379,9 +381,9 @@ def export_for_qdrant(df_clean, output_json='qdrant_payload.json'):
             "payload": payload,
             "text_to_embed": semantic_text 
         })
-        
+
     with open(output_json, 'w', encoding='utf-8') as f:
         json.dump(qdrant_documents, f, ensure_ascii=False, indent=2)
-        
-    print(f"✅ Gata! Am exportat {len(qdrant_documents)} documente fără erori.")
+
+    logger.info(f"✅ Gata! Am exportat {len(qdrant_documents)} documente fără erori.")
     return qdrant_documents
