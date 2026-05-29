@@ -54,3 +54,6 @@ t=2026-05-29T14:17:33+0300 lvl=info msg="join connections" obj=join id=f0029f823
 t=2026-05-29T14:18:07+0300 lvl=info msg="join connections" obj=join id=3e293e560544 l=127.0.0.1:45080 r=54.236.32.188:26524
 t=2026-05-29T14:18:09+0300 lvl=info msg="join connections" obj=join id=bd335aecd065 l=127.0.0.1:45080 r=35.153.178.10:37602
 t=2026-05-29T14:18:11+0300 lvl=info msg="join connections" obj=join id=a713054397f8 l=127.0.0.1:45080 r=54.87.135.61:17334
+t=2026-05-29T14:21:56+0300 lvl=info msg="join connections" obj=join id=f8075527dc31 l=127.0.0.1:45080 r=34.230.48.59:20636
+t=2026-05-29T14:21:57+0300 lvl=info msg="join connections" obj=join id=d56bddbd68e3 l=127.0.0.1:45080 r=54.166.141.170:49462
+t=2026-05-29T14:22:01+0300 lvl=info msg="join connections" obj=join id=bb620dd08447 l=127.0.0.1:45080 r=44.193.218.201:24542

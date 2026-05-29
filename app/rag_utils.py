@@ -232,66 +232,61 @@ def build_and_index_rag(df_clean: pd.DataFrame, output_json: str = 'qdrant_paylo
 # ==========================================
 # 2. SOTA HYBRID SEARCH (CU RERANKING)
 # ==========================================
-def sota_hybrid_search(state_json: Dict[str, Any], final_top_k: int = 3, qdrant_url: str = None, qdrant_api_key: str = None) -> List[Dict]:
-    client = get_qdrant_client(url=qdrant_url, api_key=qdrant_api_key)
+def sota_hybrid_search(state_json: Dict[str, Any], filter_scores: Dict[str, int] = None, final_top_k: int = 3, qdrant_url: str = None, qdrant_api_key: str = None) -> (List[Dict], Dict[str, Any]):
+    client = get_qdrant_client(url=url, api_key=api_key) if (url := qdrant_url) or (api_key := qdrant_api_key) else get_qdrant_client()
     embed_model, reranker_model = get_models()
     
     filters = state_json.get("filters") or {}
     semantic_query = state_json.get("semantic_query", "")
     
-    # Conversie ultra-robustă în string (Gemini poate returna listă sau dict uneori)
-    if not isinstance(semantic_query, str):
-        if isinstance(semantic_query, list):
-            semantic_query = " ".join([str(s) for s in semantic_query])
-        elif isinstance(semantic_query, dict):
-            # Dacă e dict, concatenăm valorile pentru a extrage keywords
-            semantic_query = " ".join([str(v) for v in semantic_query.values()])
-        else:
-            semantic_query = str(semantic_query)
-    
-    if not semantic_query.strip():
-        return []
-
     # 1. Construim condițiile de filtrare
-    conditions = {}
+    conditions_map = {}
     if filters.get("price_max"):
-        conditions["price"] = FieldCondition(key="price", range=Range(lte=float(filters["price_max"])))
+        conditions_map["price_max"] = FieldCondition(key="price", range=Range(lte=float(filters["price_max"])))
     if filters.get("dimensiune"):
-        conditions["dimensiune"] = FieldCondition(key="dimensiune", match=MatchValue(value=filters["dimensiune"]))
+        conditions_map["dimensiune"] = FieldCondition(key="dimensiune", match=MatchValue(value=filters["dimensiune"]))
     if filters.get("category"):
-        conditions["category"] = FieldCondition(key="category", match=MatchValue(value=filters["category"]))
+        conditions_map["category"] = FieldCondition(key="category", match=MatchValue(value=filters["category"]))
     if filters.get("event_type"):
-        # MatchValue pe o listă (event_type) în Qdrant funcționează ca "conține"
-        conditions["event_type"] = FieldCondition(key="event_type", match=MatchValue(value=filters["event_type"]))
+        conditions_map["event_type"] = FieldCondition(key="event_type", match=MatchValue(value=filters["event_type"]))
+    if filters.get("colors"):
+        conditions_map["colors"] = FieldCondition(key="colors", match=MatchValue(value=filters["colors"]))
+    if filters.get("flowers_type"):
+        conditions_map["flowers_type"] = FieldCondition(key="flowers_type", match=MatchValue(value=filters["flowers_type"]))
 
-    # 2. Căutare vectorială inițială cu RELAXARE GRADUALĂ
+    # 2. Căutare vectorială inițială cu RELAXARE DINAMICĂ
     pool_size = final_top_k * 5 
     query_vector = embed_model.encode(semantic_query).tolist()
     
-    # Definim ordinea de relaxare:
-    # Pas 1: Toate filtrele active
-    # Pas 2: Fără preț (adesea cel mai restrictiv)
-    # Pas 3: Fără dimensiune
-    # Pas 4: Doar categoria sau event_type (trăsăturile structurale de bază)
-    # Pas 5: Fără niciun filtru (căutare pur semantică)
+    # Ordonăm filtrele după scor (cele mai mici primele pentru a fi eliminate primele)
+    active_keys = list(conditions_map.keys())
+    if filter_scores:
+        # Sortăm cheile active după scorul lor (default 0 dacă lipsește)
+        sorted_keys = sorted(active_keys, key=lambda k: filter_scores.get(k, 0))
+    else:
+        # Fallback la o ordine predefinită dacă nu avem scoruri
+        fallback_order = ["dimensiune", "colors", "price_max", "event_type", "category", "flowers_type"]
+        sorted_keys = [k for k in fallback_order if k in active_keys]
+
+    # Generăm strategiile de relaxare: eliminăm pe rând cel mai puțin important filtru
+    search_strategies = []
+    # Strategia 1: Toate
+    search_strategies.append({"name": "ALL", "keys": list(active_keys)})
     
-    search_strategies = [
-        list(conditions.values()), # TOATE
-        [v for k, v in conditions.items() if k != "price"], # Fără preț
-        [v for k, v in conditions.items() if k not in ["price", "dimensiune"]], # Fără preț și dimensiune
-        [v for k, v in conditions.items() if k in ["category", "event_type"]], # Doar categoria și tipul de eveniment
-        [] # Nimic (Doar semantic)
-    ]
+    # Strategii intermediare: eliminăm progresiv din cele sortate (cele mai slabe primele)
+    current_keys = list(active_keys)
+    for key_to_remove in sorted_keys:
+        if key_to_remove in current_keys:
+            current_keys.remove(key_to_remove)
+            search_strategies.append({"name": f"RELAXED_{key_to_remove}", "keys": list(current_keys)})
 
     initial_results = []
-    strategy_names = ["TOATE FILTRELE", "FĂRĂ PREȚ", "FĂRĂ PREȚ ȘI DIMENSIUNE", "DOAR CATEGORIA/EVENIMENT", "SEMANTIC ONLY"]
+    failed_filters = []
+    used_strategy = "SEMANTIC"
     
     try:
-        for i, must_cond in enumerate(search_strategies):
-            # Dacă strategia curentă are aceleași filtre ca precedenta (ex: nu aveam preț de la început), o sărim
-            if i > 0 and must_cond == search_strategies[i-1]:
-                continue
-                
+        for strategy in search_strategies:
+            must_cond = [conditions_map[k] for k in strategy["keys"]]
             current_filter = Filter(must=must_cond) if must_cond else None
             
             response = client.query_points(
@@ -303,25 +298,23 @@ def sota_hybrid_search(state_json: Dict[str, Any], final_top_k: int = 3, qdrant_
             
             if response.points:
                 initial_results = response.points
-                if i > 0:
-                    logger.info(f"💡 Rezultate găsite folosind strategia de fallback: {strategy_names[i]}")
+                used_strategy = strategy["name"]
+                # Filtrele care NU sunt în strategia câștigătoare sunt cele eșuate
+                failed_filters = [k for k in active_keys if k not in strategy["keys"]]
                 break
-            else:
-                if must_cond: # Logăm doar dacă chiar am avut filtre care au eșuat
-                    logger.warning(f"🔍 Niciun rezultat cu strategia: {strategy_names[i]}. Încercăm următoarea...")
 
     except Exception as e:
         logger.error(f"❌ Eroare la interogarea Qdrant: {e}")
-        return []
+        return [], {"error": str(e)}
 
     if not initial_results:
-        return []
+        return [], {"strategy": "NONE", "failed_filters": active_keys}
 
     # 3. Reranking cu Cross-Encoder
     rerank_pairs = [[semantic_query, hit.payload.get("page_content", "")] for hit in initial_results]
     cross_scores = reranker_model.predict(rerank_pairs)
 
-    # 4. Extragem datele în dicționare standard Python (ocolim restricțiile Pydantic)
+    # 4. Extragem datele
     combined_results = []
     for i, hit in enumerate(initial_results):
         combined_results.append({
@@ -332,8 +325,14 @@ def sota_hybrid_search(state_json: Dict[str, Any], final_top_k: int = 3, qdrant_
             "context": hit.payload.get("page_content") 
         })
         
-    # 5. Sortăm descrescător după precizia Cross-Encoder-ului
     reranked_results = sorted(combined_results, key=lambda x: x["score"], reverse=True)
+    
+    search_metadata = {
+        "strategy": used_strategy,
+        "failed_filters": failed_filters,
+        "total_found": len(reranked_results)
+    }
         
-    # 6. Returnăm doar Top K
-    return reranked_results[:final_top_k]
+    return reranked_results[:final_top_k], search_metadata
+
+

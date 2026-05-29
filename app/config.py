@@ -11,7 +11,7 @@ class Config:
 
     # Gemini
     GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
-    GEMINI_MODEL_NAME = os.environ.get("GEMINI_MODEL_NAME", "gemini-2.5-flash")
+    GEMINI_MODEL_NAME = os.environ.get("GEMINI_MODEL_NAME", "gemini-3.1-flash-lite")
 
     # Qdrant
     QDRANT_HOST = os.environ.get("QDRANT_HOST", "localhost")
