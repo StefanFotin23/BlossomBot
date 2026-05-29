@@ -1,6 +1,7 @@
 import re
 import json
 import os
+import asyncio
 from app import llm_agent as llm
 from app import rag_utils as rag
 from app.config import Config
@@ -8,10 +9,7 @@ from app.logger import get_logger
 
 logger = get_logger(__name__)
 
-# State configurations
-VALID_STATES = ["GREETING", "SEARCH_PRODUCTS", "PURCHASE_INTENT", "RESTART", "GENERAL_INQUIRY"]
-
-# In-memory storage for MVP (consider Redis for multi-instance production)
+# In-memory storage
 user_states = {}
 
 async def get_user_state(user_id):
@@ -21,72 +19,98 @@ async def set_user_state(user_id, state_data):
     user_states[user_id] = state_data
 
 async def process_recommendations(user_query):
-    """Execută flow-ul de RAG: Extracție -> Căutare -> Generare Răspuns."""
-    # 1. Extracție filtre
-    logger.info(f"Extracting filters for query: {user_query}")
+    """Execută flow-ul de RAG."""
+    # 1. Extracție filtre (aruncă GeminiOverloadedError dacă e 503)
     extracted_data = llm.extract_filters(
         user_query, 
-        ollama_url=Config.OLLAMA_URL, 
-        model_name=Config.MODEL_NAME, 
         api_key=Config.GEMINI_API_KEY
     )
     
     # 2. Căutare Qdrant
-    logger.info(f"Searching Qdrant with filters: {extracted_data}")
     results = rag.sota_hybrid_search(
         extracted_data, 
         qdrant_url=Config.QDRANT_URL
     )
     
     if not results:
-        logger.warning(f"No results found for query: {user_query}")
         return "Îmi pare rău, nu am găsit flori care să se potrivească exact descrierii tale. Poți încerca să modifici puțin cerințele?", []
 
-    # 3. Generare răspuns natural
-    logger.info(f"Generating conversational response for {len(results)} results")
-    rag_context = rag.format_context_for_llm(results)
-    response_text = llm.generate_conversational_response(
-        user_query, 
-        rag_context, 
-        ollama_url=Config.OLLAMA_URL, 
-        model_name=Config.MODEL_NAME, 
-        api_key=Config.GEMINI_API_KEY
-    )
-    
+    # 3. Generare răspuns hibrid (instant)
+    response_text = llm.generate_hybrid_response(results)
     return response_text, results
 
-async def handle_message(body, say, publish_purchase_callback=None):
+async def retry_recommendations(user_id, channel_id, user_query, client):
+    """Background task care reîncearcă procesarea până când Gemini este disponibil."""
+    max_retries = 10
+    retry_delay = 5 # secunde
+    
+    logger.info(f"🔄 Starting background retry for user {user_id}")
+    
+    for i in range(max_retries):
+        try:
+            await asyncio.sleep(retry_delay)
+            logger.info(f"🔄 Retry attempt {i+1} for user {user_id}")
+            
+            response_text, results = await process_recommendations(user_query)
+            
+            # Trimitem răspunsul final
+            await client.chat_postMessage(channel=channel_id, text=response_text)
+            
+            # Actualizăm starea
+            user_data = await get_user_state(user_id)
+            user_data["last_results"] = [r['title'] for r in results]
+            await set_user_state(user_id, user_data)
+            
+            logger.info(f"✅ Success on retry {i+1} for user {user_id}")
+            return
+            
+        except llm.GeminiOverloadedError:
+            logger.warning(f"⚠️ Retry {i+1} failed: Gemini still busy.")
+        except Exception as e:
+            logger.error(f"❌ Error during retry: {e}")
+            break
+            
+    await client.chat_postMessage(
+        channel=channel_id, 
+        text="Îmi cer scuze, dar serviciul conversational este extrem de solicitat acum. Te rog să încerci din nou peste câteva minute."
+    )
+
+async def handle_message(body, say, client, publish_purchase_callback=None):
     """EntryPoint pentru logica bot-ului. Acționează ca un State Machine robust."""
     event = body["event"]
     user_id = event["user"]
+    channel_id = event["channel"]
     text = event["text"]
     
-    # Load State
     user_data = await get_user_state(user_id)
     current_state = user_data.get("state")
     
-    # Gemini Routing (Determine Intent)
+    # 1. Gemini Routing (Determine Intent)
     new_state = llm.classify_intent(text, current_state, api_key=Config.GEMINI_API_KEY)
-    logger.info(f"User: {user_id} | State: {current_state} -> {new_state} | Message: {text}")
+    logger.info(f"User: {user_id} | State: {current_state} -> {new_state}")
 
-    # State Transitions & Actions
     if new_state == "RESTART":
         user_data = {"state": "GREETING", "history": []}
         await set_user_state(user_id, user_data)
-        logger.info(f"Resetting state for user: {user_id}")
-        await say("Nicio problemă, am resetat conversația. Cu ce te pot ajuta astăzi?")
+        await say("Nicio problemă, am resetat conversația. Cu ce te pot ajuta?")
         return
 
     if new_state == "GREETING":
-        await say(f"Bună! Sunt BlossomBot 🌸 asistentul tău virtual de la City Flowers. Spune-mi ce fel de flori cauți sau pentru ce ocazie?")
+        await say(f"Bună! Sunt BlossomBot 🌸 asistentul tău virtual. Spune-mi ce fel de flori cauți?")
         user_data["state"] = "SEARCH_PRODUCTS" 
     
     elif new_state == "SEARCH_PRODUCTS":
-        await say("Caut cele mai potrivite flori în catalogul nostru...")
-        response_text, results = await process_recommendations(text)
-        await say(response_text)
-        user_data["last_results"] = [r['title'] for r in results]
-        user_data["state"] = "SEARCH_PRODUCTS"
+        await say("Analizez cererea ta și verific catalogul nostru...")
+        try:
+            response_text, results = await process_recommendations(text)
+            await say(response_text)
+            user_data["last_results"] = [r['title'] for r in results]
+        except llm.GeminiOverloadedError:
+            logger.warning(f"🚨 Gemini Overloaded for user {user_id}. Starting retry task.")
+            await say("🌸 Sunt puțin ocupat cu multe cereri acum, dar nu te-am uitat! Revin în câteva secunde cu cele mai bune recomandări pentru tine...")
+            # PORNIM TASK-UL ÎN FUNDAL (RAM)
+            asyncio.create_task(retry_recommendations(user_id, channel_id, text, client))
+            return # Ieșim din handler, mesajul va fi trimis ulterior de task-ul de fundal
 
     elif new_state == "PURCHASE_INTENT":
         if publish_purchase_callback:
@@ -95,25 +119,14 @@ async def handle_message(body, say, publish_purchase_callback=None):
                 "items": user_data.get("last_results", ["Produs selectat"]),
                 "timestamp": event.get("event_ts")
             }
-            logger.info(f"Publishing purchase for user: {user_id}")
             success = await publish_purchase_callback(purchase_data)
             if success:
-                logger.info(f"Purchase published successfully for user: {user_id}")
-                await say("Excelent! Am trimis comanda ta către echipa noastră. Vei fi contactat în scurt timp pentru livrare. 🎉")
+                await say("Excelent! Am trimis comanda ta. 🎉")
                 user_data["state"] = "GREETING" 
             else:
-                logger.error(f"Failed to publish purchase for user: {user_id}")
-                await say("Îmi cer scuze, a apărut o problemă la procesarea comenzii. Te rog să încerci din nou.")
+                await say("Îmi cer scuze, a apărut o problemă. Te rog să încerci din nou.")
         else:
-            await say("Vrei să finalizezi comanda? Spune-mi 'da' pentru a trimite solicitarea către colegii mei.")
-
-    elif new_state == "GENERAL_INQUIRY":
-        logger.info(f"Handling general inquiry for user: {user_id}")
-        response_text = llm.generate_conversational_response(
-            text, "Informații generale florărie: Livrăm zilnic 09-21, locație București Str. Florilor 10.", 
-            ollama_url=Config.OLLAMA_URL, model_name=Config.MODEL_NAME, api_key=Config.GEMINI_API_KEY
-        )
-        await say(response_text)
+            await say("Vrei să finalizezi comanda? Spune-mi 'da'.")
 
     # Save State
     user_data["history"].append({"user": text, "state": new_state})

@@ -51,11 +51,19 @@ up:
 	@make status
 	@echo "Deployment done!"
 
-# Indexează datele în Qdrant folosind Job-ul K8s sau direct exec
+# Indexează datele în Qdrant folosind Job-ul K8s și actualizează și fișierele locale (Redundanță)
 index-data:
-	@echo "--- Starting RAG Indexing Job ---"
+	@echo "--- Step 1: Updating local files (Payload + Schema) via Docker ---"
+	-@docker run --rm \
+		--network host \
+		-v $(shell pwd)/app/template:/app/app/template \
+		$(PROD_IMAGE_NAME) \
+		python3 -m app.build.build_rag
+	@echo "--- Step 2: Cleaning old indexing job if exists ---"
+	@kubectl delete job rag-indexer --ignore-not-found=true
+	@echo "--- Step 3: Starting RAG Indexing Job in Kubernetes ---"
 	@kubectl apply -f k8s/chat-app/job-index-rag.yaml
-	@echo "Job triggered. Check status with: kubectl get jobs"
+	@echo "Job triggered. Monitor cluster logs with: kubectl logs -f job/rag-indexer"
 
 update:
 	@kubectl apply -f $(K8S_DIR)/ --recursive
@@ -118,7 +126,8 @@ restart-cluster: delete-cluster create-cluster up
 
 # Builds the application image.
 build-app-image:
-	@echo "--- Building Docker image using BuildKit for caching ---"
+	@echo "--- Building Docker image (forcing app layer refresh for all .py files) ---"
+	@find app -name "*.py" -exec touch {} +
 	@DOCKER_BUILDKIT=1 docker build --build-arg BUILDKIT_INLINE_CACHE=1 -t $(PROD_IMAGE_NAME) .
 
 # Loads the application image into the Kind cluster.

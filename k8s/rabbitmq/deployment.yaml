@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: rabbitmq
-        image: rabbitmq:3-management-alpine
+        image: rabbitmq:4.0.7-management-alpine
         env:
         - name: RABBITMQ_DEFAULT_USER
           value: "guest"

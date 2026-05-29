@@ -183,6 +183,4 @@ def generate_hybrid_response(rag_results):
         # 4. Asamblăm textul produsului
         items_text += f"{i}. **{title}** - Preț: {price} lei\n   Detalii: {short_desc}\n   Image: {imageUrl}\n\n"
     
-    footer = "Doriți să adăugăm și o felicitare personalizată la acest buchet?"
-    
-    return f"{selected_intro}\n\n{items_text}{footer}"
+    return f"{selected_intro}\n\n{items_text}"

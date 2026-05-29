@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: qdrant
-        image: qdrant/qdrant:latest
+        image: qdrant/qdrant:v1.18.1
         ports:
         - containerPort: 6333 # gRPC and HTTP
         - containerPort: 6334 # gRPC
