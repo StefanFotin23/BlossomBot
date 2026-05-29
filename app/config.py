@@ -39,6 +39,10 @@ class Config:
     DEBUG = os.environ.get("DEBUG", "False").lower() in ("true", "1", "t")
     TEMPLATE_DIR = os.environ.get("TEMPLATE_DIR", "app/template")
     DATASET_PATH = os.environ.get("DATASET_PATH", "app/build/dataset/products.csv")
+    
+    # AI/ML Settings
+    TRANSFORMERS_OFFLINE = os.environ.get("TRANSFORMERS_OFFLINE", "1")
+    HF_HUB_OFFLINE = os.environ.get("HF_HUB_OFFLINE", "1")
 
     @classmethod
     def validate(cls):

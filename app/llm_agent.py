@@ -3,21 +3,28 @@ import requests
 import random
 import json
 import re
+import logging
 from google import genai
 from typing import Dict, Any
 
+# Get logger
+logger = logging.getLogger(__name__)
+
 OLLAMA_OPTIMIZED_OPTIONS = {
-    "num_ctx": 2048,        # Limitează contextul pentru a nu umple VRAM-ul
-    "num_gpu": 99,          # Forțează toate straturile pe GPU
-    "temperature": 0.1,     # Determinism pentru extracție și stări
-    "num_predict": 150,     # Limitează lungimea output-ului pentru latență mică
-    "low_vram": True        # Hint pentru Ollama să fie conservator
+    "num_ctx": 2048,
+    "num_gpu": 99,
+    "temperature": 0.1,
+    "num_predict": 150,
+    "low_vram": True
 }
 
 GEMINI_MODEL_NAME = "gemini-2.5-flash"
 
+class GeminiOverloadedError(Exception):
+    """Excepție custom pentru când Gemini API dă 503."""
+    pass
+
 def getApiClient(api_key: str = None):
-    """Inițializează și returnează clientul GenAI dacă api_key este prezent."""
     if api_key:
         return genai.Client(api_key=api_key)
     return None
@@ -26,22 +33,30 @@ def getApiClient(api_key: str = None):
 # 1. CONVERSATION ROUTER (State Classification)
 # ==========================================
 def classify_intent(user_message: str, current_state: str = "GREETING", api_key: str = None) -> str:
-    """Identifică intenția utilizatorului folosind Gemini pentru a ghida starea conversației."""
+    """Identifică intenția utilizatorului folosind Gemini."""
     client = getApiClient(api_key)
-    if not client:
-        # Fallback simplu dacă nu avem API Key
-        if any(word in user_message.lower() for word in ["caut", "vreau", "buchet", "flori", "recomand"]):
+    
+    def manual_fallback(msg, current):
+        msg_clean = msg.lower()
+        if any(word in msg_clean for word in ["salut", "buna", "bună", "hello", "hi"]):
+            return "GREETING"
+        if any(word in msg_clean for word in ["caut", "vreau", "buchet", "flori", "recomand", "lalele", "trandafiri"]):
             return "SEARCH_PRODUCTS"
-        if any(word in user_message.lower() for word in ["cumpăr", "comand", "iau", "da"]):
+        if any(word in msg_clean for word in ["cumpăr", "comand", "iau", "da", "confirm", "finaliz"]):
             return "PURCHASE_INTENT"
-        return current_state
+        if "restart" in msg_clean:
+            return "RESTART"
+        return current
+
+    if not client:
+        return manual_fallback(user_message, current_state)
 
     states_desc = """
     - GREETING: Utilizatorul salută sau începe conversația.
     - SEARCH_PRODUCTS: Utilizatorul caută flori, cere recomandări sau descrie o ocazie.
     - PURCHASE_INTENT: Utilizatorul confirmă că vrea să cumpere sau întreabă cum comandă.
     - RESTART: Utilizatorul vrea să o ia de la capăt.
-    - GENERAL_INQUIRY: Utilizatorul pune întrebări generale (livrare, program, locație).
+    - GENERAL_INQUIRY: Utilizatorul pune întrebări generale.
     """
 
     system_prompt = (
@@ -57,176 +72,84 @@ def classify_intent(user_message: str, current_state: str = "GREETING", api_key:
             contents=f"{system_prompt}\n\nMesaj utilizator: {user_message}"
         )
         intent = response.text.strip().upper()
-        # Validare rapidă
         valid_states = ["GREETING", "SEARCH_PRODUCTS", "PURCHASE_INTENT", "RESTART", "GENERAL_INQUIRY"]
         for s in valid_states:
             if s in intent: return s
         return current_state
     except Exception as e:
-        print(f"⚠️ Eroare la Gemini Intent Router: {e}")
+        if "503" in str(e) or "UNAVAILABLE" in str(e):
+            logger.warning("Gemini is overloaded during classification, using manual fallback.")
+            return manual_fallback(user_message, current_state)
+        logger.error(f"⚠️ Eroare neașteptată Gemini Intent Router: {e}")
         return current_state
 
 # ==========================================
 # 2. RAG ROUTER (Text -> JSON pentru RAG)
 # ==========================================
-def _build_router_prompt(template_dir: str = None) -> str:
-    """Metodă internă care asamblează promptul dinamic pe baza fișierelor."""
-    t_dir = template_dir if template_dir is not None else "app/template"
-    schema_path = os.path.join(t_dir, "query_template.json")
-    prompt_path = os.path.join(t_dir, "prompt_router.txt")
-    
-    try:
-        with open(schema_path, "r", encoding="utf-8") as f:
-            schema_json = f.read()
-        with open(prompt_path, "r", encoding="utf-8") as f:
-            prompt_template = f.read()
-            
-        return prompt_template.replace("{json_schema}", schema_json)
-    except FileNotFoundError as e:
-        raise FileNotFoundError(f"❌ Lipsesc fișierele template în {t_dir}! Detalii: {e}")
-
 def extract_filters(user_message: str, ollama_url: str = None, model_name: str = None, template_dir: str = None, api_key: str = None) -> Dict[str, Any]:
-    """Interoghează LLM-ul cu temperatura 0 și forțează output JSON pentru căutarea Qdrant."""
     client = getApiClient(api_key)
-
-    system_prompt = _build_router_prompt(template_dir)
-    full_prompt = f"{system_prompt}\n\nMesaj client: {user_message}\nOutput JSON:"
     
-    llm_output = ""
-    if client:
-        try:
-            response = client.models.generate_content(
-                model=GEMINI_MODEL_NAME,
-                contents=full_prompt
+    # Încărcăm schema de valori unice pentru a ghida Gemini
+    schema_path = os.path.join(Config.TEMPLATE_DIR, "schema.json")
+    schema_info = ""
+    if os.path.exists(schema_path):
+        with open(schema_path, "r", encoding="utf-8") as f:
+            schema = json.load(f)
+            schema_info = (
+                f"\nValori VALIDE pentru filtre (folosește EXACT aceste denumiri):\n"
+                f"- Categorie: {schema.get('categories', [])}\n"
+                f"- Dimensiune: {schema.get('dimensiuni', [])}\n"
+                f"- Tip Eveniment: {schema.get('event_types', [])}\n"
+                f"- Culori: {schema.get('colors', [])}\n"
+                f"- Tip Flori: {schema.get('flowers_types', [])}\n"
+                f"- Sezon: {schema.get('sezoane', [])}\n"
             )
-            llm_output = response.text
-        except Exception as e:
-            print(f"⚠️ Eroare la Gemini Router: {e}")
-            return {"filters": {}, "semantic_query": user_message}
-    else:
-        agent_options = OLLAMA_OPTIMIZED_OPTIONS.copy()
-        payload = {
-            "model": model_name,
-            "prompt": full_prompt,
-            "stream": False,
-            "format": "json", # Obligăm modelul să emită doar JSON
-            "options": agent_options
-        }
-        
-        try:
-            response = requests.post(ollama_url, json=payload)
-            response.raise_for_status()
-            llm_output = response.json().get("response", "")
-        except Exception as e:
-            print(f"⚠️ Eroare la Router Ollama: {e}")
-            return {"filters": {}, "semantic_query": user_message}
-
-    try:
-        llm_output = re.sub(r"```json|```", "", llm_output).strip()
-        parsed_json = json.loads(llm_output)
-        
-        # Eliminăm cheile null din filtre
-        if "filters" in parsed_json and isinstance(parsed_json["filters"], dict):
-            parsed_json["filters"] = {k: v for k, v in parsed_json["filters"].items() if v is not None}
-            
-        return parsed_json
-    except Exception as e:
-        print(f"⚠️ Eroare la procesare output JSON: {e}")
-        return {"filters": {}, "semantic_query": user_message}
-
-
-# ==========================================
-# 2. SALES AGENT (Context -> Răspuns Natural)
-# ==========================================
-def generate_conversational_response(user_message: str, rag_context: str, ollama_url: str = None, model_name: str = None, api_key: str = None) -> str:
-    client = getApiClient(api_key)
 
     system_prompt = (
-        "Ești un asistent amabil și profesionist al florăriei City Flowers. "
-        "Sarcina ta este să prezinți clientului opțiunile găsite într-un mod atractiv și util. "
-        "Reguli: \n"
-        "1. Salută clientul și confirmă că ai găsit câteva variante superbe care se potrivesc cererii lui. \n"
-        "2. Prezintă produsele într-o listă numerotată, menționând Numele, Prețul și o scurtă descriere pentru fiecare. \n"
-        "3. Folosește STRICT informațiile din contextul PRODUSE furnizat mai jos. \n"
-        "4. Încheie oferindu-te să ajuți cu alte detalii sau cu plasarea comenzii."
+        "Ești un expert în extragerea de informații din text pentru o florărie. "
+        "Extrage un JSON care să conțină:\n"
+        "1. 'filters': un obiect cu 'price_max' (număr), 'category' (string), 'dimensiune' (string), 'event_type' (string), 'colors' (string), 'flowers_type' (string), 'sezon' (string).\n"
+        "2. 'semantic_query': keywords pentru căutare (string).\n"
+        f"{schema_info}\n"
+        "Reguli:\n"
+        "- Dacă un filtru nu este menționat, omite-l din obiectul 'filters'.\n"
+        "- Alege VALOAREA CEA MAI APROPIATĂ din listele de mai sus pentru filtrele corespunzătoare.\n"
+        "- Răspunde DOAR cu obiectul JSON."
     )
     
-    full_prompt = f"{system_prompt}\n\nPRODUSE:\n{rag_context}\n\nCLIENT: {user_message}\nASISTENT:"
-
     if client:
         try:
             response = client.models.generate_content(
                 model=GEMINI_MODEL_NAME,
-                contents=full_prompt
+                contents=f"{system_prompt}\n\nMesaj client: {user_message}"
             )
-            return response.text.strip()
+            llm_output = response.text
+            llm_output = re.sub(r"```json|```", "", llm_output).strip()
+            return json.loads(llm_output)
         except Exception as e:
-            return f"Îmi cer scuze, întâmpinăm o problemă tehnică cu Gemini. (Detalii eroare: {e})"
-    else:
-        agent_options = OLLAMA_OPTIMIZED_OPTIONS.copy()
-        agent_options["temperature"] = 0.2 # Puțin mai relaxat pentru vorbire
+            if "503" in str(e) or "UNAVAILABLE" in str(e):
+                raise GeminiOverloadedError("Gemini is busy")
+            return {"filters": {}, "semantic_query": user_message}
+    return {"filters": {}, "semantic_query": user_message}
 
-        payload = {
-            "model": model_name,
-            "prompt": full_prompt,
-            "stream": False,
-            "options": agent_options
-        }
-        
-        try:
-            response = requests.post(ollama_url, json=payload)
-            response.raise_for_status()
-            return response.json().get("response", "").strip()
-        except Exception as e:
-            return f"Îmi cer scuze, întâmpinăm o problemă tehnică de comunicare. Vă rugăm să reîncercați. (Detalii eroare: {e})"
-
+# ==========================================
+# 3. HYBRID RESPONSE (Instant Template)
+# ==========================================
 def generate_hybrid_response(rag_results):
     intros = [
         "Bună! Am găsit câteva opțiuni superbe care se încadrează perfect în dorințele tale:",
-        "Vă mulțumim pentru solicitare! Iată selecția noastră de flori elegante pentru această ocazie:",
-        "O alegere minunată! Am selectat pentru dumneavoastră cele mai proaspete flori din stoc:",
-        "Iată propunerile noastre care respectă bugetul și preferințele menționate:",
-        "Ne bucurăm să vă ajutăm! Am pregătit o listă cu cele mai rafinate variante pentru dumneavoastră:",
-        "Specialiștii noștri au ales câteva buchete deosebite care s-ar potrivi de minune cu cererea dumneavoastră:",
-        "Bună ziua! Iată ce v-am pregătit pentru a transforma această ocazie într-un moment memorabil:",
-        "Am analizat cu atenție preferințele dumneavoastră și iată cele mai bune recomandări:",
-        "Vă propunem câteva aranjamente florale de excepție care respectă întocmai criteriile selectate:",
-        "Căutarea a luat sfârșit! Iată cele mai frumoase flori care se potrivesc bugetului dumneavoastră:",
-        "Salutări! Am selectat special pentru dumneavoastră aceste variante pline de prospețime și stil:",
-        "Pentru o ocazie atât de specială, am ales câteva buchete care emană eleganță și rafinament:",
-        "Iată propunerile noastre florale, create pentru a impresiona prin culoare și parfum:",
-        "Ne-am uitat în atelierul nostru și am găsit aceste opțiuni perfecte pentru ceea ce căutați:",
-        "Vă invităm să descoperiți selecția noastră de flori, atent alese pentru a se încadra în bugetul stabilit:",
-        "Am găsit câteva combinații florale unice care vor aduce cu siguranță un zâmbet persoanei dragi:",
-        "Echipa noastră a pregătit următoarele recomandări premium pentru solicitarea dumneavoastră:",
-        "Suntem încântați să vă prezentăm aceste variante florale care îmbină calitatea cu eleganța:",
-        "Iată selecția noastră curatoriată, gândită special pentru a răspunde nevoilor dumneavoastră:",
-        "Vă prezentăm cele mai apreciate buchete din colecția noastră care se potrivesc cerințelor actuale:"
+        "Vă mulțumim pentru solicitare! Iată selecția noastră de flori elegante:",
+        "O alegere minunată! Iată cele mai proaspete flori din stoc pentru tine:"
     ]
     
     selected_intro = random.choice(intros)
     items_text = ""
     
     for i, res in enumerate(rag_results, 1):
-        # 1. Extragem datele de bază
         title = res.get('title', 'Produs necunoscut')
         price = res.get('price', 'Preț indisponibil')
-        imageUrl = res.get('Image Src', '')
-        
-        # 3. Extragem o scurtă descriere din string-ul 'context'
-        # Ne folosim de faptul că descrierea lungă începe după "Body (HTML):"
         context_str = res.get('context', '')
-        if "Body (HTML):" in context_str:
-            # Luăm doar textul de după "Body (HTML):" și curățăm spațiile
-            full_desc = context_str.split("Body (HTML):")[1].strip()
-            # Tăiem la primele 150 de caractere ca să nu inundăm clientul cu text
-            short_desc = full_desc[:150] + "..." if len(full_desc) > 150 else full_desc
-        else:
-            short_desc = "Detalii suplimentare direct pe pagina produsului."
-        
-        # 4. Asamblăm textul produsului
-        items_text += f"{i}. **{title}** - Preț: {price} lei\n   Detalii: {short_desc}\n   Image: {imageUrl}\n\n"
+        short_desc = context_str[:150] + "..." if len(context_str) > 150 else context_str
+        items_text += f"{i}. *{title}* - Preț: {price} lei\n   _{short_desc}_\n\n"
     
-    footer = "Doriți să adăugăm și o felicitare personalizată la acest buchet?"
-    
-    return f"{selected_intro}\n\n{items_text}{footer}"
+    return f"{selected_intro}\n\n{items_text}"

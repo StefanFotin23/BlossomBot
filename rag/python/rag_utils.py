@@ -136,10 +136,18 @@ def sota_hybrid_search(state_json: Dict[str, Any], final_top_k: int = 3, qdrant_
     
     filters = state_json.get("filters", {})
     semantic_query = state_json.get("semantic_query", "")
-    
+
+    # Conversie ultra-robustă în string
+    if not isinstance(semantic_query, str):
+        if isinstance(semantic_query, list):
+            semantic_query = " ".join([str(s) for s in semantic_query])
+        elif isinstance(semantic_query, dict):
+            semantic_query = " ".join([str(v) for v in semantic_query.values()])
+        else:
+            semantic_query = str(semantic_query)
+
     if not semantic_query.strip():
         return []
-
     # 1. Construim filtrele Qdrant
     must_conditions = []
     if filters.get("price_max"):

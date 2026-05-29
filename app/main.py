@@ -63,9 +63,9 @@ async def publish_purchase(purchase_data):
 
 # --- Register Slack Events via Gateway ---
 @slack_app.event("message")
-async def handle_message_events(body, say):
-    logger.debug(f"Received message event: {body}")
-    await bot.handle_message(body, say, publish_purchase_callback=publish_purchase)
+async def handle_message_events(body, say, client):
+    # Pass the client (WebClient) to allow background tasks to post messages later
+    await bot.handle_message(body, say, client, publish_purchase_callback=publish_purchase)
 
 @slack_app.event("app_mention")
 async def handle_app_mention_events(body, say):
