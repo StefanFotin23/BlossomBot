@@ -38,10 +38,12 @@ spec:
       containers:
       - name: chat-app
         image: stefanfotin23/blossombot
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 8000
         env:
+        - name: LOG_LEVEL
+          value: "DEBUG"
         - name: SLACK_BOT_TOKEN
           valueFrom:
             secretKeyRef:

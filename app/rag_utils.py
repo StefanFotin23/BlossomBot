@@ -233,7 +233,7 @@ def build_and_index_rag(df_clean: pd.DataFrame, output_json: str = 'qdrant_paylo
 # 2. SOTA HYBRID SEARCH (CU RERANKING)
 # ==========================================
 def sota_hybrid_search(state_json: Dict[str, Any], filter_scores: Dict[str, int] = None, final_top_k: int = 3, qdrant_url: str = None, qdrant_api_key: str = None) -> (List[Dict], Dict[str, Any]):
-    client = get_qdrant_client(url=url, api_key=api_key) if (url := qdrant_url) or (api_key := qdrant_api_key) else get_qdrant_client()
+    client = get_qdrant_client(url=qdrant_url, api_key=qdrant_api_key)
     embed_model, reranker_model = get_models()
     
     filters = state_json.get("filters") or {}
@@ -314,17 +314,53 @@ def sota_hybrid_search(state_json: Dict[str, Any], filter_scores: Dict[str, int]
     rerank_pairs = [[semantic_query, hit.payload.get("page_content", "")] for hit in initial_results]
     cross_scores = reranker_model.predict(rerank_pairs)
 
-    # 4. Extragem datele
+    # 4. Extragem datele (Deduplicate by Title & Diversify Fallback)
     combined_results = []
-    for i, hit in enumerate(initial_results):
+    seen_titles = set()
+    seen_categories = set()
+    
+    # Sortăm după scor inițial
+    all_hits = sorted(enumerate(initial_results), key=lambda x: cross_scores[x[0]], reverse=True)
+    
+    # Pas 1: Încercăm să luăm produse din categorii diferite (Diversificare)
+    for i, hit in all_hits:
+        title = hit.payload.get("title")
+        category = hit.payload.get("category")
+        
+        if title in seen_titles: continue
+        
+        # Dacă este un fallback (SEMANTIC), încercăm diversificarea
+        if "SEMANTIC" in used_strategy and category in seen_categories and len(combined_results) < final_top_k:
+            continue
+            
         combined_results.append({
             "score": round(float(cross_scores[i]) if not isinstance(cross_scores[i], (list, tuple)) and getattr(cross_scores[i], "size", 1) == 1 else float(max(cross_scores[i])), 4),
-            "title": hit.payload.get("title"),
+            "title": title,
             "price": hit.payload.get("price"),
             "handle": hit.payload.get("handle"),
             "context": hit.payload.get("page_content") 
         })
+        seen_titles.add(title)
+        seen_categories.add(category)
         
+        if len(combined_results) >= final_top_k:
+            break
+            
+    # Pas 2: Dacă nu am umplut Top K din cauza diversificării prea stricte, completăm cu restul
+    if len(combined_results) < final_top_k:
+        for i, hit in all_hits:
+            title = hit.payload.get("title")
+            if title not in seen_titles:
+                combined_results.append({
+                    "score": round(float(cross_scores[i]) if not isinstance(cross_scores[i], (list, tuple)) and getattr(cross_scores[i], "size", 1) == 1 else float(max(cross_scores[i])), 4),
+                    "title": title,
+                    "price": hit.payload.get("price"),
+                    "handle": hit.payload.get("handle"),
+                    "context": hit.payload.get("page_content") 
+                })
+                seen_titles.add(title)
+            if len(combined_results) >= final_top_k: break
+
     reranked_results = sorted(combined_results, key=lambda x: x["score"], reverse=True)
     
     search_metadata = {

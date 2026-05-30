@@ -93,10 +93,10 @@ install-ingress:
 build-and-push-docker-images:
 	@echo "--- Building Docker Images ---"
 	@make build-app-image
-	@echo "--- Loading Images into Kind cluster ---"
-	@make load-app-image-to-kind
 	@echo "--- Pushing Images to Docker Hub ---"
 	@make push-app-image
+	@echo "--- Loading Images into Kind cluster ---"
+	@make load-app-image-to-kind
 
 restart-chat:
 	@echo "--- Restarting Chat App ---"
