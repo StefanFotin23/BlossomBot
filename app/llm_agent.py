@@ -5,7 +5,7 @@ import json
 import re
 import logging
 from google import genai
-from typing import Dict, Any
+from typing import Dict, Any, List
 from app.config import Config
 
 # Get logger
@@ -41,8 +41,10 @@ def classify_intent(user_message: str, current_state: str = "GREETING", api_key:
         msg_clean = msg.lower()
         if any(word in msg_clean for word in ["salut", "buna", "bună", "hello", "hi"]):
             return "GREETING"
-        if any(word in msg_clean for word in ["caut", "vreau", "buchet", "flori", "recomand", "lalele", "trandafiri"]):
+        if any(word in msg_clean for word in ["caut", "vreau", "buchet", "flori", "recomand", "lalele", "trandafiri", "cadou"]):
             return "SEARCH_PRODUCTS"
+        if any(word in msg_clean for word in ["detalii", "info", "mai mult", "descriere"]):
+            return "PRODUCT_DETAILS"
         if any(word in msg_clean for word in ["cumpăr", "comand", "iau", "da", "confirm", "finaliz", "place", "prima", "doua", "treia", "ultim"]):
             return "PURCHASE_INTENT"
         if "restart" in msg_clean:
@@ -54,27 +56,31 @@ def classify_intent(user_message: str, current_state: str = "GREETING", api_key:
 
     states_desc = """
     - GREETING: Utilizatorul salută sau începe conversația.
-    - SEARCH_PRODUCTS: Utilizatorul caută flori, cere recomandări sau descrie o ocazie.
-    - PURCHASE_INTENT: Utilizatorul confirmă că vrea să cumpere, alege un produs din listă (ex: "o vreau pe prima", "imi place varianta 2") sau întreabă cum comandă.
+    - SEARCH_PRODUCTS: Utilizatorul caută flori, CADOURI, ciocolată, vin sau cere recomandări.
+    - PRODUCT_DETAILS: Utilizatorul cere mai multe informații/detalii despre un produs afișat (ex: 'vreau mai multe detalii despre primul', 'spune-mi mai multe despre buchetul de trandafiri').
+    - PURCHASE_INTENT: Utilizatorul confirmă că vrea să cumpere, alege un produs din listă.
     - RESTART: Utilizatorul vrea să o ia de la capăt.
-    - GENERAL_INQUIRY: Utilizatorul pune întrebări generale.
+    - GENERAL_INQUIRY: Utilizatorul pune întrebări despre bot, program sau alte discuții libere.
     """
 
     system_prompt = (
-        f"Ești un router de conversație pentru o florărie. "
+        f"Ești un router de conversație pentru o florărie online. "
         f"Starea actuală este: {current_state}. "
-        f"Analizează mesajul utilizatorului și alege următoarea stare din această listă:\n{states_desc}\n"
-        "Regulă importantă: Dacă utilizatorul se referă la un produs afișat anterior (ex: 'prima varianta', 'o aleg pe a doua', 'imi place prima'), clasifică drept PURCHASE_INTENT.\n"
-        "Răspunde DOAR cu numele stării (ex: SEARCH_PRODUCTS)."
+        f"Analizează mesajul utilizatorului și alege următoarea stare din listă:\n{states_desc}\n"
+        "Regulă importantă 1: Orice cerere de produs (cadou, pachet, ceva de băut) este SEARCH_PRODUCTS.\n"
+        "Regulă importantă 2: Dacă cere detalii suplimentare, specificații sau 'mai multe info' despre ceva afișat deja, este PRODUCT_DETAILS.\n"
+        "Regulă importantă 3: Dacă se referă la un produs pentru a-l cumpăra, este PURCHASE_INTENT.\n"
+        "Răspunde DOAR cu numele stării."
     )
 
     try:
         response = client.models.generate_content(
             model=GEMINI_MODEL_NAME,
-            contents=f"{system_prompt}\n\nMesaj utilizator: {user_message}"
+            contents=f"{system_prompt}\n\nMesaj utilizator: {user_message}",
+            config={"temperature": 0.0}
         )
         intent = response.text.strip().upper()
-        valid_states = ["GREETING", "SEARCH_PRODUCTS", "PURCHASE_INTENT", "RESTART", "GENERAL_INQUIRY"]
+        valid_states = ["GREETING", "SEARCH_PRODUCTS", "PRODUCT_DETAILS", "PURCHASE_INTENT", "RESTART", "GENERAL_INQUIRY"]
         for s in valid_states:
             if s in intent: return s
         return current_state
@@ -135,7 +141,8 @@ def extract_filters(user_message: str, history: List[Dict] = None, api_key: str 
         try:
             response = client.models.generate_content(
                 model=GEMINI_MODEL_NAME,
-                contents=f"{system_prompt}\n{history_context}\nMesaj actual client: {user_message}"
+                contents=f"{system_prompt}\n{history_context}\nMesaj actual client: {user_message}",
+                config={"temperature": 0.0}
             )
             llm_output = response.text
             llm_output = re.sub(r"```json|```", "", llm_output).strip()
@@ -154,9 +161,9 @@ def extract_filters(user_message: str, history: List[Dict] = None, api_key: str 
 # ==========================================
 def generate_hybrid_response(rag_results):
     intros = [
-        "Bună! Am găsit câteva opțiuni superbe care se încadrează perfect în dorințele tale:",
+        "Bună! Am găsit câteva opțiuni superbe care s-ar putea să îți placă:",
         "Vă mulțumim pentru solicitare! Iată selecția noastră de flori elegante:",
-        "O alegere minunată! Iată cele mai proaspete flori din stoc pentru tine:"
+        "O alegere minunată! Iată cele mai proaspete opțiuni din stoc:"
     ]
     
     selected_intro = random.choice(intros)
@@ -166,19 +173,131 @@ def generate_hybrid_response(rag_results):
         title = res.get('title', 'Produs necunoscut')
         price = res.get('price', 'Preț indisponibil')
         
-        # Extragem descrierea curată (fără etichete Produs/Categorie etc.)
+        # Extragem descrierea (încercăm multiple tag-uri, altfel curățăm contextul)
         context_str = res.get('context', '')
         description = ""
-        if "Descriere: " in context_str:
-            description = context_str.split("Descriere: ")[-1].strip()
-        else:
-            # Fallback dacă nu avem tagul Descriere
-            description = context_str.split("\n")[-1].strip()
-            
-        short_desc = description[:150] + "..." if len(description) > 150 else description
         
-        # Formatare nouă: Titlu + Preț pe primul rând, Descriere pe rândul 2, /n între produse
+        # Căutăm tag-ul de început al descrierii reale
+        for tag in ["Descriere:", "Body (HTML):", "Description:"]:
+            if tag in context_str:
+                description = context_str.split(tag)[-1].strip()
+                break
+        
+        if not description:
+            # Fallback: eliminăm toate liniile care conțin "Label: "
+            lines = context_str.split("\n")
+            tags_to_skip = ["Produs:", "Type:", "Flowers Type:", "Colors:", "Categorie:", "Flori:", "Culori:", "Dimensiune:", "Eveniment:", "Sezon:", "Body (HTML):"]
+            clean_lines = []
+            for line in lines:
+                # Sărim liniile care sunt doar etichete
+                if not any(t in line for t in tags_to_skip) and ":" not in line[:15]:
+                    clean_lines.append(line)
+            description = " ".join(clean_lines).strip()
+            
+        if not description:
+            description = "Vezi detaliile complete în catalogul nostru online."
+            
+        # Limităm la 350 caractere pentru o descriere decentă
+        limit = 350
+        short_desc = description[:limit] + "..." if len(description) > limit else description
+        
+        # Formatare finală: Titlu + Preț, apoi Descrierea pe rând nou
         items_text += f"{i}. *{title}* - Preț: {price} lei\n_{short_desc}_\n\n"
     
     return f"{selected_intro}\n\n{items_text}"
 
+# ==========================================
+# 4. DETAILED PRODUCT INFO (Readable Metadata)
+# ==========================================
+def generate_detailed_product_info(product: Dict[str, Any]) -> str:
+    """Formatează toate metadatele unui produs într-un mod citibil și frumos."""
+    title = product.get('title', 'Produs')
+    price = product.get('price', 'N/A')
+    
+    # Mapare etichete tehnice -> Română prietenoasă
+    label_map = {
+        "category": "Categorie",
+        "dimensiune": "Dimensiune",
+        "event_type": "Ideal pentru",
+        "colors": "Culori disponibile",
+        "flowers_type": "Tipuri de flori",
+        "sezon": "Sezon"
+    }
+    
+    header = f"🔍 *Detalii complete pentru: {title}*\n💰 *Preț:* {price} lei\n\n"
+    
+    details = []
+    for key, label in label_map.items():
+        val = product.get(key)
+        if val:
+            if isinstance(val, list):
+                val_str = ", ".join([str(v) for v in val if v])
+            else:
+                val_str = str(val)
+                
+            if val_str and val_str.lower() != "nan" and val_str.lower() != "none":
+                details.append(f"• *{label}:* {val_str}")
+    
+    # Adăugăm și descrierea completă
+    context_str = product.get('context', '')
+    description = ""
+    for tag in ["Descriere:", "Body (HTML):", "Description:"]:
+        if tag in context_str:
+            description = context_str.split(tag)[-1].strip()
+            break
+            
+    if not description:
+        lines = context_str.split("\n")
+        tags_to_skip = ["Produs:", "Type:", "Flowers Type:", "Colors:", "Categorie:", "Flori:", "Culori:", "Dimensiune:", "Eveniment:", "Sezon:", "Body (HTML):"]
+        clean_lines = [line for line in lines if not any(t in line for t in tags_to_skip) and ":" not in line[:15]]
+        description = " ".join(clean_lines).strip()
+
+    full_text = header + "\n".join(details)
+    if description:
+        full_text += f"\n\n📖 *Descriere:* \n_{description}_"
+        
+    full_text += "\n\n_Dorești să adaugi acest produs în comandă? Spune-mi 'Da' sau 'Îl vreau pe acesta'._"
+    
+    return full_text
+
+# ==========================================
+# 5. GENERAL RESPONSE (Deterministic & Fast)
+# ==========================================
+def generate_general_response(user_message: str, api_key: str = None) -> str:
+    """Clasifică și returnează un răspuns instantaneu pentru întrebări comune."""
+    client = getApiClient(api_key)
+    
+    responses = {
+        "GREETING": "Bună! Sunt BlossomBot 🌸 asistentul tău. Cu ce te pot ajuta astăzi?",
+        "IDENTITY": "Sunt BlossomBot, un asistent virtual creat pentru a te ajuta să alegi cele mai frumoase flori și cadouri.",
+        "AVAILABILITY": "Sunt aici și te ascult! Spune-mi ce cauți.",
+        "HUMOR": "Sunt un bot serios, dar pot spune că florile mele nu se ofilesc niciodată în catalog! 😂",
+        "UNKNOWN": "Sunt aici să te ajut cu drag! Ce anume te interesează din oferta noastră?"
+    }
+
+    if not client:
+        return responses["UNKNOWN"]
+
+    system_prompt = (
+        "Clasifică mesajul utilizatorului în una din următoarele categorii:\n"
+        "- GREETING: saluturi (salut, bună, hei)\n"
+        "- IDENTITY: cine ești, ce faci\n"
+        "- AVAILABILITY: ești acolo, răspunzi, ești activ\n"
+        "- HUMOR: glume, bancuri\n"
+        "- UNKNOWN: orice altceva\n"
+        "Răspunde DOAR cu numele categoriei."
+    )
+
+    try:
+        response = client.models.generate_content(
+            model=GEMINI_MODEL_NAME,
+            contents=f"{system_prompt}\n\nUtilizator: {user_message}",
+            config={
+                "temperature": 0.0,
+                "max_output_tokens": 10
+            }
+        )
+        category = response.text.strip().upper()
+        return responses.get(category, responses["UNKNOWN"])
+    except:
+        return responses["UNKNOWN"]

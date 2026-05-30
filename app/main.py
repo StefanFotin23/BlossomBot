@@ -111,6 +111,16 @@ async def check_ollama_health():
         logger.error(f"Ollama health check failed: {e}")
         return {"status": "error", "message": str(e)}
 
+async def check_redis_health():
+    try:
+        import redis
+        r = redis.Redis(host=Config.REDIS_HOST, port=Config.REDIS_PORT, db=Config.REDIS_DB, password=Config.REDIS_PASSWORD, socket_timeout=2)
+        r.ping()
+        return {"status": "ok"}
+    except Exception as e:
+        logger.error(f"Redis health check failed: {e}")
+        return {"status": "error", "message": str(e)}
+
 # --- API Endpoints ---
 @app.post("/slack/events")
 async def slack_events(req: Request):
@@ -126,13 +136,15 @@ async def healthz():
         check_rabbitmq_health(),
         check_qdrant_health(),
         check_ollama_health(),
+        check_redis_health(),
         return_exceptions=True
     )
     
     details = {
         "rabbitmq": results[0],
         "qdrant": results[1],
-        "ollama": results[2]
+        "ollama": results[2],
+        "redis": results[3]
     }
     
     overall_status = "ok"

@@ -14,7 +14,7 @@ OLLAMA_OPTIMIZED_OPTIONS = {
     "low_vram": True        # Hint pentru Ollama să fie conservator
 }
 
-GEMINI_MODEL_NAME = "gemini-2.5-flash"
+GEMINI_MODEL_NAME = os.environ.get("GEMINI_MODEL_NAME", "gemini-3.1-flash-lite")
 
 def getApiClient(api_key: str = None):
     """Inițializează și returnează clientul GenAI dacă api_key este prezent."""

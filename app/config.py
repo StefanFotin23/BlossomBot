@@ -35,6 +35,16 @@ class Config:
         RABBITMQ_PORT = int(_rmq_port)
     PURCHASE_QUEUE = os.environ.get("PURCHASE_QUEUE", "flower_purchases")
 
+    # Redis
+    REDIS_HOST = os.environ.get("REDIS_HOST", "redis")
+    _redis_port = os.environ.get("REDIS_PORT_NUMBER") or os.environ.get("REDIS_PORT", "6379")
+    if "://" in _redis_port:
+        REDIS_PORT = 6379
+    else:
+        REDIS_PORT = int(_redis_port)
+    REDIS_DB = int(os.environ.get("REDIS_DB", "0"))
+    REDIS_PASSWORD = os.environ.get("REDIS_PASSWORD", None)
+
     # App Settings
     DEBUG = os.environ.get("DEBUG", "False").lower() in ("true", "1", "t")
     TEMPLATE_DIR = os.environ.get("TEMPLATE_DIR", "app/template")
