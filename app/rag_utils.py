@@ -260,20 +260,24 @@ def sota_hybrid_search(state_json: Dict[str, Any], filter_scores: Dict[str, int]
     
     # Ordonăm filtrele după scor (cele mai mici primele pentru a fi eliminate primele)
     active_keys = list(conditions_map.keys())
-    if filter_scores:
-        # Sortăm cheile active după scorul lor (default 0 dacă lipsește)
-        sorted_keys = sorted(active_keys, key=lambda k: filter_scores.get(k, 0))
-    else:
-        # Fallback la o ordine predefinită dacă nu avem scoruri
-        fallback_order = ["dimensiune", "colors", "price_max", "event_type", "category", "flowers_type"]
-        sorted_keys = [k for k in fallback_order if k in active_keys]
+    fallback_order = ["dimensiune", "colors", "category", "flowers_type", "event_type", "price_max"]
+    
+    # Sortăm după: 1) Scorul explicit (dacă există, crescător), 2) Ordinea fallback (ca tie-breaker)
+    sorted_keys = sorted(
+        active_keys, 
+        key=lambda k: (
+            (filter_scores.get(k, 0) if filter_scores else 0), 
+            fallback_order.index(k) if k in fallback_order else 99
+        )
+    )
 
-    # Generăm strategiile de relaxare: eliminăm pe rând cel mai puțin important filtru
+    # Generăm strategiile de relaxare
+
     search_strategies = []
-    # Strategia 1: Toate
+    # 1. Toate filtrele
     search_strategies.append({"name": "ALL", "keys": list(active_keys)})
     
-    # Strategii intermediare: eliminăm progresiv din cele sortate (cele mai slabe primele)
+    # 2. Eliminăm progresiv (cel mai slab scor primul)
     current_keys = list(active_keys)
     for key_to_remove in sorted_keys:
         if key_to_remove in current_keys:
@@ -322,6 +326,17 @@ def sota_hybrid_search(state_json: Dict[str, Any], filter_scores: Dict[str, int]
     # Sortăm după scor inițial
     all_hits = sorted(enumerate(initial_results), key=lambda x: cross_scores[x[0]], reverse=True)
     
+    # Dacă folosim o strategie foarte relaxată (fără price_max etc.), adăugăm puțină variație (Jitter)
+    # ca să nu dăm mereu aceleași "top 3" scumpe dacă userul cere repetat ceva ce nu avem.
+    if len(failed_filters) >= 2 or used_strategy == "SEMANTIC":
+        import random
+        # Păstrăm primul hit ca fiind cel mai relevant semantic, dar amestecăm puțin următoarele
+        if len(all_hits) > 1:
+            top_hit = all_hits[0]
+            rest_hits = all_hits[1:10] # Luăm un pool mai mare pentru amestec
+            random.shuffle(rest_hits)
+            all_hits = [top_hit] + rest_hits + all_hits[10:]
+            
     # Pas 1: Încercăm să luăm produse din categorii diferite (Diversificare)
     for i, hit in all_hits:
         title = hit.payload.get("title")
