@@ -158,6 +158,11 @@ ngrok: ngrok-down
 	@sleep 5
 	@grep -o "url=https://[a-z0-9.-]*" $(NGROK_LOG) || cat $(NGROK_LOG)
 
+# View messages in the RabbitMQ queue
+view-queue:
+	@echo "--- Fetching recent messages from flower_purchases queue ---"
+	@kubectl exec deployment/rabbitmq -- rabbitmqadmin get queue=flower_purchases ackmode=ack_requeue_true count=10 || echo "Eroare la preluarea mesajelor."
+
 # Stop any running ngrok process
 ngrok-down:
 	@bash scripts/ngrok_down.sh
