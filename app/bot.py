@@ -129,7 +129,11 @@ async def process_recommendations(user_id, user_query, history=None):
         else:
             joined_failed = failed_texts[0]
             
-        feedback_msg = f"💡 *Am ajustat puțin căutarea.* Nu am găsit exact potriviri {joined_failed}, dar iată cele mai frumoase alternative pe care ți le recomand:\n\n"
+        if ("price_max" in real_failed or "price" in real_failed) and results:
+            min_price = min([r.get("price", 0) for r in results])
+            feedback_msg = f"💡 *Am ajustat puțin căutarea.* Nu am găsit exact potriviri {joined_failed}. Cele mai apropiate opțiuni pornesc de la {min_price} RON. Iată ce am găsit:\n\n"
+        else:
+            feedback_msg = f"💡 *Am ajustat puțin căutarea.* Nu am găsit exact potriviri {joined_failed}, dar iată cele mai frumoase alternative pe care ți le recomand:\n\n"
 
     # 5. Generare răspuns hibrid
     response_text = feedback_msg + llm.generate_hybrid_response(results)
