@@ -18,18 +18,6 @@ nodes:
   - containerPort: 30081 # NodePort for Qdrant
     hostPort: 40081      # Host port for Qdrant
     protocol: TCP
-  - containerPort: 30082 # NodePort for Ollama
-    hostPort: 40082      # Host port for Ollama
+  - containerPort: 30082 # NodePort for RabbitMQ Management
+    hostPort: 40082      # Host port for RabbitMQ Management
     protocol: TCP
-  extraMounts:
-  - hostPath: /var/run/nvidia-container-toolkit.sock
-    containerPath: /var/run/nvidia-container-toolkit.sock
-
-# ACEASTA ESTE SECȚIUNEA PENTRU GPU
-containerdConfigPatches:
-- |
-  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
-    privileged_without_host_pkgs = false
-    runtime_type = "io.containerd.runtime.v1.linux"
-    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
-      BinaryName = "/usr/bin/nvidia-container-runtime"

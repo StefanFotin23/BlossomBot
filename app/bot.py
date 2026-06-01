@@ -8,7 +8,6 @@ from app.config import Config
 from app.logger import get_logger
 
 import redis
-import json
 
 logger = get_logger(__name__)
 
@@ -35,7 +34,7 @@ _local_user_states = {}
 
 async def get_user_state(user_id):
     """Obține starea utilizatorului din Redis sau memorie locală."""
-    default_state = {"state": "GREETING", "history": [], "filter_scores": {}}
+    default_state = {"state": "GREETING", "history": [], "filter_scores": {}, "cart": []}
     
     if redis_client:
         try:
@@ -64,10 +63,9 @@ async def process_recommendations(user_id, user_query, history=None):
     user_data = await get_user_state(user_id)
     filter_scores = user_data.get("filter_scores", {})
     
-    logger.debug(f"[User: {user_id}] ➡️ Starting search. Query: '{user_query}'")
-    logger.debug(f"[User: {user_id}] ➡️ Current Filter Scores: {filter_scores}")
+    logger.debug(f"\n[User: {user_id}]\n➡️ Starting search. Query: '{user_query}'\n➡️ Current Filter Scores: {json.dumps(filter_scores, indent=2, ensure_ascii=False)}")
 
-    # 1. Extracție filtre (și detecție mențiuni noi/insistențe)
+    # 1. Extracție filtre
     extracted_data = llm.extract_filters(
         user_query, 
         history=history,
@@ -78,61 +76,62 @@ async def process_recommendations(user_id, user_query, history=None):
     mentioned_now = extracted_data.get("mentioned_now", [])
     insisted = extracted_data.get("insisted", [])
     
-    logger.debug(f"[User: {user_id}] 🧠 LLM Extracted Filters: {current_filters}")
-    logger.debug(f"[User: {user_id}] 🧠 LLM Mentioned Now: {mentioned_now} | Insisted: {insisted}")
+    logger.debug(f"\n[User: {user_id}]\n🧠 LLM Extracted Filters:\n{json.dumps(current_filters, indent=2, ensure_ascii=False)}\n🧠 Mentioned Now: {mentioned_now} | Insisted: {insisted}")
 
-    # 2. Update Scoruri (Logica solicitată: New = +2, Insisted = +2, etc.)
+    # 2. Update Scoruri
     for f_key in current_filters.keys():
         if f_key not in filter_scores:
-            filter_scores[f_key] = 2 # Prima apariție (nou)
+            filter_scores[f_key] = 2 
         else:
             if f_key in mentioned_now:
-                filter_scores[f_key] += 2 # Menționat ulterior (dublu ca număr de apariții/boost)
+                filter_scores[f_key] += 2 
             if f_key in insisted:
-                filter_scores[f_key] += 2 # Insistență (boost extra)
+                filter_scores[f_key] += 2 
 
     user_data["filter_scores"] = filter_scores
     await set_user_state(user_id, user_data)
     
-    logger.debug(f"[User: {user_id}] 📊 Updated Filter Scores: {filter_scores}")
+    logger.debug(f"\n[User: {user_id}]\n📊 Updated Filter Scores:\n{json.dumps(filter_scores, indent=2, ensure_ascii=False)}")
 
-    # 3. Căutare Qdrant (Trimitem scorurile pentru relaxare dinamică)
-    logger.debug(f"[User: {user_id}] 🔍 Searching Qdrant...")
+    # 3. Căutare Qdrant
     results, metadata = rag.sota_hybrid_search(
         extracted_data, 
         filter_scores=filter_scores,
         qdrant_url=Config.QDRANT_URL
     )
     
-    logger.debug(f"[User: {user_id}] 🏁 Search Results: Found {metadata.get('total_found', 0)} items.")
-    logger.debug(f"[User: {user_id}] 🏁 Search Metadata (Relaxation): {metadata}")
-
+    logger.debug(f"\n[User: {user_id}]\n🏁 Search Results: Found {metadata.get('total_found', 0)} items.\n🏁 Search Metadata (Relaxation):\n{json.dumps(metadata, indent=2, ensure_ascii=False)}\n")
+    
     if not results:
-        logger.debug(f"[User: {user_id}] ❌ No results found even after relaxation.")
         return "Îmi pare rău, nu am găsit flori care să se potrivească descrierii tale. Poți încerca să modifici puțin cerințele?", []
 
-    # 3. Generare feedback despre filtre eșuate
+    # 4. Feedback filtre eșuate (DOAR DACĂ AU FOST CERUTE ACUM SAU REPETATE)
     failed = metadata.get("failed_filters", [])
     feedback_msg = ""
-    if failed:
+    
+    user_requested_keys = set(mentioned_now + insisted)
+    real_failed = [f for f in failed if f in user_requested_keys or (f == "price" and "price_max" in user_requested_keys)]
+
+    if real_failed:
         filter_map = {
             "price_max": "sub prețul dorit",
+            "price": "sub prețul dorit",
             "category": "din categoria cerută",
             "dimensiune": "de mărimea dorită",
             "event_type": "pentru acest tip de eveniment",
             "colors": "în culorile solicitate",
             "flowers_type": "cu tipul de flori specificat"
         }
-        failed_texts = [filter_map.get(f, f) for f in failed]
+        failed_texts = [filter_map.get(f, f) for f in real_failed]
         
         if len(failed_texts) > 1:
             joined_failed = ", ".join(failed_texts[:-1]) + " sau " + failed_texts[-1]
         else:
             joined_failed = failed_texts[0]
             
-        feedback_msg = f"⚠️ Momentan nu avem opțiuni {joined_failed}, dar iată cele mai apropiate alternative pe care ți le pot recomanda:\n\n"
+        feedback_msg = f"💡 *Am ajustat puțin căutarea.* Nu am găsit exact potriviri {joined_failed}, dar iată cele mai frumoase alternative pe care ți le recomand:\n\n"
 
-    # 4. Generare răspuns hibrid
+    # 5. Generare răspuns hibrid
     response_text = feedback_msg + llm.generate_hybrid_response(results)
     return response_text, results
 
@@ -140,39 +139,27 @@ async def process_recommendations(user_id, user_query, history=None):
 async def retry_recommendations(user_id, channel_id, user_query, history, client):
     """Background task care reîncearcă procesarea până când Gemini este disponibil."""
     max_retries = 10
-    retry_delay = 5 # secunde
-    
-    logger.info(f"🔄 Starting background retry for user {user_id}")
+    retry_delay = 5
     
     for i in range(max_retries):
         try:
             await asyncio.sleep(retry_delay)
-            logger.info(f"🔄 Retry attempt {i+1} for user {user_id}")
-            
             response_text, results = await process_recommendations(user_id, user_query, history=history)
-            
-            # Trimitem răspunsul final
             await client.chat_postMessage(channel=channel_id, text=response_text)
             
-            # Actualizăm starea
             user_data = await get_user_state(user_id)
             user_data["last_results"] = results
             user_data["state"] = "SEARCH_PRODUCTS"
             await set_user_state(user_id, user_data)
-            
-            logger.info(f"✅ Success on retry {i+1} for user {user_id}")
             return
             
         except llm.GeminiOverloadedError:
-            logger.warning(f"⚠️ Retry {i+1} failed: Gemini still busy.")
+            logger.warning(f"⚠️ Retry {i+1} failed: Gemini busy.")
         except Exception as e:
-            logger.error(f"❌ Error during retry: {e}")
+            logger.error(f"❌ Error retry: {e}")
             break
             
-    await client.chat_postMessage(
-        channel=channel_id, 
-        text="Îmi cer scuze, dar serviciul conversational este extrem de solicitat acum. Te rog să încerci din nou peste câteva minute."
-    )
+    await client.chat_postMessage(channel=channel_id, text="Îmi cer scuze, serviciul este foarte solicitat. Revino te rog mai târziu.")
 
 async def handle_message(body, say, client, publish_purchase_callback=None):
     """EntryPoint pentru logica bot-ului. Acționează ca un State Machine robust."""
@@ -184,61 +171,72 @@ async def handle_message(body, say, client, publish_purchase_callback=None):
     user_data = await get_user_state(user_id)
     current_state = user_data.get("state")
     
-    # 1. Gemini Routing (Determine Intent)
+    # 1. Routing
     new_state = llm.classify_intent(text, current_state, api_key=Config.GEMINI_API_KEY)
     logger.info(f"User: {user_id} | State: {current_state} -> {new_state}")
 
     if new_state == "RESTART":
-        user_data = {"state": "GREETING", "history": []}
+        user_data = {"state": "GREETING", "history": [], "filter_scores": {}, "cart": []}
         await set_user_state(user_id, user_data)
-        await say("Nicio problemă, am resetat conversația. Cu ce te pot ajuta?")
-        return
-
-    # LOGICA SPECIALĂ PENTRU CONFIRMARE (Așteptăm DA/NU după selecție)
-    if current_state == "AWAITING_CONFIRMATION":
-        text_clean = text.lower()
-        if any(word in text_clean for word in ["da", "confirm", "ok", "sigur", "vrea"]):
-            if publish_purchase_callback:
-                selected_item = user_data.get("selected_item", "Produs selectat")
-                selected_price = user_data.get("selected_price", "N/A")
-                purchase_data = {
-                    "user_id": user_id,
-                    "items": [selected_item],
-                    "price": selected_price,
-                    "timestamp": event.get("event_ts")
-                }
-                success = await publish_purchase_callback(purchase_data)
-                if success:
-                    await say(f"Excelent! Am trimis comanda ta pentru *{selected_item}*. 🎉 O zi frumoasă!")
-                    user_data["state"] = "GREETING"
-                else:
-                    await say("Îmi cer scuze, a apărut o problemă tehnică la procesarea comenzii. Te rog să încerci din nou.")
-            else:
-                await say("Comanda a fost confirmată intern! (Modul demo)")
-                user_data["state"] = "GREETING"
-        else:
-            await say("Am înțeles, am anulat comanda. Dorești să cauți altceva?")
-            user_data["state"] = "SEARCH_PRODUCTS"
         
+        restart_msg = (
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            "🔄 **Conversația a fost resetată.**\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            "Nicio problemă, am anulat totul și am golit coșul. Cu ce te pot ajuta?"
+        )
+        await say(restart_msg)
+        return
+
+    # LOGICA CONFIRMARE & ADĂUGARE ÎN COȘ
+    if current_state == "AWAITING_CONFIRMATION":
+        conf = llm.parse_confirmation(text, api_key=Config.GEMINI_API_KEY)
+        is_confirmed = conf.get("confirmed", False)
+        
+        if is_confirmed:
+            pending = user_data.get("pending_item")
+            if pending:
+                if conf.get("quantity") is not None:
+                    pending["qty"] = conf["quantity"]
+                
+                cart = user_data.get("cart", [])
+                cart.append(pending)
+                user_data["cart"] = cart
+                
+                await say(f"✅ Am adăugat {pending['qty']} x *{pending['name']}* în coș! 🛒 (Total produse diferite în coș: {len(cart)})\n_Dorești să mai cauți altceva sau finalizăm comanda?_")
+                user_data["state"] = "SEARCH_PRODUCTS" # Setăm pe search pentru a aștepta următoarea comandă (sau finalizează)
+            else:
+                await say("Nu am găsit produsul în așteptare.")
+                user_data["state"] = "SEARCH_PRODUCTS"
+        else:
+            await say("Am anulat adăugarea în coș. Ce ai vrea să cauți în schimb?")
+            user_data["state"] = "SEARCH_PRODUCTS"
+            
         await set_user_state(user_id, user_data)
         return
 
+    # LOGICA STATE MACHINE
     if new_state == "GREETING":
+        # Greeting funcționează și ca un mini-restart dacă dorim un nou context
+        # user_data = {"state": "SEARCH_PRODUCTS", "history": [], "filter_scores": {}, "cart": []}
         await say(f"Bună! Sunt BlossomBot 🌸 asistentul tău virtual. Spune-mi ce fel de flori cauți?")
         user_data["state"] = "SEARCH_PRODUCTS" 
     
     elif new_state == "GENERAL_INQUIRY":
         response_text = llm.generate_general_response(text, api_key=Config.GEMINI_API_KEY)
         await say(response_text)
-        
+
+    elif new_state == "CATALOG_DISCOVERY":
+        await say("Sigur! Avem o gamă variată de produse. Iată câteva recomandări din oferta noastră:")
+        response_text, results = await process_recommendations(user_id, "produse populare flori cadouri", history=[])
+        await say(response_text)
+        user_data["last_results"] = results
+        user_data["state"] = "SEARCH_PRODUCTS"
+
     elif new_state == "PRODUCT_DETAILS":
         last_results = user_data.get("last_results", [])
-        selected_index = -1
-        
-        text_lower = text.lower()
-        if "prim" in text_lower or " 1" in text_lower: selected_index = 0
-        elif "doua" in text_lower or " 2" in text_lower: selected_index = 1
-        elif "treia" in text_lower or " 3" in text_lower: selected_index = 2
+        selection = llm.extract_purchase_selection(text, api_key=Config.GEMINI_API_KEY)
+        selected_index = selection.get("index", 0)
         
         if selected_index >= 0 and selected_index < len(last_results):
             product = last_results[selected_index]
@@ -246,53 +244,111 @@ async def handle_message(body, say, client, publish_purchase_callback=None):
             await say(details_text)
         else:
             if not last_results:
-                await say("Caută întâi niște produse, iar apoi te pot ajuta cu detalii despre ele.")
+                await say("Caută întâi niște produse, apoi te pot ajuta cu detalii.")
             else:
-                await say("Despre care produs dorești mai multe detalii? (ex: 'despre primul')")
-        
+                await say("Despre care produs dorești detalii? (ex: 'primul')")
+
+    elif new_state == "VIEW_CART":
+        cart = user_data.get("cart", [])
+        if not cart:
+            await say("🛒 Coșul tău este momentan gol. Hai să căutăm niște flori frumoase!")
+            user_data["state"] = "SEARCH_PRODUCTS"
+        else:
+            cart_msg = "🛒 *Coșul tău de cumpărături:*\n\n"
+            total_price = 0
+            for i, item in enumerate(cart, 1):
+                qty = item['qty']
+                name = item['name']
+                price = item['price']
+                item_total = qty * price
+                total_price += item_total
+                cart_msg += f"{i}. {qty}x {name} - {item_total} RON ({price} lei/buc)\n"
+            
+            cart_msg += f"\n💰 **Total comandă: {total_price} RON**\n"
+            cart_msg += "_Spune 'finalizează' pentru a trimite comanda sau poți continua cumpărăturile._"
+            await say(cart_msg)
+            # Rămânem în SEARCH_PRODUCTS ca să poată continua sau să dea finalizare
+            user_data["state"] = "SEARCH_PRODUCTS"
+
     elif new_state == "SEARCH_PRODUCTS":
         await say("Analizez cererea ta și verific catalogul nostru...")
         try:
             response_text, results = await process_recommendations(user_id, text, history=user_data.get("history"))
             await say(response_text)
-            # Salvăm obiectele complete pentru a putea extrage prețul mai târziu
             user_data["last_results"] = results 
             user_data["state"] = "SEARCH_PRODUCTS"
         except llm.GeminiOverloadedError:
-            logger.warning(f"🚨 Gemini Overloaded for user {user_id}. Starting retry task.")
-            await say("🌸 Sunt puțin ocupat cu multe cereri acum, dar nu te-am uitat! Revin în câteva secunde cu cele mai bune recomandări pentru tine...")
-            # PORNIM TASK-UL ÎN FUNDAL (RAM)
+            await say("🌸 Sunt puțin ocupat, revin în câteva secunde cu recomandări...")
             asyncio.create_task(retry_recommendations(user_id, channel_id, text, user_data.get("history"), client))
-            return # Ieșim din handler, mesajul va fi trimis ulterior de task-ul de fundal
+            return
 
     elif new_state == "PURCHASE_INTENT":
-        # Încercăm să identificăm ce produs a ales
         last_results = user_data.get("last_results", [])
-        selected_index = -1
-        
-        text_lower = text.lower()
-        if "prim" in text_lower or " 1" in text_lower: selected_index = 0
-        elif "doua" in text_lower or " 2" in text_lower: selected_index = 1
-        elif "treia" in text_lower or " 3" in text_lower: selected_index = 2
-        
-        if selected_index >= 0 and selected_index < len(last_results):
-            product = last_results[selected_index]
-            p_name = product.get('title')
-            p_price = product.get('price')
-            
-            user_data["selected_item"] = p_name
-            user_data["selected_price"] = p_price
-            user_data["state"] = "AWAITING_CONFIRMATION"
-            
-            await say(f"Vrei să adăugăm *{p_name}* în comandă pentru *{p_price}* RON? (Spune 'Da' pentru confirmare)")
+        if not last_results:
+            await say("Spune-mi întâi ce cauți.")
+            user_data["state"] = "SEARCH_PRODUCTS"
         else:
-            if not last_results:
-                await say("Spune-mi întâi ce flori cauți, ca să te pot ajuta cu o comandă.")
-                user_data["state"] = "SEARCH_PRODUCTS"
+            selection = llm.extract_purchase_selection(text, api_key=Config.GEMINI_API_KEY)
+            idx = selection.get("index", 0)
+            qty = selection.get("quantity", 1)
+            
+            if idx >= 0 and idx < len(last_results):
+                product = last_results[idx]
+                p_name = product.get('title')
+                p_price = product.get('price')
+                
+                user_data["pending_item"] = {
+                    "name": p_name,
+                    "price": p_price,
+                    "qty": qty
+                }
+                user_data["state"] = "AWAITING_CONFIRMATION"
+                
+                total = p_price * qty
+                await say(f"Vrei să adăugăm *{qty} x {p_name}* în coș (Total: {total} RON)? (Spune 'Da' pentru a confirma)")
             else:
-                await say("Nu am înțeles exact pe care dorești să îl cumperi. Îmi poți spune, de exemplu, 'îl vreau pe primul'?")
+                await say("Nu am înțeles exact care produs îl dorești (ex: 'pe primul').")
 
-    # Save State
+    elif new_state == "FINISH_ORDER":
+        cart = user_data.get("cart", [])
+        if not cart:
+            await say("Coșul tău este gol! Nu avem ce să finalizăm. Ce ai dori să comanzi?")
+            user_data["state"] = "SEARCH_PRODUCTS"
+        else:
+            if publish_purchase_callback:
+                items_str = [f"{item['qty']}x {item['name']}" for item in cart]
+                total_price = sum(item['price'] * item['qty'] for item in cart)
+                
+                purchase_data = {
+                    "user_id": user_id,
+                    "items": items_str,
+                    "price": total_price,
+                    "timestamp": event.get("event_ts")
+                }
+                success = await publish_purchase_callback(purchase_data)
+                if success:
+                    success_msg = (
+                        f"🎉 Excelent! Comanda ta (Total: {total_price} RON) a fost trimisă spre procesare!\n\n"
+                        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                        "Îți mulțumim că ai folosit **BlossomBot**, asistentul virtual de la City Flowers, care îți este alături 24/7!\n"
+                        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                    )
+                    await say(success_msg)
+                    # HARD RESET PENTRU A SIMULA O CONVERSAȚIE NOUĂ
+                    user_data = {"state": "GREETING", "history": [], "filter_scores": {}, "cart": []}
+                else:
+                    await say("Îmi cer scuze, a apărut o problemă tehnică la trimiterea comenzii. Te rog spune 'finalizează' pentru a reîncerca.")
+                    user_data["state"] = "SEARCH_PRODUCTS"
+            else:
+                demo_msg = (
+                    "Comanda a fost trimisă intern! (Modul Demo)\n\n"
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    "Îți mulțumim că ai folosit **BlossomBot**, asistentul virtual de la City Flowers, care îți este alături 24/7!\n"
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                )
+                await say(demo_msg)
+                user_data = {"state": "GREETING", "history": [], "filter_scores": {}, "cart": []}
+
+    # Save History & State
     user_data["history"].append({"user": text, "state": new_state})
     await set_user_state(user_id, user_data)
-
