@@ -1,0 +1,26 @@
+=========================================================
+TECHNICAL DOCUMENTATION: DATA PIPELINE & EDA
+=========================================================
+
+1. DATA SOURCE AND PREPARATION
+The core data source for BlossomBot is an e-commerce catalog provided as a CSV file (`products.csv`). Before the data can be used by the RAG (Retrieval-Augmented Generation) system, it goes through a rigorous formatting pipeline.
+
+2. EXPLORATORY DATA ANALYSIS (EDA) & CLEANING
+The initial stage of the project involves cleaning the raw catalog data to ensure high-quality vector embeddings and accurate metadata filtering.
+- Handling Missing Values: Empty fields (NaNs) are identified. Numerical fields are defaulted to 0.0, while missing text fields are cast as empty strings to prevent Python runtime errors during concatenation.
+- Data Type Normalization: Complex strings that represent multiple values (e.g., tags separated by commas or semicolons) are cleaned, stripped of whitespace, and converted into standard Python lists. This is crucial for Qdrant's `MatchValue` filtering, which checks if a queried value exists within a list of tags.
+- Price Extraction: Raw price fields containing currencies or semicolons are parsed using regex/string splitting to extract clean floating-point numbers, allowing the `price_max` filter to function correctly.
+
+3. SCHEMA GENERATION
+The `generate_schema` function analyzes the cleaned DataFrame to build a `schema.json` file.
+- It dynamically extracts all unique values across crucial columns (Categories, Dimensions, Event Types, Colors, Flower Types, Seasons).
+- This JSON schema acts as a constraint dictionary. It is injected into the LLM prompts, ensuring that when the AI extracts user filters, it only maps them to terms that actually exist in the database (e.g., mapping "medium" to "Medie").
+
+4. PAYLOAD AND EMBEDDING PREPARATION
+The `generate_files_only` function prepares the data for Qdrant without initiating a network connection:
+- Semantic Text Concatenation: It builds a rich textual description for each product by combining labels with their values (e.g., "Produs: Rose Bouquet.\nCategorie: Buchete Flori\n..."). This ensures the embedding model captures the full semantic context of the item.
+- Payload Construction: A structured dictionary (payload) is created for each item, containing strict metadata fields (price, category, etc.) separate from the main text.
+- Export: The resulting structures are assigned UUIDs and saved to `qdrant_payload.json`.
+
+5. BATCH INDEXING
+The `build_and_index_rag` function (executed via Kubernetes Job) reads the payload JSON. It feeds the `text_to_embed` strings through the SentenceTransformer model to generate high-dimensional vectors. Finally, it uploads the vectors and their accompanying metadata payloads to the Qdrant database in batches, minimizing memory overhead.

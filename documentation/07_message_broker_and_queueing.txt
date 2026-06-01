@@ -1,0 +1,29 @@
+=========================================================
+TECHNICAL DOCUMENTATION: MESSAGE BROKER & QUEUEING
+=========================================================
+
+1. PURPOSE OF RABBITMQ
+BlossomBot acts as a conversational frontend for an e-commerce platform. To ensure reliability and decouple the chatbot's real-time interaction from backend order processing (e.g., ERP systems, inventory management), the architecture incorporates RabbitMQ as a Message Broker.
+
+2. QUEUE ARCHITECTURE
+- Queue Name: `flower_purchases` (configurable via environment variables).
+- Durability: The queue is declared with `durable=True`. This ensures that the queue definition survives a RabbitMQ server restart.
+- Persistence: Messages published to the broker use `delivery_mode=2` (persistent). This guarantees that once an order is placed in the queue, it is written to disk and will not be lost if the message broker crashes before a backend consumer processes it.
+
+3. PUBLISHING MECHANISM (ASYNCHRONOUS DELEGATION)
+Slack requires the bot to respond to webhooks within a strict 3-second window. The `pika` library (the Python client for RabbitMQ) uses blocking I/O, which could freeze the FastAPI event loop.
+- To prevent this, `app/main.py` wraps the synchronous `_blocking_publish_purchase` function inside an asynchronous wrapper (`publish_purchase`).
+- The async wrapper uses `asyncio.get_running_loop().run_in_executor(executor, ...)` to offload the network call to a dedicated `ThreadPoolExecutor`. This allows the FastAPI server to instantly acknowledge the Slack event while the order is being safely transmitted to RabbitMQ in the background.
+
+4. HEALTH CHECKS AND INITIALIZATION
+- At application startup, the `/healthz` endpoint executes a health check against RabbitMQ.
+- Crucially, during this health check (`_blocking_check_rabbitmq_health`), the application explicitly declares the `flower_purchases` queue.
+- This ensures that the queue is visible in the RabbitMQ Management UI immediately upon cluster boot, even before the first user places an order, simplifying monitoring and debugging for system administrators.
+
+5. DATA PAYLOAD
+When a user finishes an order (the `FINISH_ORDER` state), the cart's contents are aggregated into a JSON payload:
+- `user_id`: The Slack ID of the customer.
+- `items`: An array of formatted strings representing the cart contents (e.g., `["3x Sunny Bloom Bouquet", "1x Chocolate Box"]`).
+- `price`: The total calculated integer/float value of the entire order.
+- `timestamp`: The UNIX timestamp of the event.
+This structured payload makes it trivial for downstream services to consume and process the order.

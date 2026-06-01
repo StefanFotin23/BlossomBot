@@ -1,0 +1,28 @@
+=========================================================
+TECHNICAL DOCUMENTATION: STATE MANAGEMENT & REDIS
+=========================================================
+
+1. THE NEED FOR STATE MANAGEMENT
+Unlike simple FAQ bots, an e-commerce chatbot like BlossomBot requires conversational memory. It must remember what products the user was looking at, what filters they insisted upon, and what items they have added to their shopping cart across multiple asynchronous Slack messages.
+
+2. REDIS INTEGRATION
+To support horizontal scaling (running multiple replicas of the `chat-app` pod) and ensure that user context survives application restarts, the state is persisted in a Redis database.
+- Key Structure: States are stored as JSON strings with the key format `user:{user_id}`, ensuring complete isolation between different Slack users interacting with the bot simultaneously.
+- TTL (Time To Live): To prevent memory leaks and clear abandoned carts, every update to a user's state in Redis sets an expiration timer (TTL) of 24 hours (`ex=3600*24`). If a user does not interact with the bot for a day, their session is automatically purged.
+
+3. STATE PAYLOAD STRUCTURE
+The JSON object stored for each user contains:
+- `state`: The current node in the state machine (e.g., `SEARCH_PRODUCTS`, `AWAITING_CONFIRMATION`).
+- `history`: An array of previous messages and states, passed to the LLM to provide conversational context.
+- `filter_scores`: A dictionary mapping filter keys (like `price_max`) to integer scores. These scores dictate the RAG engine's dynamic relaxation logic.
+- `cart`: An array of product objects (name, quantity, price) representing the user's pending order.
+- `pending_item`: A temporary object holding the item currently awaiting Yes/No confirmation from the user.
+
+4. FALLBACK MECHANISM (RESILIENCE)
+If the Redis service becomes unreachable (e.g., due to a network partition or pod crash), the application is designed to degrade gracefully rather than fail entirely.
+- In `app/bot.py`, the initialization code wraps the Redis connection in a `try/except` block.
+- If the connection fails, the application falls back to `_local_user_states`, an in-memory Python dictionary.
+- While in-memory storage does not persist across pod restarts and does not support multi-pod scaling, it guarantees that the bot remains functional and can continue serving users while infrastructure issues are resolved.
+
+5. CONVERSATIONAL CHECKPOINTS (HARD RESET)
+When a user completes an order (`FINISH_ORDER`) or manually requests a restart (`RESTART`), the `set_user_state` function is called with a deeply cleaned dictionary (empty history, empty cart, empty scores, state set to `GREETING`). This effectively creates a strict conversational boundary, proving the user with a fresh context for their next interaction.

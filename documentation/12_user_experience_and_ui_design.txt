@@ -1,0 +1,24 @@
+=========================================================
+TECHNICAL DOCUMENTATION: USER EXPERIENCE (UX) & UI DESIGN
+=========================================================
+
+1. INTRODUCTION
+Developing a chatbot for Slack introduces unique UI constraints. Slack is primarily a text-based, professional communication tool. BlossomBot's UX design focuses on clarity, readability, and empathetic conversational flow to simulate a high-quality human sales assistant.
+
+2. OVERCOMING SLACK UI LIMITATIONS
+Constraint: Slack bots cannot universally clear a user's chat history to provide a "fresh screen."
+Solution: "Visual Delimiters". When an order is completed (`FINISH_ORDER`) or manually reset (`RESTART`), the bot outputs a bold, multi-line markdown separator (e.g., ━━━━━━━━). This acts as a psychological checkpoint, signaling to the user that the previous transaction context is closed and the bot's memory is blank.
+
+3. READABILITY AND FORMATTING
+Raw data dumps from databases are visually overwhelming.
+- Hybrid Response Formatting: The `generate_detailed_product_info` function translates raw JSON metadata into clean vertical lists. Technical keys like `flowers_type` are mapped to friendly strings ("Tipuri de flori"). Bullet points and bold text are used extensively to draw the eye to critical information (Title, Price).
+- Concise Descriptions: In the broad discovery phase (`SEARCH_PRODUCTS`), product descriptions are truncated intelligently to 350 characters and displayed in italics. This provides enough flavor to entice the user without creating walls of text that dominate a mobile screen.
+
+4. EMPATHETIC ERROR MESSAGING
+A common chatbot flaw is robotic failure handling (e.g., "Error: 0 results found").
+- Guided Fallback: When the dynamic relaxation algorithm drops a strict filter (like a tight budget), the bot does not simply return expensive items silently. It acknowledges the compromise: "💡 Am ajustat puțin căutarea. Nu am găsit exact potriviri sub prețul dorit..." (I adjusted the search. I couldn't find exact matches under the desired price...).
+- It goes a step further by scanning the fallback results and offering the actual minimum price floor: "Cele mai apropiate opțiuni pornesc de la X RON." This manages user expectations and guides them toward realistic catalog options.
+
+5. SMART CONFIRMATION AND NATURAL LANGUAGE
+To avoid rigid UI flows (like forcing users to click specific buttons or type exact keywords like "/confirm"), the bot uses an LLM-based confirmation parser. 
+- It allows users to speak naturally (e.g., "Yes, but I want 3 pieces instead"). The bot processes the affirmative intent and updates the cart quantity simultaneously, creating a frictionless, human-like checkout experience.

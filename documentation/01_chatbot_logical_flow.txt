@@ -1,0 +1,31 @@
+=========================================================
+TECHNICAL DOCUMENTATION: CHATBOT LOGICAL FLOW
+=========================================================
+
+1. INTRODUCTION
+The logical flow of BlossomBot is built around an asynchronous State Machine, implemented in Python using the Slack Bolt framework and an LLM (Gemini 3.1 Flash-Lite) acting as a decision router. This architecture enables the bot to handle non-linear conversations, retain user context across multiple turns, and function as a fully-fledged conversational e-commerce assistant.
+
+2. THE STATE MACHINE (CONVERSATIONAL STATES)
+Each user's state is tracked persistently (via Redis) using their unique Slack `user_id`. The application handles the following states:
+
+- GREETING: The initial state. The bot introduces itself and invites the user to browse. It also acts as a "soft reset" point.
+- CATALOG_DISCOVERY: Triggered by broad questions (e.g., "What products do you have?"). It bypasses strict filtering to offer a diverse, representative sample of the catalog.
+- SEARCH_PRODUCTS: The core RAG state. It extracts filters from the user's input, searches the vector database, and returns the most relevant products while applying dynamic relaxation if necessary.
+- PRODUCT_DETAILS: When a user asks for more information about a previously displayed product (e.g., "Tell me more about the first one"). The bot expands the product's metadata into a highly readable list and shows the full narrative description.
+- PURCHASE_INTENT: The user selects a product to add to their cart. The LLM extracts the target product's index and the requested quantity.
+- AWAITING_CONFIRMATION: The bot explicitly asks the user to confirm the item, quantity, and price. A fast-track LLM classifier (temperature 0.0) reads the input to detect a "Yes" (handling slang like "yep", "k") or "No", updating the shopping cart accordingly.
+- VIEW_CART: Allows the user to check their pending order (e.g., "What's in my cart?"). The bot formats and displays the internal cart array and the total order value.
+- FINISH_ORDER: Triggers the asynchronous dispatch of the shopping cart payload to RabbitMQ. Upon success, it executes a "Hard Reset".
+- GENERAL_INQUIRY: Handles small-talk and status questions ("Who are you?", "Are you there?"). It returns instant, deterministic responses based on predefined categories.
+- RESTART: Allows the user to manually clear their cart and memory, reverting the state to GREETING.
+
+3. INTENT ROUTING
+The core of the interaction lies in the `classify_intent` function (`app/llm_agent.py`).
+- Every incoming Slack message is sent to the LLM along with the user's current state.
+- The system prompt instructs the LLM to map the input to exactly one of the predefined state names.
+- The LLM temperature is strictly set to 0.0 to guarantee determinism, eliminate hallucinations, and ensure minimal latency.
+
+4. SHOPPING CART AND CONTEXT RESET ("HARD RESET")
+- The `cart` array lives inside the user's state dictionary. It accumulates items across the conversation.
+- Submitting an order acts as a major conversational checkpoint. Since Slack does not offer a native "Clear Chat" feature for bots, BlossomBot responds with a strong visual delimiter (━━━━━━━━) to indicate order completion.
+- Following this visual cue, the memory associated with the `user_id` is overwritten with an empty dictionary. This "Hard Reset" ensures that the next interaction starts with a clean slate, unaffected by previous filters or cart items.

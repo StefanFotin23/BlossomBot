@@ -1,0 +1,39 @@
+=========================================================
+TECHNICAL DOCUMENTATION: INFRASTRUCTURE & ARCHITECTURE
+=========================================================
+
+1. MICROSERVICES ARCHITECTURE
+BlossomBot is designed as a distributed system running inside a Kubernetes cluster, composed of decoupled microservices:
+
+a) Chat App (FastAPI + Slack Bolt):
+   - The core orchestrator. It receives asynchronous Slack webhook events.
+   - Delegates heavy tasks (LLM inference, Message Broker publishing) to a `ThreadPoolExecutor` or `asyncio` background tasks to prevent event loop blocking.
+   - Exposes standard `/slack/events` and `/healthz` HTTP endpoints.
+
+b) Vector Database (Qdrant):
+   - Stores and retrieves dense vectors and product metadata.
+   - Configured with a Persistent Volume Claim (PVC) to retain indexing data across pod restarts.
+
+c) State Store (Redis):
+   - Handles isolated, in-memory state management for users.
+   - Enables the Chat App to scale horizontally (multiple replicas) without losing conversational context.
+
+d) Message Broker (RabbitMQ):
+   - Manages the `flower_purchases` queue for completed orders.
+   - Ensures zero data loss between the bot (frontend) and any potential ERP/backend systems. Uses `delivery_mode=2` for disk persistence.
+
+2. KUBERNETES NETWORKING & ROUTING
+The infrastructure uses the NGINX Ingress Controller on a Kind (Kubernetes in Docker) cluster.
+- Main Ingress (`blossombot-ingress`): Routes incoming HTTP traffic (from ngrok) to the `chat-app` service.
+- Sub-path Routing (`rabbitmq-ingress`): Uses advanced regular expressions (`/rabbitmq(/|$)(.*)`) and `rewrite-target: /$2` annotations. This ensures RabbitMQ's Management UI and its static assets (CSS/JS) load correctly under a sub-path without breaking.
+- NodePorts: Configured as a direct debug fallback. The Kind cluster maps container ports (e.g., 30081, 30082) to the host machine (e.g., localhost:40081), bypassing Ingress complexities for database management.
+
+3. ASYNCHRONOUS PERFORMANCE
+Slack requires an acknowledgment response within 3 seconds, making performance critical:
+- Both Slack (`say()`) and LLM API calls utilize async libraries.
+- Synchronous operations, such as publishing to RabbitMQ using the `pika` library, are wrapped in a `ThreadPoolExecutor` to maintain an unblocked event loop.
+
+4. HEALTH CHECKS & RESILIENCE
+The `/healthz` endpoint aggregates the status of critical dependencies (Qdrant, Redis, RabbitMQ) at runtime. 
+- A failure in any component is logged and returns a 500 status code, triggering Kubernetes Liveness/Readiness probes to restart or isolate the failing Pod.
+- If Redis becomes completely unreachable, the `app/bot.py` logic automatically falls back to an internal Python dictionary (`_local_user_states`), allowing the bot to continue functioning in a degraded but operational mode.

@@ -1,0 +1,28 @@
+=========================================================
+TECHNICAL DOCUMENTATION: SCALABILITY & FUTURE ROADMAP
+=========================================================
+
+1. INTRODUCTION
+BlossomBot has been developed as a complete, microservices-based proof-of-concept operating within a local `Kind` cluster. The architectural choices were made specifically to ensure that transitioning from this local environment to an enterprise-grade cloud environment requires minimal refactoring. This document outlines the roadmap for scaling the project.
+
+2. CLOUD DEPLOYMENT (AWS / GCP / AZURE)
+The current Kubernetes manifests (`k8s/`) are largely cloud-agnostic.
+- Managed Kubernetes: Moving to AWS EKS or Google GKE involves applying the exact same manifests.
+- Managed Databases: Instead of running Redis and RabbitMQ as Pods, a production deployment should offload these to managed cloud services (e.g., AWS ElastiCache for Redis, Amazon MQ for RabbitMQ) to ensure high availability, automatic backups, and disaster recovery.
+- Cloud Storage: The local Qdrant PVCs would be replaced by cloud-native Block Storage (EBS/Persistent Disk) to ensure the vector database survives node terminations.
+
+3. CONTINUOUS INTEGRATION / CONTINUOUS DEPLOYMENT (CI/CD)
+The current `Makefile` automates local builds. The next step is implementing a CI/CD pipeline (e.g., GitHub Actions, GitLab CI).
+- Automated Testing: Introduce `pytest` suites to validate the LLM prompt extraction (using mocked LLM responses) and state machine transitions.
+- Automated Image Builds: On every commit to the `main` branch, the CI pipeline should build the Docker image, run security scans (e.g., Trivy), and push the artifact to a container registry (Docker Hub, AWS ECR).
+- GitOps Deployment: Tools like ArgoCD or Flux can be integrated to automatically sync the Kubernetes cluster state with the manifests in the Git repository.
+
+4. MASTER DATA MANAGEMENT (RDBMS)
+Currently, the product catalog is loaded from a static `products.csv` file. 
+- In a scalable enterprise environment, the source of truth should be a Relational Database (PostgreSQL/MySQL). 
+- A synchronization service (or cron job) would periodically query the RDBMS, identify new or updated products, run them through the Embedding Model, and upsert the vectors into Qdrant, keeping the RAG system perfectly synced with the live inventory.
+
+5. OBSERVABILITY AND ANALYTICS
+While the `/healthz` endpoint provides basic liveness, production systems require deep observability.
+- Metrics (Prometheus/Grafana): The FastAPI app should be instrumented with Prometheus to expose metrics such as LLM inference latency, Slack response times, and RabbitMQ queue depth.
+- Business Analytics: The `FINISH_ORDER` events pushed to RabbitMQ can be consumed by an analytics microservice to build a dashboard showing popular search queries, conversion rates, and the most frequently dropped constraints (e.g., if users constantly search for budgets under 100 RON, it signals a business need to source cheaper inventory).
