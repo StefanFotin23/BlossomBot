@@ -67,8 +67,6 @@ spec:
           value: "qdrant"
         - name: QDRANT_PORT
           value: "6333"
-        - name: OLLAMA_PORT
-          value: "11434"
         resources:
           requests:
             cpu: "500m"

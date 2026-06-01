@@ -75,7 +75,6 @@ create-cluster:
 	@echo "--- Creating kind cluster with Ingress ports ---"
 	@kind create cluster --name $(CLUSTER_NAME) --config kind-config.yaml
 	@make install-ingress
-	@kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.17.1/deployments/static/nvidia-device-plugin.yml
 
 delete-cluster:
 	@echo "--- Deleting kind cluster ---"

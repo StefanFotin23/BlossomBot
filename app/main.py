@@ -83,6 +83,9 @@ def _blocking_check_rabbitmq_health():
         connection = pika.BlockingConnection(
             pika.ConnectionParameters(host=Config.RABBITMQ_HOST, port=Config.RABBITMQ_PORT, heartbeat=10)
         )
+        # Asigură-te că coada este creată chiar dacă nu am trimis comenzi
+        channel = connection.channel()
+        channel.queue_declare(queue=Config.PURCHASE_QUEUE, durable=True)
         connection.close()
         return {"status": "ok"}
     except Exception as e:
@@ -99,16 +102,6 @@ async def check_qdrant_health():
         return {"status": "ok"}
     except Exception as e:
         logger.error(f"Qdrant health check failed: {e}")
-        return {"status": "error", "message": str(e)}
-
-async def check_ollama_health():
-    try:
-        ollama_url = f"http://{Config.OLLAMA_HOST}:{Config.OLLAMA_PORT}/api/tags"
-        response = await http_client.get(ollama_url, timeout=5)
-        response.raise_for_status()
-        return {"status": "ok"}
-    except Exception as e:
-        logger.error(f"Ollama health check failed: {e}")
         return {"status": "error", "message": str(e)}
 
 async def check_redis_health():
@@ -135,7 +128,6 @@ async def healthz():
     results = await asyncio.gather(
         check_rabbitmq_health(),
         check_qdrant_health(),
-        check_ollama_health(),
         check_redis_health(),
         return_exceptions=True
     )
@@ -143,8 +135,7 @@ async def healthz():
     details = {
         "rabbitmq": results[0],
         "qdrant": results[1],
-        "ollama": results[2],
-        "redis": results[3]
+        "redis": results[2]
     }
     
     overall_status = "ok"

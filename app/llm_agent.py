@@ -11,14 +11,6 @@ from app.config import Config
 # Get logger
 logger = logging.getLogger(__name__)
 
-OLLAMA_OPTIMIZED_OPTIONS = {
-    "num_ctx": 2048,
-    "num_gpu": 99,
-    "temperature": 0.1,
-    "num_predict": 150,
-    "low_vram": True
-}
-
 GEMINI_MODEL_NAME = Config.GEMINI_MODEL_NAME
 
 class GeminiOverloadedError(Exception):
@@ -325,7 +317,13 @@ def extract_purchase_selection(user_message: str, api_key: str = None) -> Dict[s
             config={"temperature": 0.0, "max_output_tokens": 50}
         )
         out = re.sub(r"```json|```", "", response.text).strip()
-        return json.loads(out)
+        parsed = json.loads(out)
+        # Gestionare robustă: Gemini poate returna o listă cu un obiect
+        if isinstance(parsed, list) and len(parsed) > 0:
+            return parsed[0]
+        elif isinstance(parsed, dict):
+            return parsed
+        return default
     except:
         return default
 
