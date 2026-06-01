@@ -19,12 +19,6 @@ class Config:
     QDRANT_URL = os.environ.get("QDRANT_URL", f"http://{QDRANT_HOST}:{QDRANT_PORT}")
     QDRANT_API_KEY = os.environ.get("QDRANT_API_KEY")
 
-    # Ollama (Fallback/Local LLM)
-    OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "localhost")
-    OLLAMA_PORT = os.environ.get("OLLAMA_PORT", "11434")
-    OLLAMA_URL = os.environ.get("OLLAMA_URL", f"http://{OLLAMA_HOST}:{OLLAMA_PORT}/api/generate")
-    MODEL_NAME = os.environ.get("MODEL_NAME", "qwen2.5:0.5b")
-
     # RabbitMQ
     RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST", "localhost")
     # K8s sometimes sets RABBITMQ_PORT to a URL like 'tcp://...'. We want the numeric port.
@@ -60,8 +54,7 @@ class Config:
         missing = []
         if not cls.SLACK_BOT_TOKEN: missing.append("SLACK_BOT_TOKEN")
         if not cls.SLACK_SIGNING_SECRET: missing.append("SLACK_SIGNING_SECRET")
-        if not cls.GEMINI_API_KEY:
-            print("⚠️ Warning: GEMINI_API_KEY is not set. Application will fallback to Ollama if available.")
+        if not cls.GEMINI_API_KEY: missing.append("GEMINI_API_KEY")
         
         if missing:
             print(f"❌ Missing critical environment variables: {', '.join(missing)}")
