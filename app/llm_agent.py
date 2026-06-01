@@ -41,6 +41,8 @@ def classify_intent(user_message: str, current_state: str = "GREETING", api_key:
         msg_clean = msg.lower()
         if any(word in msg_clean for word in ["salut", "buna", "bună", "hello", "hi"]):
             return "GREETING"
+        if any(word in msg_clean for word in ["ce produse", "catalog", "ce aveți", "oferta", "oferta"]):
+            return "CATALOG_DISCOVERY"
         if any(word in msg_clean for word in ["caut", "vreau", "buchet", "flori", "recomand", "lalele", "trandafiri", "cadou"]):
             return "SEARCH_PRODUCTS"
         if any(word in msg_clean for word in ["detalii", "info", "mai mult", "descriere"]):
@@ -57,9 +59,12 @@ def classify_intent(user_message: str, current_state: str = "GREETING", api_key:
     states_desc = """
     - GREETING: Utilizatorul salută sau începe conversația.
     - SEARCH_PRODUCTS: Utilizatorul caută flori, CADOURI, ciocolată, vin sau cere recomandări.
-    - PRODUCT_DETAILS: Utilizatorul cere mai multe informații/detalii despre un produs afișat (ex: 'vreau mai multe detalii despre primul', 'spune-mi mai multe despre buchetul de trandafiri').
-    - PURCHASE_INTENT: Utilizatorul confirmă că vrea să cumpere, alege un produs din listă.
-    - RESTART: Utilizatorul vrea să o ia de la capăt.
+    - CATALOG_DISCOVERY: Utilizatorul întreabă ce produse aveți în general, cere să vadă oferta sau catalogul.
+    - PRODUCT_DETAILS: Utilizatorul cere mai multe informații/detalii despre un produs afișat.
+    - PURCHASE_INTENT: Utilizatorul alege un produs din listă pentru a-l adăuga în coș.
+    - VIEW_CART: Utilizatorul întreabă ce are în coș sau ce a comandat până acum (ex: 'ce am comandat?', 'ce e in cos?', 'arata-mi comanda').
+    - FINISH_ORDER: Utilizatorul dorește să finalizeze comanda curentă, să trimită produsele sau spune că a terminat.
+    - RESTART: Utilizatorul vrea să o ia de la capăt, anulează tot.
     - GENERAL_INQUIRY: Utilizatorul pune întrebări despre bot, program sau alte discuții libere.
     """
 
@@ -67,9 +72,12 @@ def classify_intent(user_message: str, current_state: str = "GREETING", api_key:
         f"Ești un router de conversație pentru o florărie online. "
         f"Starea actuală este: {current_state}. "
         f"Analizează mesajul utilizatorului și alege următoarea stare din listă:\n{states_desc}\n"
-        "Regulă importantă 1: Orice cerere de produs (cadou, pachet, ceva de băut) este SEARCH_PRODUCTS.\n"
-        "Regulă importantă 2: Dacă cere detalii suplimentare, specificații sau 'mai multe info' despre ceva afișat deja, este PRODUCT_DETAILS.\n"
-        "Regulă importantă 3: Dacă se referă la un produs pentru a-l cumpăra, este PURCHASE_INTENT.\n"
+        "Regulă 1: Cerere de produs specific = SEARCH_PRODUCTS.\n"
+        "Regulă 2: Întrebări generale de catalog = CATALOG_DISCOVERY.\n"
+        "Regulă 3: Detalii despre produs = PRODUCT_DETAILS.\n"
+        "Regulă 4: Alegerea unui produs pentru coș = PURCHASE_INTENT.\n"
+        "Regulă 5: Vizualizare produse alese = VIEW_CART.\n"
+        "Regulă 6: Cererea de finalizare = FINISH_ORDER.\n"
         "Răspunde DOAR cu numele stării."
     )
 
@@ -80,7 +88,7 @@ def classify_intent(user_message: str, current_state: str = "GREETING", api_key:
             config={"temperature": 0.0}
         )
         intent = response.text.strip().upper()
-        valid_states = ["GREETING", "SEARCH_PRODUCTS", "PRODUCT_DETAILS", "PURCHASE_INTENT", "RESTART", "GENERAL_INQUIRY"]
+        valid_states = ["GREETING", "SEARCH_PRODUCTS", "CATALOG_DISCOVERY", "PRODUCT_DETAILS", "PURCHASE_INTENT", "VIEW_CART", "FINISH_ORDER", "RESTART", "GENERAL_INQUIRY"]
         for s in valid_states:
             if s in intent: return s
         return current_state
@@ -152,8 +160,8 @@ def extract_filters(user_message: str, history: List[Dict] = None, api_key: str 
             if any(code in error_str for code in ["503", "UNAVAILABLE", "429", "RESOURCE_EXHAUSTED"]):
                 raise GeminiOverloadedError(f"Gemini is busy or quota exceeded: {error_str}")
             logger.error(f"⚠️ Eroare neașteptată Gemini Filter Extraction: {e}")
-            return {"filters": {}, "semantic_query": user_message}
-    return {"filters": {}, "semantic_query": user_message}
+            return {"filters": {}, "semantic_query": user_message, "mentioned_now": [], "insisted": []}
+    return {"filters": {}, "semantic_query": user_message, "mentioned_now": [], "insisted": []}
 
 
 # ==========================================
@@ -173,35 +181,25 @@ def generate_hybrid_response(rag_results):
         title = res.get('title', 'Produs necunoscut')
         price = res.get('price', 'Preț indisponibil')
         
-        # Extragem descrierea (încercăm multiple tag-uri, altfel curățăm contextul)
+        # Extragem descrierea
         context_str = res.get('context', '')
         description = ""
-        
-        # Căutăm tag-ul de început al descrierii reale
         for tag in ["Descriere:", "Body (HTML):", "Description:"]:
             if tag in context_str:
                 description = context_str.split(tag)[-1].strip()
                 break
         
         if not description:
-            # Fallback: eliminăm toate liniile care conțin "Label: "
             lines = context_str.split("\n")
             tags_to_skip = ["Produs:", "Type:", "Flowers Type:", "Colors:", "Categorie:", "Flori:", "Culori:", "Dimensiune:", "Eveniment:", "Sezon:", "Body (HTML):"]
-            clean_lines = []
-            for line in lines:
-                # Sărim liniile care sunt doar etichete
-                if not any(t in line for t in tags_to_skip) and ":" not in line[:15]:
-                    clean_lines.append(line)
+            clean_lines = [line for line in lines if not any(tag in line for tag in tags_to_skip) and ":" not in line[:15]]
             description = " ".join(clean_lines).strip()
             
         if not description:
             description = "Vezi detaliile complete în catalogul nostru online."
             
-        # Limităm la 350 caractere pentru o descriere decentă
         limit = 350
         short_desc = description[:limit] + "..." if len(description) > limit else description
-        
-        # Formatare finală: Titlu + Preț, apoi Descrierea pe rând nou
         items_text += f"{i}. *{title}* - Preț: {price} lei\n_{short_desc}_\n\n"
     
     return f"{selected_intro}\n\n{items_text}"
@@ -214,7 +212,6 @@ def generate_detailed_product_info(product: Dict[str, Any]) -> str:
     title = product.get('title', 'Produs')
     price = product.get('price', 'N/A')
     
-    # Mapare etichete tehnice -> Română prietenoasă
     label_map = {
         "category": "Categorie",
         "dimensiune": "Dimensiune",
@@ -224,7 +221,7 @@ def generate_detailed_product_info(product: Dict[str, Any]) -> str:
         "sezon": "Sezon"
     }
     
-    header = f"🔍 *Detalii complete pentru: {title}*\n💰 *Preț:* {price} lei\n\n"
+    header = f"🔍 *Detalii complete pentru: {title}*\n💰 *Preț:* {price} lei\n"
     
     details = []
     for key, label in label_map.items():
@@ -238,7 +235,7 @@ def generate_detailed_product_info(product: Dict[str, Any]) -> str:
             if val_str and val_str.lower() != "nan" and val_str.lower() != "none":
                 details.append(f"• *{label}:* {val_str}")
     
-    # Adăugăm și descrierea completă
+    # Descrierea completă
     context_str = product.get('context', '')
     description = ""
     for tag in ["Descriere:", "Body (HTML):", "Description:"]:
@@ -301,3 +298,68 @@ def generate_general_response(user_message: str, api_key: str = None) -> str:
         return responses.get(category, responses["UNKNOWN"])
     except:
         return responses["UNKNOWN"]
+
+# ==========================================
+# 6. PURCHASE INTENT (Index & Quantity)
+# ==========================================
+def extract_purchase_selection(user_message: str, api_key: str = None) -> Dict[str, Any]:
+    """Extrage indexul produsului și cantitatea dorită."""
+    client = getApiClient(api_key)
+    default = {"index": 0, "quantity": 1}
+    
+    if not client:
+        return default
+
+    system_prompt = (
+        "Analizează mesajul utilizatorului care alege un produs dintr-o listă de 3 (primul, al doilea, al treilea).\n"
+        "Extrage:\n"
+        "1. 'index': 0 pentru primul, 1 pentru al doilea, 2 pentru al treilea.\n"
+        "2. 'quantity': câte bucăți vrea? (număr întreg, ex: '3 bucati' -> 3, 'de 2 ori' -> 2). Dacă nu specifică, e 1.\n"
+        "Răspunde DOAR cu JSON valid."
+    )
+    
+    try:
+        response = client.models.generate_content(
+            model=GEMINI_MODEL_NAME,
+            contents=f"{system_prompt}\n\nMesaj: {user_message}",
+            config={"temperature": 0.0, "max_output_tokens": 50}
+        )
+        out = re.sub(r"```json|```", "", response.text).strip()
+        return json.loads(out)
+    except:
+        return default
+
+# ==========================================
+# 7. CONFIRMATION PARSER (Yes/No & Qty)
+# ==========================================
+def parse_confirmation(user_message: str, api_key: str = None) -> Dict[str, Any]:
+    """Returnează dacă a confirmat și dacă a specificat o cantitate nouă."""
+    client = getApiClient(api_key)
+    
+    msg_clean = user_message.lower().strip()
+    if msg_clean in ["da", "yes", "ok", "k", "yep", "daaa", "sigur", "confirm", "perfect", "il vreau"]:
+        return {"confirmed": True, "quantity": None}
+    if msg_clean in ["nu", "no", "nope", "anuleaza", "anulează", "stai"]:
+        return {"confirmed": False, "quantity": None}
+        
+    if not client:
+        return {"confirmed": False, "quantity": None}
+
+    system_prompt = (
+        "Analizează răspunsul utilizatorului la confirmarea adăugării în coș.\n"
+        "Extrage JSON cu:\n"
+        "1. 'confirmed': true (da, ok, k, yes, vreau, adauga) sau false (nu, anuleaza, nu vreau).\n"
+        "2. 'quantity': dacă specifică O NOUĂ cantitate (ex: 'da, 3 bucati' -> 3), pune numărul. Altfel null.\n"
+        "Răspunde DOAR cu JSON."
+    )
+
+    try:
+        response = client.models.generate_content(
+            model=GEMINI_MODEL_NAME,
+            contents=f"{system_prompt}\n\nMesaj: {user_message}",
+            config={"temperature": 0.0, "max_output_tokens": 50}
+        )
+        out = re.sub(r"```json|```", "", response.text).strip()
+        return json.loads(out)
+    except:
+        return {"confirmed": False, "quantity": None}

@@ -16,4 +16,5 @@ spec:
       port: 15672
       targetPort: 15672
       name: http-management
-  type: ClusterIP
+      nodePort: 30082
+  type: NodePort

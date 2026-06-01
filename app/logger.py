@@ -22,6 +22,9 @@ def get_logger(name):
         logger.setLevel(logging.WARNING)
     return logger
 
-# Globally quiet HTTP access logs from httpx/uvicorn
+# Globally quiet noisy libraries
 logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
 logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
+logging.getLogger("urllib3").setLevel(logging.WARNING)
+logging.getLogger("slack_bolt.AsyncApp").setLevel(logging.INFO) # Keep bolt info, hide debug
