@@ -1,0 +1,29 @@
+=========================================================
+TECHNICAL DOCUMENTATION: DEPLOYMENT & AUTOMATION
+=========================================================
+
+1. DOCKER CONTAINERIZATION
+The application is packaged into a highly optimized Docker image based on `python:3.11-slim`.
+Key build features:
+- Offline AI Models: During the Docker build process, `download_models.py` pulls the required NLP models (SentenceTransformers, Reranker) and stores them directly inside the image (`/app/models/`).
+- Environment Flags: Setting `TRANSFORMERS_OFFLINE=1` and `HF_HUB_OFFLINE=1` guarantees the container will not attempt to download models at runtime, drastically improving pod startup speed and preventing crashes in restricted network environments.
+
+2. LOCAL KUBERNETES CLUSTER (KIND)
+Development and testing environments are virtualized using Kind (Kubernetes in Docker).
+- The `kind-config.yaml` file specifies host-to-container port mappings, enabling the developer to access internal cluster services (like NGINX Ingress, Qdrant, and RabbitMQ) directly from `localhost` on the Windows/WSL host machine.
+
+3. KUBERNETES MANIFESTS (k8s/)
+Resources are modularized per application (`chat-app`, `qdrant`, `rabbitmq`, `redis`):
+- Secrets: Sensitive tokens (Slack, Gemini) are stored as Kubernetes `Opaque` Secrets and exposed as environment variables within the pods.
+- Persistent Volumes (PVC): Qdrant and RabbitMQ utilize the `local-path` storage class to dynamically provision disk space, ensuring databases survive pod recreation.
+- InitContainers: The `chat-app` deployment uses an `initContainer` (running the same image but with a different command) to execute `check_qdrant.py`. This ensures the required JSON payload and schemas are generated before the main FastAPI server starts.
+
+4. KUBERNETES JOBS
+The vector database population is handled by a standalone Kubernetes Job (`job-index-rag.yaml`). This separates the heavy computational task of generating embeddings and pushing them to Qdrant from the main application's lifecycle. It is only executed on-demand when the dataset changes.
+
+5. MAKEFILE AUTOMATION
+The entire operational lifecycle is automated via a robust `Makefile`, minimizing human error:
+- `make build-and-push-docker-images`: Forces a layer refresh for Python files, builds the image, and uses `kind load docker-image` to inject the new build directly into the local cluster (bypassing the need to push to Docker Hub).
+- `make restart-chat`: Executes a `kubectl rollout restart deployment chat-app`, forcing Kubernetes to recreate the pods using the newly loaded local image.
+- `make up` / `make status`: Macro commands to provision the entire architecture and verify cluster health.
+- `make ngrok`: Automates the creation of a secure tunnel, exposing the local cluster to the public internet so Slack webhooks can reach the bot.

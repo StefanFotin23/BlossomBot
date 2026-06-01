@@ -1,0 +1,37 @@
+=========================================================
+TECHNICAL DOCUMENTATION: DEVELOPMENT CHALLENGES & EVOLUTION
+=========================================================
+
+1. INTRODUCTION
+The development of BlossomBot was an iterative process, transitioning from a basic RAG implementation to a robust, production-ready e-commerce assistant. This document chronicles the major technical challenges encountered during development and the solutions implemented to overcome them.
+
+2. OVERCOMING API LIMITATIONS AND MODEL SELECTION
+Challenge: Initial iterations of the bot relied on `gemini-2.5-flash`. During testing, the bot frequently crashed or hung with `429 RESOURCE_EXHAUSTED` errors due to strict daily quotas (20 requests/day) on the free tier.
+Evolution & Solution:
+- Model Migration: We migrated the core logic to `gemini-3.1-flash-lite`, which offered significantly higher throughput (30 RPM, 1M TPM) without strict daily caps, perfectly suiting a high-volume testing environment.
+- Resilient Fallbacks: Before the migration, we implemented an asynchronous retry mechanism (`retry_recommendations`). Instead of failing, the bot intercepted 429/503 errors, sent a polite "I am busy" message, and retried the request in the background using `asyncio.sleep()`.
+
+3. EVOLVING THE RAG ENGINE: FROM RIGID TO DYNAMIC
+Challenge: The initial RAG implementation was too rigid. If a user asked for "cheap tulips under 100 RON" and the cheapest bouquet was 179 RON, the vector database returned 0 results, leading to a frustrating "I can't find anything" response.
+Evolution & Solution:
+- Dynamic Filter Relaxation: We moved away from a static search to a progressive relaxation algorithm. If an exact match failed, the bot began dropping filters.
+- Filter Scoring (User Intent): To prevent dropping crucial filters (like a strict budget constraint), we implemented a scoring system. Filters explicitly mentioned or "insisted" upon by the user gained higher scores (+2, +4). The relaxation algorithm was rewritten to drop the lowest-scored filters first, ensuring the bot respected the user's primary constraints (e.g., sacrificing the "tulip" category to find *any* product under 100 RON).
+- Jitter & Diversity: To prevent the fallback mechanism from repeatedly suggesting the same expensive items, we added semantic "Jitter" (randomly shuffling secondary results) and forced category diversification.
+
+4. MASTERING KUBERNETES AND DOCKER NETWORKING
+Challenge: Accessing the RabbitMQ Management UI proved difficult within the Kind (Kubernetes in Docker) environment. NodePort mappings failed with `Connection reset by peer` due to internal Erlang/Cowboy routing quirks when exposed directly through Docker's port mapping.
+Evolution & Solution:
+- Ingress Refinement: Instead of fighting NodePort mechanics, we reverted to the NGINX Ingress Controller. However, standard `Prefix` routing broke RabbitMQ's static assets (CSS/JS).
+- Regex Rewrite: We implemented advanced Ingress rules using `pathType: ImplementationSpecific` and regex matching (`/rabbitmq(/|$)(.*)`) alongside the `rewrite-target: /$2` annotation. This cleanly stripped the path prefix, allowing the RabbitMQ UI to function perfectly at `localhost/rabbitmq`.
+
+5. TAMING THE LLM: PROMPT ENGINEERING AND JSON PARSING
+Challenge: LLMs, even at temperature 0.0, are inherently unpredictable. The bot frequently crashed with `AttributeError` or `JSONDecodeError` when Gemini returned markdown blocks (```json ... ```) or a JSON array (`[{...}]`) instead of a single object for purchase intent.
+Evolution & Solution:
+- Aggressive Sanitization: All LLM extraction functions were updated to strip markdown backticks before JSON parsing using regex (`re.sub(r"```json|```", "", ...).strip()`).
+- Type Checking: Logic was added to inspect the parsed JSON. If it was a list, the bot safely extracted `parsed[0]`, ensuring downstream functions always received the expected dictionary format.
+
+6. STATE MANAGEMENT AND "CLEAR SCREEN" LIMITATIONS
+Challenge: Slack does not allow bots to delete user messages to "clear the screen" after an order is finished, leading to potential context confusion for the user.
+Evolution & Solution:
+- Visual Delimiters: We implemented strong visual cues (Markdown lines: ━━━━━━━━) coupled with a "Thank you" message upon order completion.
+- Hard Reset: Behind the scenes, the Redis state for that user is completely wiped (`cart`, `history`, `filter_scores`). This creates a firm psychological and logical boundary; despite seeing old messages, the user understands they are starting a fresh transaction.
