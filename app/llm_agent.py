@@ -25,75 +25,58 @@ def getApiClient(api_key: str = None):
 # ==========================================
 # 1. CONVERSATION ROUTER (State Classification)
 # ==========================================
-def classify_intent(user_message: str, current_state: str = "GREETING", api_key: str = None) -> str:
-    """Identifică intenția utilizatorului folosind Gemini."""
+def decompose_intents(user_message: str, current_state: str = "GREETING", api_key: str = None) -> List[Dict[str, str]]:
+    """Descompune un mesaj complex în mai multe acțiuni atomice."""
+    client = getApiClient(api_key)
     
     def manual_fallback(msg, current):
-        msg_clean = msg.lower()
-        if any(word in msg_clean for word in ["salut", "buna", "bună", "hello", "hi"]):
-            return "GREETING"
-        if any(word in msg_clean for word in ["ce produse", "catalog", "ce aveți", "oferta"]):
-            return "CATALOG_DISCOVERY"
-        if any(word in msg_clean for word in ["caut", "vreau", "buchet", "flori", "recomand", "lalele", "trandafiri", "cadou"]):
-            return "SEARCH_PRODUCTS"
-        if any(word in msg_clean for word in ["detalii", "info", "mai mult", "descriere"]):
-            return "PRODUCT_DETAILS"
-        if any(word in msg_clean for word in ["gata", "terminat", "trimite", "finalizează", "finalizeaza"]):
-            return "FINISH_ORDER"
-        if any(word in msg_clean for word in ["cumpăr", "comand", "iau", "da", "confirm", "place", "prima", "doua", "treia", "ultim"]):
-            return "PURCHASE_INTENT"
-        if "restart" in msg_clean:
-            return "RESTART"
-        return current
+        # Fallback ultra-robust cu jargon extins
+        msg_cl = msg.lower().strip()
+        words = msg_cl.split()
 
-    client = getApiClient(api_key)
+        # Categorii de Keywords
+        K_GREET = ["salut", "buna", "bună", "hei", "hello", "hi", "hey", "salutare", "ciao"]
+        K_SEARCH = ["caut", "vreau", "buchet", "flori", "recomand", "lalele", "trandafiri", "cadou", "ceva", "aranjament"]
+        K_DETAILS = ["detalii", "info", "informatii", "informații", "descriere", "mai mult", "povesteste", "despre"]
+        K_PURCHASE = ["da", "dap", "yes", "ok", "k", "kk", "yep", "yup", "y", "sigur", "confirm", "perfect", "vreau", "baga", "hai", "primul", "doilea", "treilea", "1", "2", "3", "iau", "cumpar"]
+        K_FINISH = ["gata", "final", "finalizeaza", "finalizează", "trimite", "atat", "atât", "am terminat", "stop", "plateste", "plătește", "checkout"]
+        K_RESTART = ["restart", "reset", "de la capat", "anuleaza tot", "anulează tot", "sterge tot", "șterge tot"]
 
-    if not client:
-        return manual_fallback(user_message, current_state)
+        intent = "SEARCH_PRODUCTS" # Default
+        if any(w in K_RESTART for w in [msg_cl] + words): intent = "RESTART"
+        elif any(w in K_GREET for w in [msg_cl] + words): intent = "GREETING"
+        elif any(w in K_FINISH for w in [msg_cl] + words): intent = "FINISH_ORDER"
+        elif any(w in K_DETAILS for w in [msg_cl] + words): intent = "PRODUCT_DETAILS"
+        elif any(w in K_PURCHASE for w in [msg_cl] + words): intent = "PURCHASE_INTENT"
 
-    states_desc = """
-    - GREETING: Utilizatorul salută sau începe conversația.
-    - SEARCH_PRODUCTS: Utilizatorul caută flori, CADOURI, ciocolată, vin sau cere recomandări.
-    - CATALOG_DISCOVERY: Utilizatorul întreabă ce produse aveți în general, cere să vadă oferta sau catalogul.
-    - PRODUCT_DETAILS: Utilizatorul cere mai multe informații/detalii despre un produs afișat.
-    - PURCHASE_INTENT: Utilizatorul alege un produs din listă pentru a-l adăuga în coș.
-    - VIEW_CART: Utilizatorul întreabă ce are în coș sau ce a comandat până acum (ex: 'ce am comandat?', 'ce e in cos?', 'arata-mi comanda').
-    - FINISH_ORDER: Utilizatorul dorește să finalizeze comanda curentă, să trimită produsele sau spune că a terminat.
-    - RESTART: Utilizatorul vrea să o ia de la capăt, anulează tot.
-    - GENERAL_INQUIRY: Utilizatorul pune întrebări despre bot, program sau alte discuții libere.
-    """
+        return [{"text": msg, "intent": intent}]
+
+
+    if not client: return manual_fallback(user_message, current_state)
+
+    states_desc = "GREETING, SEARCH_PRODUCTS, CATALOG_DISCOVERY, PRODUCT_DETAILS, PURCHASE_INTENT, VIEW_CART, FINISH_ORDER, RESTART"
 
     system_prompt = (
-        f"Ești un router de conversație pentru o florărie online. "
-        f"Starea actuală este: {current_state}. "
-        f"Analizează mesajul utilizatorului și alege următoarea stare din listă:\n{states_desc}\n"
-        "Regulă 1: Cerere de produs specific = SEARCH_PRODUCTS.\n"
-        "Regulă 2: Întrebări generale de catalog = CATALOG_DISCOVERY.\n"
-        "Regulă 3: Detalii despre produs = PRODUCT_DETAILS.\n"
-        "Regulă 4: Alegerea unui produs pentru coș = PURCHASE_INTENT.\n"
-        "Regulă 5: Vizualizare produse alese = VIEW_CART.\n"
-        "Regulă 6: Cererea de finalizare = FINISH_ORDER.\n"
-        "Răspunde DOAR cu numele stării."
+        "Ești un expert în descompunerea mesajelor pentru un chatbot de florărie.\n"
+        "Analizează dacă mesajul are mai multe intenții și împarte-l în sarcini atomice.\n"
+        "Exemplu: 'al doilea e ok și mai vreau praline' -> \n"
+        "[{\"text\": \"al doilea e ok\", \"intent\": \"PURCHASE_INTENT\"}, {\"text\": \"mai vreau praline\", \"intent\": \"SEARCH_PRODUCTS\"}]\n"
+        f"Intenții posibile: {states_desc}\n"
+        "Răspunde DOAR cu un JSON (listă de obiecte)."
     )
 
     try:
         response = client.models.generate_content(
             model=GEMINI_MODEL_NAME,
-            contents=f"{system_prompt}\n\nMesaj utilizator: {user_message}",
+            contents=f"{system_prompt}\n\nStare actuală: {current_state}\nMesaj: {user_message}",
             config={"temperature": 0.0}
         )
-        intent = response.text.strip().upper()
-        valid_states = ["GREETING", "SEARCH_PRODUCTS", "CATALOG_DISCOVERY", "PRODUCT_DETAILS", "PURCHASE_INTENT", "VIEW_CART", "FINISH_ORDER", "RESTART", "GENERAL_INQUIRY"]
-        for s in valid_states:
-            if s in intent: return s
-        return current_state
+        out = re.sub(r"```json|```", "", response.text).strip()
+        tasks = json.loads(out)
+        return tasks if isinstance(tasks, list) else [tasks]
     except Exception as e:
-        error_str = str(e)
-        if any(code in error_str for code in ["503", "UNAVAILABLE", "429", "RESOURCE_EXHAUSTED"]):
-            logger.warning(f"Gemini is overloaded or quota exceeded during classification ({error_str}), using manual fallback.")
-            return manual_fallback(user_message, current_state)
-        logger.error(f"⚠️ Eroare neașteptată Gemini Intent Router: {e}")
-        return current_state
+        logger.warning(f"Intent Decomposition failed ({e}), using fallback.")
+        return manual_fallback(user_message, current_state)
 
 # ==========================================
 # 2. RAG ROUTER (Text -> JSON pentru RAG)
@@ -312,36 +295,36 @@ def generate_general_response(user_message: str, api_key: str = None) -> str:
 # ==========================================
 # 6. PURCHASE INTENT (Index & Quantity)
 # ==========================================
-def extract_purchase_selection(user_message: str, api_key: str = None) -> Dict[str, Any]:
-    """Extrage indexul produsului și cantitatea dorită."""
+def extract_purchase_selection(user_message: str, titles: List[str] = None, api_key: str = None) -> Dict[str, Any]:
+    """Extrage indexul produsului și cantitatea, folosind și titlurile pentru context."""
     client = getApiClient(api_key)
     default = {"index": 0, "quantity": 1}
     
     if not client:
         return default
 
+    context_titles = ""
+    if titles:
+        context_titles = "\nProduse afișate anterior:\n" + "\n".join([f"{i}. {t}" for i, t in enumerate(titles)])
+
     system_prompt = (
-        "Analizează mesajul utilizatorului care alege un produs dintr-o listă de 3 (primul, al doilea, al treilea).\n"
-        "Extrage:\n"
-        "1. 'index': 0 pentru primul, 1 pentru al doilea, 2 pentru al treilea.\n"
-        "2. 'quantity': câte bucăți vrea? (număr întreg, ex: '3 bucati' -> 3, 'de 2 ori' -> 2). Dacă nu specifică, e 1.\n"
-        "Răspunde DOAR cu JSON valid."
+        "Ești un asistent de vânzări. Analizează mesajul utilizatorului care alege un produs dintr-o listă.\n"
+        f"{context_titles}\n"
+        "Extrage JSON:\n"
+        "1. 'index': numărul de ordine (0-based). Dacă numește un produs, identifică-i indexul din listă.\n"
+        "2. 'quantity': numărul de bucăți. Default 1.\n"
+        "Răspunde DOAR cu JSON."
     )
     
     try:
         response = client.models.generate_content(
             model=GEMINI_MODEL_NAME,
-            contents=f"{system_prompt}\n\nMesaj: {user_message}",
+            contents=f"{system_prompt}\n\nMesaj client: {user_message}",
             config={"temperature": 0.0, "max_output_tokens": 50}
         )
         out = re.sub(r"```json|```", "", response.text).strip()
         parsed = json.loads(out)
-        # Gestionare robustă: Gemini poate returna o listă cu un obiect
-        if isinstance(parsed, list) and len(parsed) > 0:
-            return parsed[0]
-        elif isinstance(parsed, dict):
-            return parsed
-        return default
+        return parsed[0] if isinstance(parsed, list) else parsed
     except:
         return default
 

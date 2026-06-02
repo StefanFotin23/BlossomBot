@@ -1,0 +1,23 @@
+=========================================================
+TECHNICAL DOCUMENTATION: DETERMINISTIC FAST-PATHS & JARGON
+=========================================================
+
+1. INTRODUCTION
+To optimize performance and reduce external API dependency, BlossomBot utilizes "Deterministic Fast-Paths." These are hard-coded, regex-based logic branches that execute before any AI calls, providing near-zero latency for common actions.
+
+2. EXTENDED JARGON SUPPORT
+The bot supports a vast array of Romanian and English conversational keywords to accommodate natural, informal communication styles.
+- Confirmation (YES): "da", "dap", "yes", "ok", "k", "yep", "sure", "sigur", "baga", "hai", etc.
+- Rejection (NO): "nu", "no", "nope", "stai", "anuleaza", "pas", etc.
+- Finalization: "gata", "atat", "trimite", "checkout", "am terminat", etc.
+
+3. ROBUSTNESS & SANITIZATION
+Fast-paths are designed to be "Noise-Resistant":
+- Whitespace Normalization: Words are stripped of leading/trailing spaces (`strip()`), ensuring "da " and "da" are treated identically.
+- Word-Level Matching: The system tokenizes the message and checks for keywords at the word level. A message like "yes please" will trigger the "YES" fast-path instantly because it contains the keyword "yes".
+- Case Insensitivity: All checks are performed in lower-case.
+
+4. SYSTEM BENEFITS
+- Instant Gratification: Critical transactional steps (like confirming an item or resetting a session) happen in milliseconds.
+- Quota Conservation: By offloading simple "Yes/No" decisions from Gemini, the system saves API quota for complex semantic searches, increasing the total capacity of the free tier.
+- Reliability: Deterministic logic is 100% predictable and immune to LLM hallucinations or formatting errors.

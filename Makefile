@@ -129,6 +129,10 @@ build-app-image:
 	@find app -name "*.py" -exec touch {} +
 	@DOCKER_BUILDKIT=1 docker build --build-arg BUILDKIT_INLINE_CACHE=1 -t $(PROD_IMAGE_NAME) .
 
+# Builds and loads the application image into the Kind cluster.
+build-and-load-app: build-app-image load-app-image-to-kind
+	@echo "--- Image rebuilt and loaded. Run 'make restart-chat' to apply. ---"
+
 # Loads the application image into the Kind cluster.
 load-app-image-to-kind:
 	@echo "--- Loading Docker image into Kind cluster ---"
