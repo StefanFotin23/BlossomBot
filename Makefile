@@ -163,6 +163,10 @@ view-queue:
 	@echo "--- Fetching recent messages from flower_purchases queue ---"
 	@kubectl exec deployment/rabbitmq -- rabbitmqadmin get queue=flower_purchases ackmode=ack_requeue_true count=10 || echo "Eroare la preluarea mesajelor."
 
+stress-test:
+	@echo "--- Starting Multi-user Stress Test ---"
+	@python3 scripts/stress_test.py
+
 # Stop any running ngrok process
 ngrok-down:
 	@bash scripts/ngrok_down.sh

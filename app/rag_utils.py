@@ -241,70 +241,103 @@ def sota_hybrid_search(state_json: Dict[str, Any], filter_scores: Dict[str, int]
     
     # 1. Construim condițiile de filtrare
     conditions_map = {}
-    if filters.get("price_max"):
-        conditions_map["price_max"] = FieldCondition(key="price", range=Range(lte=float(filters["price_max"])))
-    if filters.get("dimensiune"):
-        conditions_map["dimensiune"] = FieldCondition(key="dimensiune", match=MatchValue(value=filters["dimensiune"]))
-    if filters.get("category"):
-        conditions_map["category"] = FieldCondition(key="category", match=MatchValue(value=filters["category"]))
-    if filters.get("event_type"):
-        conditions_map["event_type"] = FieldCondition(key="event_type", match=MatchValue(value=filters["event_type"]))
-    if filters.get("colors"):
-        conditions_map["colors"] = FieldCondition(key="colors", match=MatchValue(value=filters["colors"]))
-    if filters.get("flowers_type"):
-        conditions_map["flowers_type"] = FieldCondition(key="flowers_type", match=MatchValue(value=filters["flowers_type"]))
+    negative_map = {}
 
-    # 2. Căutare vectorială inițială cu RELAXARE DINAMICĂ
+    def build_qdrant_condition(key, val, is_negative=False):
+        if key == "price_max" and not is_negative:
+            return FieldCondition(key="price", range=Range(lte=float(val)))
+        if key == "category":
+            return FieldCondition(key="category", match=MatchValue(value=val))
+        if key == "dimensiune":
+            return FieldCondition(key="dimensiune", match=MatchValue(value=val))
+        if key == "event_type":
+            return FieldCondition(key="event_type", match=MatchValue(value=val))
+        if key == "colors":
+            return FieldCondition(key="colors", match=MatchValue(value=val))
+        if key == "flowers_type":
+            return FieldCondition(key="flowers_type", match=MatchValue(value=val))
+        return None
+
+    # Filtre Pozitive
+    for k, v in filters.items():
+        cond = build_qdrant_condition(k, v)
+        if cond: conditions_map[k] = cond
+
+    # Filtre Negative (must_not)
+    negative_filters = state_json.get("negative_filters") or {}
+    for k, v in negative_filters.items():
+        cond = build_qdrant_condition(k, v, is_negative=True)
+        if cond: negative_map[f"no_{k}"] = cond
+
+    # 2. Căutare vectorială inițială cu RELAXARE DINAMICĂ (Sinergie Pozitive + Negative)
     pool_size = final_top_k * 5 
     query_vector = embed_model.encode(semantic_query).tolist()
-    
-    # Ordonăm filtrele după scor (cele mai mici primele pentru a fi eliminate primele)
-    active_keys = list(conditions_map.keys())
+
+    # Combinăm toate cheile pentru sortare
+    all_active_keys = list(conditions_map.keys()) + list(negative_map.keys())
     fallback_order = ["dimensiune", "colors", "category", "flowers_type", "event_type", "price_max"]
-    
-    # Sortăm după: 1) Scorul explicit (dacă există, crescător), 2) Ordinea fallback (ca tie-breaker)
-    sorted_keys = sorted(
-        active_keys, 
-        key=lambda k: (
-            (filter_scores.get(k, 0) if filter_scores else 0), 
-            fallback_order.index(k) if k in fallback_order else 99
-        )
-    )
 
-    # Generăm strategiile de relaxare
+    def get_sort_score(key):
+        score = filter_scores.get(key, 0) if filter_scores else 0
+        # Determinăm importanța de bază din fallback_order
+        base_key = key.replace("no_", "")
+        base_priority = fallback_order.index(base_key) if base_key in fallback_order else 99
+        return (score, base_priority)
 
+    sorted_keys = sorted(all_active_keys, key=get_sort_score)
+
+    # Generăm strategiile
     search_strategies = []
-    # 1. Toate filtrele
-    search_strategies.append({"name": "ALL", "keys": list(active_keys)})
-    
-    # 2. Eliminăm progresiv (cel mai slab scor primul)
-    current_keys = list(active_keys)
+    # 1. Start cu tot (Pozitive + Negative)
+    search_strategies.append({
+        "name": "ALL", 
+        "pos": list(conditions_map.keys()), 
+        "neg": list(negative_map.keys())
+    })
+
+    # 2. Eliminăm progresiv cel mai slab scor
+    current_pos = list(conditions_map.keys())
+    current_neg = list(negative_map.keys())
+
     for key_to_remove in sorted_keys:
-        if key_to_remove in current_keys:
-            current_keys.remove(key_to_remove)
-            search_strategies.append({"name": f"RELAXED_{key_to_remove}", "keys": list(current_keys)})
+        if key_to_remove.startswith("no_"):
+            if key_to_remove in current_neg: current_neg.remove(key_to_remove)
+        else:
+            if key_to_remove in current_pos: current_pos.remove(key_to_remove)
+
+        search_strategies.append({
+            "name": f"RELAXED_{key_to_remove}", 
+            "pos": list(current_pos), 
+            "neg": list(current_neg)
+        })
 
     initial_results = []
     failed_filters = []
     used_strategy = "SEMANTIC"
-    
+
     try:
         for strategy in search_strategies:
-            must_cond = [conditions_map[k] for k in strategy["keys"]]
-            current_filter = Filter(must=must_cond) if must_cond else None
-            
+            must_cond = [conditions_map[k] for k in strategy["pos"]]
+            must_not_cond = [negative_map[k] for k in strategy["neg"]]
+
+            current_filter = Filter(
+                must=must_cond if must_cond else None,
+                must_not=must_not_cond if must_not_cond else None
+            )
+
             response = client.query_points(
                 collection_name=COLLECTION_NAME,
                 query=query_vector,
-                query_filter=current_filter,
+                query_filter=current_filter if (must_cond or must_not_cond) else None,
                 limit=pool_size
             )
+
             
             if response.points:
                 initial_results = response.points
                 used_strategy = strategy["name"]
                 # Filtrele care NU sunt în strategia câștigătoare sunt cele eșuate
-                failed_filters = [k for k in active_keys if k not in strategy["keys"]]
+                failed_filters = [k for k in all_active_keys if k not in (strategy["pos"] + strategy["neg"])]
                 break
 
     except Exception as e:
