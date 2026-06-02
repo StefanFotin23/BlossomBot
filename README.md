@@ -39,17 +39,12 @@ make stress-test
 make view-stress-queue
 ```
 
+## 🌐 Service Access & Dashboards
+
+- **🌸 BlossomBot Gateway:** [http://localhost:45080/](http://localhost:45080/)
+- **🧩 Qdrant Vector Dashboard:** [http://localhost:45080/qdrant](http://localhost:45080/qdrant)
+- **🐰 RabbitMQ Management:** [http://localhost:45080/rabbitmq/](http://localhost:45080/rabbitmq/) *(User/Pass: guest/guest)*
+- **💬 Slack Client:** [Open Conversation](https://app.slack.com/client/T09US2AV9UJ/D09UQ475VJS)
+
 ---
-
-Access services:
-
-http://localhost:45080/
-
-http://localhost:45080/qdrant
-
-http://localhost:45080/rabbitmq/
-
-https://app.slack.com/client/T09US2AV9UJ/D09UQ475VJS?entry_point=redirect_flow
-
-
 *Developed as a high-resilience AI E-commerce Gateway prototype. Proving that strategic engineering outperforms massive corporate budgets.*

@@ -10,48 +10,96 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app import bot
 from app.config import Config
-from app.main import publish_purchase # Import real publishing logic
+from app.main import publish_purchase 
 
 # Configuration
 OUTPUT_FILE = os.path.join(os.path.dirname(__file__), "stress_test.txt")
 
-# Diverisified Real-World Scenarios based on User interactions
+# Diverisified High-Fidelity Scenarios
 SCENARIOS = [
-    # 1. Standard Gift Flow
-    ["Salut", "Vreau sa cumpar un cadou pt mama mea, ceva care sa semene cu florile din gradina", "scumpe... ceva sub 250?", "al 2 lea suna bine", "da", "gata, finalizeaza"],
+    # 1. Anniversary Flow (Complex Intent)
+    ["Salut", "Caut ceva special pt o aniversare de 10 ani, buget cam 500 lei", "varianta 2 e superba", "da, baga in cos", "si mai vreau si niste praline", "da, varianta 2", "gata, trimite"],
     
-    # 2. Multi-Intent (Search + Detail)
-    ["Hei", "Vreau trandafiri rosii si spune-mi mai multe detalii despre prima varianta", "da, baga in cos", "mai vreau si ceva dulce", "varianta 2 e perfecta", "da", "gata"],
+    # 2. Multi-Intent + Jargon (The "Stefan Special")
+    ["Buna!", "Vreau niste martisoare si mai vreau si un cadou diferit, nu buchet", "da primul", "hai si cu niste ciocolata", "k varianta 2", "baga", "gata finalizeaza"],
     
-    # 3. Budget & Negotiation Flow
-    ["Buna!", "Caut un buchet imens de lux", "foarte scumpe, n-ai ceva sub 300 lei?", "ok prima varianta e buna", "da", "am terminat"],
+    # 3. Budget Negotiation (Garden Style)
+    ["Hei", "vreau un cadou pt mama, sa semene cu florile din gradina", "scumpe... ceva sub 250?", "al 2 lea suna bine", "da", "am terminat"],
     
-    # 4. Multi-Intent (Search + Add)
-    ["Salutare", "Vreau niste martisoare si mai vreau si un cadou diferit, nu buchet", "da", "hai cu pralinele", "da, le vreau", "finalizeaza"],
+    # 4. Specific Exclusions (Negative Filtering)
+    ["Salutare", "Vreau un buchet mare dar fara trandafiri si fara lalele", "al treilea e interesant", "da", "mai aveti pandantive?", "primul e ok", "da", "gata"],
     
-    # 5. Jargon & Short Messages
-    ["Hei", "ce produse aveti?", "primul", "da", "si ceva de ciocolata", "k varianta 2", "da", "atat"],
+    # 5. Quantity & Detail Flow
+    ["Buna", "ce produse aveti?", "detalii despre al doilea", "da, vreau 5 bucati", "mai vreau si vin", "da prima varianta", "atat"],
     
-    # 6. Specific Interest (Ex: 1 Martie)
-    ["Buna", "vreau martisoare galbene", "a doua", "da", "mai aveti pandantive?", "primul", "da", "gata"],
+    # 6. Information Seek (Identity + Season)
+    ["Cine esti?", "Ce flori de primavara aveti?", "prima", "da", "mai arata-mi si niste martisoare", "varianta 2", "da", "gata"],
     
-    # 7. Information Seeking (General Inquiry)
-    ["Salut", "Cine esti tu?", "Ce flori de primavara aveti?", "prima", "da", "finalizeaza comanda"],
+    # 7. Vague Inspiration
+    ["Salut", "Vreau ceva vesel care sa miroasa frumos", "prima varianta e perfecta", "da", "finalizeaza comanda"],
     
-    # 8. Negative Filtering (Exclusions)
-    ["Salut", "Vreau un buchet colorat dar fara trandafiri", "al treilea e frumos", "da", "gata"],
+    # 8. Luxury Search
+    ["Hei", "Vreau cel mai scump si luxos buchet pe care il aveti", "superb, il vreau", "da", "pune si praline", "da", "gata"],
     
-    # 9. Quantity Updates
-    ["Hei", "Vreau lalele mov", "prima varianta", "da, pune 3 bucati", "mai vreau si praline", "da", "finalizeaza"],
+    # 9. Quick Add & Finish
+    ["Vreau trandafiri rosii", "prima varianta", "da", "gata"],
     
-    # 10. Complex Semantic Search
-    ["Buna", "Ceva romantic si elegant pentru o aniversare sub 400 lei", "varianta 2", "da", "trimite comanda"],
+    # 10. Apology Flow (Emotional Context)
+    ["Buna", "Am facut o gafa si trebuie sa imi cer scuze... ceva impresionant", "varianta 2 e buna", "da", "finalizeaza"],
     
-    # 11. Discovery & Diversification
-    ["Salut", "Arata-mi catalogul", "detalii despre al treilea", "da il vreau", "mai arata-mi si niste flori albe", "prima", "da", "gata"],
+    # 11. 1 Martie Direct Search
+    ["Vreau martisoare din rasina galbene", "primul", "da", "mai vreau si un buchet de mimosa", "da", "gata"],
     
-    # 12. Direct Search & Select Flow
-    ["Salut", "Vreau trandafiri rosii", "prima varianta", "da", "gata finalizeaza"]
+    # 12. View Cart & Adjust
+    ["Salut", "ce produse aveti?", "primul", "da", "arata-mi cosul", "gata finalizeaza"],
+    
+    # 13. Complex Multi-Step
+    ["Buna", "Vreau flori albe", "detalii despre prima", "da", "acum cauta si ceva de ciocolata", "da", "gata"],
+    
+    # 14. Insistence Flow
+    ["Vreau ceva sub 100 lei", "nu, mai ieftin!", "ok, punga cadou e buna", "da", "atat"],
+    
+    # 15. Greeting + Discovery
+    ["Salut, ce mai faci? Arata-mi ce flori aveti azi", "al doilea e frumos", "da", "gata"],
+    
+    # 16. Detail Junkie
+    ["Vreau detalii despre trandafiri", "acum despre lalele", "acum despre martisoare", "ia-le pe toate", "da", "da", "da", "gata"],
+    
+    # 17. The "Baga" & "K" (Heavy Jargon)
+    ["Hei", "vreau flori rosii", "2", "k", "si ciocolata", "1", "baga", "gata"],
+    
+    # 18. Multi-Product Basket
+    ["Vreau trandafiri", "1", "da", "Vreau lalele", "1", "da", "Vreau praline", "1", "da", "gata"],
+    
+    # 19. Semantic Pivot
+    ["Vreau ceva albastru", "nu aveti? atunci ceva mov", "prima", "da", "gata"],
+    
+    # 20. Final Boss (Mix of all)
+    ["Salut, vreau ceva sub 300 lei, fara trandafiri, si sa aiba si ciocolata", "varianta 2", "da", "mai pune un pandantiv", "da", "finalizeaza acum"],
+    
+    # 21. Lazy Flow 1
+    ["Salut", "ceva ieftin", "1", "da", "gata"],
+    
+    # 22. Lazy Flow 2
+    ["Buna", "vreau buchet", "da", "atat"],
+    
+    # 23. Lazy Flow 3
+    ["Hei", "recomanda", "2", "k", "finalizeaza"],
+    
+    # 24. Lazy Flow 4
+    ["vrea flori", "primul", "da", "trimite"],
+    
+    # 25. Lazy Flow 5
+    ["buna", "ceva cadou", "2", "dap", "gata"],
+    
+    # 26. Lazy Flow 6
+    ["recomandari?", "3", "hai", "finalizeaza"],
+    
+    # 27. Lazy Flow 7
+    ["vreau ceva", "primul", "da", "atat"],
+    
+    # 28. Lazy Flow 8
+    ["buna", "flori?", "da prima", "dap", "gata"]
 ]
 
 async def log_interaction(user_id, message, responses, tag=""):
@@ -62,71 +110,49 @@ async def log_interaction(user_id, message, responses, tag=""):
             f.write(f"[{time.strftime('%H:%M:%S')}] BOT: {clean_r}\n")
         f.write("-" * 50 + "\n")
 
-async def simulate_user(user_id, scenario, delay_min, delay_max, tag=""):
+async def simulate_user(user_id, scenario, d_min, d_max, tag=""):
     print(f"🚀 [{tag}] User {user_id} joined.")
-    
     for message in scenario:
-        await asyncio.sleep(random.uniform(delay_min, delay_max))
-        
-        body = {
-            "event": {
-                "user": user_id,
-                "text": message,
-                "ts": str(time.time()),
-                "channel": f"MOCK_CH_{user_id}"
-            }
-        }
-        
+        await asyncio.sleep(random.uniform(d_min, d_max))
+        body = {"event": {"user": user_id, "text": message, "ts": str(time.time()), "channel": f"MOCK_{user_id}"}}
         try:
-            responses = await bot.handle_message(
-                body=body, 
-                say=None, 
-                client=None, 
-                publish_purchase_callback=publish_purchase,
-                is_mock=True
-            )
+            responses = await bot.handle_message(body, None, None, publish_purchase, is_mock=True)
             await log_interaction(user_id, message, responses or [], tag=tag)
-            
         except Exception as e:
-            print(f"❌ [{tag}] User {user_id} hit a logic issue: {e}")
-            
+            print(f"❌ [{tag}] User {user_id} error: {e}")
     print(f"🏁 [{tag}] User {user_id} finished.")
 
 async def main():
-    print(f"🔥 Starting HIGH-FIDELITY Stress Test...")
-    print(f"📄 Scenarios: 12 unique conversational paths")
-    
+    print(f"🔥 Starting ULTIMATE High-Fidelity Stress Test...")
+    print(f"📄 Scenarios: 28 unique complex and lazy paths")
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-        f.write(f"=== BlossomBot High-Fidelity Escalation Test ({time.strftime('%Y-%m-%d %H:%M:%S')}) ===\n\n")
+        f.write(f"=== BlossomBot ULTIMATE Escalation Test ({time.strftime('%Y-%m-%d %H:%M:%S')}) ===\n\n")
 
-    # Increase total users to 24 (2 per scenario)
-    TOTAL_USERS = 24
+    # TOTAL USERS: 40 (Aggressive simulation)
+    TOTAL_USERS = 40
     
-    # PHASE 1: Healthy Load (Simulating 8 normal users)
-    print("\n--- PHASE 1: Starting 8 Healthy Users ---")
+    print("\n--- PHASE 1: Healthy Steady Load (15 users) ---")
     healthy_tasks = []
-    for i in range(8):
+    for i in range(15):
         user_id = f"HEALTHY_{i}_{uuid.uuid4().hex[:4]}"
-        healthy_tasks.append(simulate_user(user_id, SCENARIOS[i % len(SCENARIOS)], 4, 6, tag="HEALTHY"))
+        healthy_tasks.append(simulate_user(user_id, SCENARIOS[i % len(SCENARIOS)], 4, 7, tag="HEALTHY"))
     
     phase1_future = asyncio.gather(*healthy_tasks)
     await asyncio.sleep(15)
     
-    # PHASE 2: Overflow Burst (Simulating 16 aggressive users)
-    print("\n--- PHASE 2: Starting 16 Overflow Users ---")
+    print("\n--- PHASE 2: MASSIVE BURST (25 users)! ---")
     burst_tasks = []
-    for i in range(16):
+    for i in range(25):
         user_id = f"BURST_{i}_{uuid.uuid4().hex[:4]}"
-        # Using a mix of all scenarios
         burst_tasks.append(simulate_user(user_id, SCENARIOS[i % len(SCENARIOS)], 1, 2, tag="BURST"))
     
     start_time = time.time()
     await asyncio.gather(phase1_future, *burst_tasks)
     end_time = time.time()
     
-    print(f"\n✨ Stress test completed in {end_time - start_time:.2f} seconds.")
-    print("⏳ Waiting 20s for the final QoS background queue to flush all orders...")
-    await asyncio.sleep(20)
+    print(f"\n✨ Ultimate test completed in {end_time - start_time:.2f} seconds.")
+    print("⏳ Final flush... waiting for QoS queue to finalize all 40 orders...")
+    await asyncio.sleep(30)
 
 if __name__ == "__main__":
     asyncio.run(main())

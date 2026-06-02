@@ -213,7 +213,6 @@ async def handle_message(body, say, client, publish_purchase_callback=None, is_m
         elif new_state == "FINISH_ORDER":
             cart = user_data.get("cart", [])
             if not cart:
-                # DACĂ ZICE GATA DAR NU ARE NIMIC, POATE VREA SĂ CAUTE?
                 await smart_say("Coșul este gol. Spune-mi ce flori cauți pentru a începe o comandă!"); user_data["state"] = "SEARCH_PRODUCTS"
             else:
                 total = sum(i['price'] * i['qty'] for i in cart); items_s = "\n".join([f"• {i['qty']} x {i['name']} ({i['price']*i['qty']} RON)" for i in cart])
