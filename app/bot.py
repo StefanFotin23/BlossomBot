@@ -116,52 +116,45 @@ async def handle_message(body, say, client, publish_purchase_callback=None, is_m
         if is_mock: mock_responses.append(m)
         else: await say(m)
 
-    # DETERMINISTIC FAST-PATHS (Keywords de top)
+    # DETERMINISTIC FAST-PATHS
     K_YES = ["da", "dap", "daaa", "yes", "ok", "k", "kk", "yep", "yup", "y", "sigur", "confirm", "perfect", "vreau", "baga", "hai", "corect", "exact", "asa", "așa"]
     K_NO = ["nu", "no", "nope", "n", "stai", "anuleaza", "anulează", "ba nu", "pas", "renunt", "renunț"]
     K_RESTART = ["restart", "reset", "de la capat", "anuleaza tot", "anulează tot", "sterge tot", "șterge tot"]
-    K_FINISH = ["gata", "final", "finalizeaza", "finalizează", "trimite", "atat", "atât", "am terminat", "stop", "plateste", "plătește", "checkout"]
 
-    # --- 1. RESTART FAST-PATH ---
     if any(w in K_RESTART for w in [text_cl] + words):
         user_data = {"state": "GREETING", "history": [], "filter_scores": {}, "cart": [], "deferred_tasks": []}
         await set_user_state(user_id, user_data); await smart_say("🔄 Conversație resetată."); return mock_responses if is_mock else None
 
-    # --- 2. SEQUENCING CHECK ---
     if not is_retry and await is_user_busy(user_id):
-        await smart_say(f"⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.")
+        queue_size = vital_task_queue.qsize()
+        await smart_say(f"⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă (Poz: {queue_size+1}).")
         await vital_task_queue.put({"user_id": user_id, "channel_id": channel_id, "body": body, "is_mock": is_mock})
         return mock_responses if is_mock else None
 
     user_data = await get_user_state(user_id)
     current_state = user_data.get("state", "GREETING")
 
-    # --- 3. CONFIRMATION FAST-PATH ---
     if current_state == "AWAITING_CONFIRMATION":
-        is_y = any(w in K_YES for w in [text_cl] + words)
-        is_n = any(w in K_NO for w in [text_cl] + words)
+        is_y, is_n = any(w in K_YES for w in [text_cl] + words), any(w in K_NO for w in [text_cl] + words)
         if is_y or is_n:
             if is_y:
                 p = user_data.get("pending_item")
                 if p:
-                    m_qty = re.search(r'(\d+)', text_cl)
-                    if m_qty: p["qty"] = int(m_qty.group(1))
+                    m_q = re.search(r'(\d+)', text_cl)
+                    if m_q: p["qty"] = int(m_q.group(1))
                     user_data["cart"] = user_data.get("cart", []) + [p]
                     user_data["pending_item"] = None; user_data["last_results"] = []
                     await smart_say(f"✅ Adăugat {p['qty']}x {p['name']} în coș!")
                     user_data["state"] = "SEARCH_PRODUCTS"
             else:
                 await smart_say("Anulat."); user_data["state"] = "SEARCH_PRODUCTS"
-            
             await set_user_state(user_id, user_data)
-            # Trigger deferred tasks
             if user_data.get("deferred_tasks"):
                 next_t = user_data["deferred_tasks"].pop(0); await set_user_state(user_id, user_data)
                 await handle_message({"event": {"user": user_id, "text": next_t["text"], "channel": channel_id}, "is_deferred": True, "intent": next_t["intent"]}, say, client, publish_purchase_callback, is_mock)
             return mock_responses if is_mock else None
 
-    # --- 4. MULTI-INTENT DECOMPOSITION ---
-    tasks = []
+    # MULTI-INTENT
     if not is_retry and not body.get("is_deferred"):
         tasks = llm.decompose_intents(full_text, current_state, api_key=Config.GEMINI_API_KEY)
         if len(tasks) > 1:
@@ -170,12 +163,11 @@ async def handle_message(body, say, client, publish_purchase_callback=None, is_m
     else:
         current_task = {"text": full_text, "intent": body.get("intent", "UNKNOWN")}
 
-    text_task = current_task["text"]
-    forced_intent = current_task.get("intent") if current_task.get("intent") != "UNKNOWN" else None
+    text_t, forced_intent = current_task["text"], current_task.get("intent")
+    if forced_intent == "UNKNOWN": forced_intent = None
 
-    # AI Execution
     try:
-        new_state = forced_intent or llm.classify_intent(text_task, current_state, api_key=Config.GEMINI_API_KEY)
+        new_state = forced_intent or llm.classify_intent(text_t, current_state, api_key=Config.GEMINI_API_KEY)
         should_c = False
 
         if new_state == "GREETING":
@@ -185,11 +177,16 @@ async def handle_message(body, say, client, publish_purchase_callback=None, is_m
             await smart_say(resp); user_data["last_results"] = res; user_data["state"] = "SEARCH_PRODUCTS"; should_c = True
         elif new_state == "PRODUCT_DETAILS":
             last_res = user_data.get("last_results", [])
-            titles = [r.get('title') for r in last_res]
-            sel = llm.extract_purchase_selection(text_task, titles=titles, api_key=Config.GEMINI_API_KEY)
-            idx = sel.get("index", 0)
-            if 0 <= idx < len(last_res): await smart_say(llm.generate_detailed_product_info(last_res[idx]))
-            should_c = True
+            if not last_res:
+                # CONTEXT-AWARE FALLBACK
+                await smart_say(f"Caut detalii despre: _{text_t}_..."); resp, res = await process_recommendations(user_id, text_t, history=user_data.get("history"))
+                await smart_say(resp); user_data["last_results"] = res; user_data["state"] = "SEARCH_PRODUCTS"; should_c = True
+            else:
+                titles = [r.get('title') for r in last_res]
+                sel = llm.extract_purchase_selection(text_t, titles=titles, api_key=Config.GEMINI_API_KEY)
+                idx = sel.get("index", 0)
+                if 0 <= idx < len(last_res): await smart_say(llm.generate_detailed_product_info(last_res[idx]))
+                should_c = True
         elif new_state == "VIEW_CART":
             cart = user_data.get("cart", [])
             if not cart: await smart_say("🛒 Coșul e gol.")
@@ -198,24 +195,30 @@ async def handle_message(body, say, client, publish_purchase_callback=None, is_m
                 await smart_say(f"🛒 *Coșul tău:*\n{items}\n━━━━━━━━━━━━━━━━━━━━━\n💰 *Total: {sum(i['price']*i['qty'] for i in cart)} RON*")
             should_c = True
         elif new_state == "SEARCH_PRODUCTS":
-            await smart_say(f"Caut în catalog pentru: _{text_task}_..."); resp, res = await process_recommendations(user_id, text_task, history=user_data.get("history"))
+            await smart_say(f"Caut în catalog pentru: _{text_t}_..."); resp, res = await process_recommendations(user_id, text_t, history=user_data.get("history"))
             await smart_say(resp); user_data["last_results"] = res; user_data["state"] = "SEARCH_PRODUCTS"; should_c = True
         elif new_state == "PURCHASE_INTENT":
             last_res = user_data.get("last_results", [])
-            if not last_res: await smart_say("Caută ceva întâi.")
+            if not last_res:
+                # CONTEXT-AWARE FALLBACK
+                await smart_say(f"Verific catalogul pentru: _{text_t}_..."); resp, res = await process_recommendations(user_id, text_t, history=user_data.get("history"))
+                await smart_say(resp); user_data["last_results"] = res; user_data["state"] = "SEARCH_PRODUCTS"; should_c = True
             else:
                 titles = [r.get('title') for r in last_res]
-                sel = llm.extract_purchase_selection(text_task, titles=titles, api_key=Config.GEMINI_API_KEY)
+                sel = llm.extract_purchase_selection(text_t, titles=titles, api_key=Config.GEMINI_API_KEY)
                 idx, qty = sel.get("index", 0), sel.get("quantity", 1)
                 if 0 <= idx < len(last_res):
                     p = last_res[idx]; user_data["pending_item"] = {"name": p.get('title'), "price": p.get('price'), "qty": qty}
                     user_data["state"] = "AWAITING_CONFIRMATION"; await smart_say(f"Vrei să adăugăm *{qty}x {p.get('title')}*? ({p.get('price')*qty} RON)")
         elif new_state == "FINISH_ORDER":
             cart = user_data.get("cart", [])
-            if not cart: await smart_say("Coș gol.")
+            if not cart:
+                # DACĂ ZICE GATA DAR NU ARE NIMIC, POATE VREA SĂ CAUTE?
+                await smart_say("Coșul este gol. Spune-mi ce flori cauți pentru a începe o comandă!"); user_data["state"] = "SEARCH_PRODUCTS"
             else:
                 total = sum(i['price'] * i['qty'] for i in cart); items_s = "\n".join([f"• {i['qty']} x {i['name']} ({i['price']*i['qty']} RON)" for i in cart])
-                if await publish_purchase_callback({"user_id": user_id, "items": [f"{i['qty']}x {i['name']}" for i in cart], "price": total, "timestamp": str(time.time())}, queue_name=(Config.STRESS_TEST_QUEUE if is_mock else Config.PURCHASE_QUEUE)):
+                target_q = Config.STRESS_TEST_QUEUE if is_mock else Config.PURCHASE_QUEUE
+                if await publish_purchase_callback({"user_id": user_id, "items": items_s, "price": total, "timestamp": str(time.time())}, queue_name=target_q):
                     await smart_say(f"🎉 *Comandă trimisă!*\n{items_s}\n━━━━━━━━━━━━━━━━━━━━━\n💰 *TOTAL: {total} RON*\nMulțumim! 🌸")
                     user_data = {"state": "GREETING", "history": [], "filter_scores": {}, "cart": [], "deferred_tasks": []}
 
@@ -225,7 +228,7 @@ async def handle_message(body, say, client, publish_purchase_callback=None, is_m
             set_user_busy(user_id, True); q_size = vital_task_queue.qsize()
             await smart_say(f"🌸 Ocupat. Poziția {q_size + 1} în coadă."); await vital_task_queue.put({"user_id": user_id, "channel_id": channel_id, "body": body, "is_mock": is_mock}); return mock_responses if is_mock else None
 
-    user_data["history"].append({"user": text_task, "state": new_state}); await set_user_state(user_id, user_data)
+    user_data["history"].append({"user": text_t, "state": new_state}); await set_user_state(user_id, user_data)
     if should_c and user_data.get("deferred_tasks"):
         next_t = user_data["deferred_tasks"].pop(0); await set_user_state(user_id, user_data)
         await handle_message({"event": {"user": user_id, "text": next_t["text"], "channel": channel_id}, "is_deferred": True, "intent": next_t["intent"]}, say, client, publish_purchase_callback, is_mock)

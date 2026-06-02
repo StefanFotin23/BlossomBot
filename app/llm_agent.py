@@ -30,26 +30,29 @@ def decompose_intents(user_message: str, current_state: str = "GREETING", api_ke
     client = getApiClient(api_key)
     
     def manual_fallback(msg, current):
-        # Fallback ultra-robust cu jargon extins
         msg_cl = msg.lower().strip()
         words = msg_cl.split()
 
-        # Categorii de Keywords
         K_GREET = ["salut", "buna", "bună", "hei", "hello", "hi", "hey", "salutare", "ciao"]
-        K_SEARCH = ["caut", "vreau", "buchet", "flori", "recomand", "lalele", "trandafiri", "cadou", "ceva", "aranjament"]
+        K_SEARCH = ["caut", "vreau", "buchet", "flori", "recomand", "lalele", "trandafiri", "cadou", "ceva", "aranjament", "plante"]
         K_DETAILS = ["detalii", "info", "informatii", "informații", "descriere", "mai mult", "povesteste", "despre"]
-        K_PURCHASE = ["da", "dap", "yes", "ok", "k", "kk", "yep", "yup", "y", "sigur", "confirm", "perfect", "vreau", "baga", "hai", "primul", "doilea", "treilea", "1", "2", "3", "iau", "cumpar"]
+        K_PURCHASE = ["iau", "cumpar", "cumpăr", "adauga", "adaugă", "primul", "doilea", "treilea", "1", "2", "3"]
         K_FINISH = ["gata", "final", "finalizeaza", "finalizează", "trimite", "atat", "atât", "am terminat", "stop", "plateste", "plătește", "checkout"]
         K_RESTART = ["restart", "reset", "de la capat", "anuleaza tot", "anulează tot", "sterge tot", "șterge tot"]
 
-        intent = "SEARCH_PRODUCTS" # Default
-        if any(w in K_RESTART for w in [msg_cl] + words): intent = "RESTART"
-        elif any(w in K_GREET for w in [msg_cl] + words): intent = "GREETING"
-        elif any(w in K_FINISH for w in [msg_cl] + words): intent = "FINISH_ORDER"
-        elif any(w in K_DETAILS for w in [msg_cl] + words): intent = "PRODUCT_DETAILS"
-        elif any(w in K_PURCHASE for w in [msg_cl] + words): intent = "PURCHASE_INTENT"
-
-        return [{"text": msg, "intent": intent}]
+        # Prioritizăm RESTART și GREETING
+        if any(w in K_RESTART for w in [msg_cl] + words): return [{"text": msg, "intent": "RESTART"}]
+        if any(w in K_GREET for w in [msg_cl] + words): return [{"text": msg, "intent": "GREETING"}]
+        
+        # Dacă mesajul conține cuvinte de căutare (ex: "vreau trandafiri"), e SEARCH chiar dacă are și "vreau"
+        if any(w in K_SEARCH for w in words): return [{"text": msg, "intent": "SEARCH_PRODUCTS"}]
+        
+        # Altfel verificăm restul
+        if any(w in K_DETAILS for w in words): return [{"text": msg, "intent": "PRODUCT_DETAILS"}]
+        if any(w in K_PURCHASE for w in [msg_cl] + words): return [{"text": msg, "intent": "PURCHASE_INTENT"}]
+        if any(w in K_FINISH for w in [msg_cl] + words): return [{"text": msg, "intent": "FINISH_ORDER"}]
+        
+        return [{"text": msg, "intent": "SEARCH_PRODUCTS"}]
 
 
     if not client: return manual_fallback(user_message, current_state)

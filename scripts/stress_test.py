@@ -26,8 +26,8 @@ SCENARIOS = [
     # 3. Budget & Negotiation Flow
     ["Buna!", "Caut un buchet imens de lux", "foarte scumpe, n-ai ceva sub 300 lei?", "ok prima varianta e buna", "da", "am terminat"],
     
-    # 4. Multi-Intent (Add + Search New)
-    ["Salutare", "Al doilea suna bine si mai vreau si un cadou diferit, nu buchet", "da", "hai cu pralinele", "da, le vreau", "finalizeaza"],
+    # 4. Multi-Intent (Search + Add)
+    ["Salutare", "Vreau niste martisoare si mai vreau si un cadou diferit, nu buchet", "da", "hai cu pralinele", "da, le vreau", "finalizeaza"],
     
     # 5. Jargon & Short Messages
     ["Hei", "ce produse aveti?", "primul", "da", "si ceva de ciocolata", "k varianta 2", "da", "atat"],
@@ -50,8 +50,8 @@ SCENARIOS = [
     # 11. Discovery & Diversification
     ["Salut", "Arata-mi catalogul", "detalii despre al treilea", "da il vreau", "mai arata-mi si niste flori albe", "prima", "da", "gata"],
     
-    # 12. Direct Purchase & Finish
-    ["Vreau trandafiri rosii, prima varianta si gata finalizeaza", "da", "ok"]
+    # 12. Direct Search & Select Flow
+    ["Salut", "Vreau trandafiri rosii", "prima varianta", "da", "gata finalizeaza"]
 ]
 
 async def log_interaction(user_id, message, responses, tag=""):
