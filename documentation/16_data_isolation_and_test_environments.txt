@@ -1,0 +1,27 @@
+=========================================================
+TECHNICAL DOCUMENTATION: DATA ISOLATION & TEST STRATEGY
+=========================================================
+
+1. INTRODUCTION
+A core requirement of a production-ready application is the ability to test rigorously without polluting business-critical data. BlossomBot implements a dual-stream architecture to isolate testing activities from real customer transactions.
+
+2. MOCKED VS. LIVE MODES
+The `handle_message` function supports an `is_mock` boolean flag.
+- Live Mode (`is_mock=False`): The bot interacts with the real Slack Web API and routes confirmed orders to the production `flower_purchases` queue.
+- Mock Mode (`is_mock=True`): Used during stress tests. The bot returns its responses as string arrays instead of calling Slack, bypassing network latency and Slack API permissions.
+
+3. RABBITMQ QUEUE ISOLATION
+Even when simulating logic, we want to ensure the final "Purchase Events" are captured correctly.
+- Production Queue: `flower_purchases`
+- Stress Test Queue: `stress_test_purchases`
+- Dynamic Routing: The `publish_purchase` callback in `bot.py` automatically detects the mode. If a simulated user (from `stress_test.py`) completes an order, the payload is routed to the stress test queue. This allows developers to audit thousands of simulated orders using `make view-stress-queue` without interfering with real business metrics.
+
+4. IN-CLUSTER VALIDATION
+Unlike simple unit tests, the BlossomBot stress test runs **inside** the actual Kubernetes production image. 
+- Build Context: The `Dockerfile` specifically copies the `stress_test.py` script into the image.
+- Execution: By running `make stress-test`, the script executes inside the pod, sharing the same Redis instance, RabbitMQ connection, and AI model configurations as the live app. This ensures the test results are 100% representative of actual system behavior under load.
+
+5. LOCAL-FIRST REPOSITORY STRATEGY
+To facilitate rapid development in a Kubernetes environment without relying on external registries (like Docker Hub), we utilize a `Local Image Load` strategy:
+- `kind load docker-image`: This command bypasses the "Push-Pull" cycle by directly injecting the local Docker build into the Kind node's filesystem.
+- `imagePullPolicy: Always`: Combined with a rollout restart, this forces the cluster to pick up the locally-injected changes instantly, ensuring a highly efficient dev-test loop.

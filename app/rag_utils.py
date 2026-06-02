@@ -244,18 +244,24 @@ def sota_hybrid_search(state_json: Dict[str, Any], filter_scores: Dict[str, int]
     negative_map = {}
 
     def build_qdrant_condition(key, val, is_negative=False):
-        if key == "price_max" and not is_negative:
-            return FieldCondition(key="price", range=Range(lte=float(val)))
-        if key == "category":
-            return FieldCondition(key="category", match=MatchValue(value=val))
-        if key == "dimensiune":
-            return FieldCondition(key="dimensiune", match=MatchValue(value=val))
-        if key == "event_type":
-            return FieldCondition(key="event_type", match=MatchValue(value=val))
-        if key == "colors":
-            return FieldCondition(key="colors", match=MatchValue(value=val))
-        if key == "flowers_type":
-            return FieldCondition(key="flowers_type", match=MatchValue(value=val))
+        if val is None or str(val).strip() == "" or str(val).lower() == "nan":
+            return None
+            
+        try:
+            if key == "price_max" and not is_negative:
+                return FieldCondition(key="price", range=Range(lte=float(val)))
+            if key == "category":
+                return FieldCondition(key="category", match=MatchValue(value=str(val)))
+            if key == "dimensiune":
+                return FieldCondition(key="dimensiune", match=MatchValue(value=str(val)))
+            if key == "event_type":
+                return FieldCondition(key="event_type", match=MatchValue(value=str(val)))
+            if key == "colors":
+                return FieldCondition(key="colors", match=MatchValue(value=str(val)))
+            if key == "flowers_type":
+                return FieldCondition(key="flowers_type", match=MatchValue(value=str(val)))
+        except (ValueError, TypeError):
+            return None
         return None
 
     # Filtre Pozitive

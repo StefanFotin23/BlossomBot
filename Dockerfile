@@ -24,6 +24,7 @@ RUN python -m app.build.download_models
 # --- 3. Application Layer (Light, changes often) ---
 # Copiem restul codului sursă
 COPY app/ /app/app/
+COPY scripts/stress_test.py /app/scripts/stress_test.py
 
 # Set PYTHONPATH
 ENV PYTHONPATH=/app

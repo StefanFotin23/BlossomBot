@@ -163,9 +163,20 @@ view-queue:
 	@echo "--- Fetching recent messages from flower_purchases queue ---"
 	@kubectl exec deployment/rabbitmq -- rabbitmqadmin get queue=flower_purchases ackmode=ack_requeue_true count=10 || echo "Eroare la preluarea mesajelor."
 
+view-stress-queue:
+	@echo "--- Fetching recent messages from stress_test_purchases queue ---"
+	@kubectl exec deployment/rabbitmq -- rabbitmqadmin get queue=stress_test_purchases ackmode=ack_requeue_true count=10 || echo "Eroare la preluarea mesajelor."
+
 stress-test:
-	@echo "--- Starting Multi-user Stress Test ---"
-	@python3 scripts/stress_test.py
+	@echo "--- Starting Multi-user Stress Test inside the cluster ---"
+	$(eval POD_NAME=$(shell kubectl get pod -l app=chat-app -o jsonpath='{.items[0].metadata.name}'))
+	@kubectl exec $(POD_NAME) -- python3 scripts/stress_test.py
+	@echo "--- Copying transcript to local machine: scripts/stress_test.txt ---"
+	@kubectl cp $(POD_NAME):/app/scripts/stress_test.txt scripts/stress_test.txt
+	@echo "--- Stress test finished. Check the local file in scripts/ folder. ---"
+
+view-stress-log:
+	@kubectl exec $$(kubectl get pod -l app=chat-app -o jsonpath='{.items[0].metadata.name}') -- cat scripts/stress_test.txt
 
 # Stop any running ngrok process
 ngrok-down:

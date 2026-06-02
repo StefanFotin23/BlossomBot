@@ -27,23 +27,26 @@ def getApiClient(api_key: str = None):
 # ==========================================
 def classify_intent(user_message: str, current_state: str = "GREETING", api_key: str = None) -> str:
     """Identifică intenția utilizatorului folosind Gemini."""
-    client = getApiClient(api_key)
     
     def manual_fallback(msg, current):
         msg_clean = msg.lower()
         if any(word in msg_clean for word in ["salut", "buna", "bună", "hello", "hi"]):
             return "GREETING"
-        if any(word in msg_clean for word in ["ce produse", "catalog", "ce aveți", "oferta", "oferta"]):
+        if any(word in msg_clean for word in ["ce produse", "catalog", "ce aveți", "oferta"]):
             return "CATALOG_DISCOVERY"
         if any(word in msg_clean for word in ["caut", "vreau", "buchet", "flori", "recomand", "lalele", "trandafiri", "cadou"]):
             return "SEARCH_PRODUCTS"
         if any(word in msg_clean for word in ["detalii", "info", "mai mult", "descriere"]):
             return "PRODUCT_DETAILS"
-        if any(word in msg_clean for word in ["cumpăr", "comand", "iau", "da", "confirm", "finaliz", "place", "prima", "doua", "treia", "ultim"]):
+        if any(word in msg_clean for word in ["gata", "terminat", "trimite", "finalizează", "finalizeaza"]):
+            return "FINISH_ORDER"
+        if any(word in msg_clean for word in ["cumpăr", "comand", "iau", "da", "confirm", "place", "prima", "doua", "treia", "ultim"]):
             return "PURCHASE_INTENT"
         if "restart" in msg_clean:
             return "RESTART"
         return current
+
+    client = getApiClient(api_key)
 
     if not client:
         return manual_fallback(user_message, current_state)
@@ -146,7 +149,22 @@ def extract_filters(user_message: str, history: List[Dict] = None, api_key: str 
             )
             llm_output = response.text
             llm_output = re.sub(r"```json|```", "", llm_output).strip()
-            return json.loads(llm_output)
+            parsed = json.loads(llm_output)
+            
+            # Curățăm obiectele de valori null/None care pot strica RAG-ul
+            def clean_nulls(d):
+                if not isinstance(d, dict): return d
+                return {k: clean_nulls(v) for k, v in d.items() if v is not None}
+            
+            cleaned = clean_nulls(parsed)
+            # Ne asigurăm că cheile obligatorii de meta-date există (chiar dacă sunt liste goale)
+            if "mentioned_now" not in cleaned: cleaned["mentioned_now"] = []
+            if "insisted" not in cleaned: cleaned["insisted"] = []
+            if "filters" not in cleaned: cleaned["filters"] = {}
+            if "negative_filters" not in cleaned: cleaned["negative_filters"] = {}
+            if "semantic_query" not in cleaned: cleaned["semantic_query"] = user_message
+            
+            return cleaned
         except Exception as e:
             error_str = str(e)
             if any(code in error_str for code in ["503", "UNAVAILABLE", "429", "RESOURCE_EXHAUSTED"]):
