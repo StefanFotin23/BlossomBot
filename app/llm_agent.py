@@ -126,16 +126,16 @@ def extract_filters(user_message: str, history: List[Dict] = None, api_key: str 
         "Ești un expert în extragerea de informații din text pentru o florărie. "
         "Extrage un JSON care să conțină:\n"
         "1. 'filters': un obiect cu 'price_max' (număr), 'category' (string), 'dimensiune' (string), 'event_type' (string), 'colors' (string), 'flowers_type' (string), 'sezon' (string).\n"
-        "2. 'semantic_query': keywords pentru căutare (string).\n"
-        "3. 'mentioned_now': o listă cu cheile filtrelor menționate EXPLICIT în mesajul actual (ex: ['price_max', 'colors']).\n"
-        "4. 'insisted': o listă cu cheile filtrelor asupra cărora utilizatorul INSISTĂ sau se plânge (ex: 'prea scump' -> 'price_max').\n"
+        "2. 'negative_filters': un obiect cu aceleași chei ca 'filters', dar pentru lucruri pe care utilizatorul NU le dorește (ex: 'fără trandafiri' -> 'flowers_type': 'Trandafiri').\n"
+        "3. 'semantic_query': keywords pentru căutare (string).\n"
+        "4. 'mentioned_now': o listă cu cheile filtrelor (pozitive sau negative) menționate EXPLICIT acum.\n"
+        "5. 'insisted': o listă cu cheile filtrelor asupra cărora utilizatorul INSISTĂ.\n"
         f"{schema_info}\n"
         "Reguli:\n"
-        "- 'filters' trebuie să conțină valorile cumulate (din mesajul actual + context dacă sunt relevante).\n"
-        "- 'mentioned_now' conține doar ce a zis acum.\n"
-        "- 'insisted' conține filtrele pe care le repetă pentru că nu a fost mulțumit anterior.\n"
+        "- 'filters' și 'negative_filters' trebuie să conțină valorile cumulate.\n"
         "- Răspunde DOAR cu obiectul JSON."
     )
+
     
     if client:
         try:

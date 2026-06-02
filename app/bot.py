@@ -59,13 +59,13 @@ async def set_user_state(user_id, state_data):
     _local_user_states[user_id] = state_data
 
 async def process_recommendations(user_id, user_query, history=None):
-    """Execută flow-ul de RAG cu gestionarea scorurilor de importanță ale filtrelor."""
+    """Execută flow-ul de RAG cu gestionarea scorurilor de importanță ale filtrelor (pozitive și negative)."""
     user_data = await get_user_state(user_id)
     filter_scores = user_data.get("filter_scores", {})
     
     logger.debug(f"\n[User: {user_id}]\n➡️ Starting search. Query: '{user_query}'\n➡️ Current Filter Scores: {json.dumps(filter_scores, indent=2, ensure_ascii=False)}")
 
-    # 1. Extracție filtre
+    # 1. Extracție filtre (pozitive + negative)
     extracted_data = llm.extract_filters(
         user_query, 
         history=history,
@@ -73,20 +73,26 @@ async def process_recommendations(user_id, user_query, history=None):
     )
 
     current_filters = extracted_data.get("filters", {})
+    negative_filters = extracted_data.get("negative_filters", {})
     mentioned_now = extracted_data.get("mentioned_now", [])
     insisted = extracted_data.get("insisted", [])
     
-    logger.debug(f"\n[User: {user_id}]\n🧠 LLM Extracted Filters:\n{json.dumps(current_filters, indent=2, ensure_ascii=False)}\n🧠 Mentioned Now: {mentioned_now} | Insisted: {insisted}")
+    logger.debug(f"\n[User: {user_id}]\n🧠 LLM Extracted Filters:\n{json.dumps(current_filters, indent=2, ensure_ascii=False)}")
+    logger.debug(f"🧠 LLM Negative Filters:\n{json.dumps(negative_filters, indent=2, ensure_ascii=False)}\n🧠 Mentioned Now: {mentioned_now} | Insisted: {insisted}")
 
-    # 2. Update Scoruri
-    for f_key in current_filters.keys():
-        if f_key not in filter_scores:
-            filter_scores[f_key] = 2 
+    # 2. Update Scoruri (Sinergie între Pozitive și Negative)
+    all_keys = set(list(current_filters.keys()) + list(negative_filters.keys()))
+    for f_key in all_keys:
+        # Prefixăm cheile negative pentru a le distinge în scores
+        score_key = f_key if f_key in current_filters else f"no_{f_key}"
+        
+        if score_key not in filter_scores:
+            filter_scores[score_key] = 2 
         else:
             if f_key in mentioned_now:
-                filter_scores[f_key] += 2 
+                filter_scores[score_key] += 2 
             if f_key in insisted:
-                filter_scores[f_key] += 2 
+                filter_scores[score_key] += 2 
 
     user_data["filter_scores"] = filter_scores
     await set_user_state(user_id, user_data)

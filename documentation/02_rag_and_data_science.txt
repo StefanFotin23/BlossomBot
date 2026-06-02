@@ -13,12 +13,13 @@ To ensure high performance, privacy, and resilience against network restrictions
 3. VECTOR DATABASE (QDRANT)
 Qdrant serves as the vector search engine. During initialization, Qdrant receives all product embeddings along with a JSON `payload` containing hard metadata (price, category, event_type, etc.). Similarity is calculated using Cosine Distance.
 
-4. DYNAMIC FILTER RELAXATION
-The most advanced component of the search engine is the "Dynamic Relaxation" logic (`sota_hybrid_search` in `app/rag_utils.py`). When a user applies multiple strict filters (e.g., "purple tulips under 50 lei for March 8th"), an exact match might yield 0 results.
-- The algorithm leverages the user's `filter_scores` (managed in `app/bot.py`).
-- Active filters are sorted ascending by their importance score. A tie-breaker array (fallback_order) ensures that critical fields like `price_max` are protected.
-- The system executes successive searches in Qdrant, dropping the lowest-scored filter at each step until valid results are found.
-- This ensures that if a user repeatedly insists on a low budget, the system will sacrifice the requested category (e.g., flowers) to find an item (e.g., chocolate) that fits the budget, mimicking a human sales assistant.
+4. DYNAMIC FILTER RELAXATION & EXCLUSIONS
+The search engine incorporates a synergistic "Positive + Negative" filtering system.
+- Negative Filters (Exclusions): Users can explicitly exclude features (e.g., "no roses" or "anything but yellow"). These are extracted into a `negative_filters` object and applied as `must_not` conditions in Qdrant.
+- Dynamic Relaxation: When a user applies multiple strict constraints, the system executes a progressive relaxation algorithm:
+   * Importance Scoring: Each constraint (positive or negative) carries a score managed in `app/bot.py`.
+   * Exclusion Synergy: Negative constraints are integrated into the importance hierarchy. If a user insists on "no roses," that exclusion gains points and survives longer during relaxation than a casual positive mention.
+   * Successive Search: The engine sorts all active constraints by score and executes successive Qdrant queries, dropping the least important constraint (lowest score) at each step until valid results are returned.
 
 5. DIVERSIFIED FALLBACK (SEMANTIC JITTER)
 If relaxation drops almost all filters and falls back to a pure "Semantic Only" search, the system avoids presenting monotonous results:

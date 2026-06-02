@@ -1,0 +1,35 @@
+=========================================================
+TECHNICAL DOCUMENTATION: TESTING & VALIDATION
+=========================================================
+
+1. INTRODUCTION
+Rigorous validation is essential for distributed systems. BlossomBot's testing strategy covers individual component reliability, e-commerce flow correctness, and multi-user concurrency.
+
+2. MULTI-USER STRESS TESTING
+To ensure that the architecture (specifically the Redis state management and Kubernetes pod scaling) correctly isolates user sessions, we developed a dedicated simulation tool.
+- Script: `scripts/stress_test.py`
+- Mechanism: Utilizing the `httpx` asynchronous library, the script spawns 5 concurrent virtual users.
+- Scenarios: Each user follows a unique "Buyer Journey":
+   * User 1: Search for red roses, select the first, confirm, and finish.
+   * User 2: Seek a gift under 150 RON, select the second, and finish.
+   * User 3: General catalog discovery, request product details, and finalize.
+- Execution: Managed via `make stress-test`. 
+- Result: This validates that User A's shopping cart never leaks into User B's session, demonstrating the robustness of our Redis-based session isolation.
+
+3. INFRASTRUCTURE HEALTH CHECKS
+The system incorporates an automated self-monitoring mechanism via the `/healthz` endpoint.
+- Aggregated Probes: Every 10 seconds, the main application pings its critical dependencies:
+   * Redis (State ping)
+   * Qdrant (Collection count check)
+   * RabbitMQ (Queue declaration check)
+- Kubernetes Integration: These probes are linked to Kubernetes `readinessProbes` and `livenessProbes`. If any dependency fails, the cluster automatically restarts the pod or stops routing Slack traffic to it, ensuring a self-healing system.
+
+4. LLM EXTRACTION VALIDATION
+Given the non-deterministic nature of AI, we perform "Visual Logic Audits" using the enhanced debug logging system.
+- Trace Logs: By setting `LOG_LEVEL=DEBUG`, the bot prints formatted JSON traces of exactly what Gemini extracted vs. what was in the user's message.
+- Accuracy Check: This allows developers to verify that "3 pieces" is correctly parsed as `quantity: 3` and "no roses" is correctly placed in `negative_filters`.
+
+5. RABBITMQ PAYLOAD AUDIT
+To confirm that orders are correctly formatted for backend consumption, we use the `make view-queue` utility.
+- Audit Command: This command executes `rabbitmqadmin` inside the cluster to retrieve the last 10 order payloads.
+- Verification: We check that the JSON includes the correct `user_id`, a human-readable list of items (e.g., "3x Sunny Bloom"), the correct total price, and a valid timestamp. This ensures the data contract between the bot and potential downstream fulfillment systems is intact.

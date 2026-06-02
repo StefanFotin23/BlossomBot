@@ -9,13 +9,14 @@ BlossomBot uses Gemini (Flash-Lite) as a "Central Brain" or Intent Router. Inste
 - Zero Temperature: To ensure lightning-fast responses and 100% deterministic outputs (zero hallucinations), the Gemini configuration enforces `temperature: 0.0` and limits the output to a few tokens (just the state name).
 
 2. DYNAMIC FILTER EXTRACTION
-Converting natural language ("I want cheap purple tulips") into structured database queries (JSON).
+Converting natural language ("I want cheap purple tulips, but no roses") into structured database queries (JSON).
 - Dynamic Schema: At startup, the application reads the dataset and generates `schema.json` (containing exact valid categories, colors, etc.). This schema is injected into the LLM prompt, forcing Gemini to output database-compliant strings.
-- Output Structure: The LLM returns a structured JSON containing:
-  1. `filters`: The cumulative filters based on the current message and chat history.
-  2. `semantic_query`: A text summary of desired product features.
-  3. `mentioned_now`: A list of filter keys the user explicitly stated *in the current turn*.
-  4. `insisted`: A list of filter keys the user is frustrated about or repeats (e.g., "too expensive" -> `price_max`).
+- Output Structure: The LLM returns a complex structured JSON containing:
+  1. `filters`: The cumulative positive requirements.
+  2. `negative_filters`: A set of exclusions (e.g., "no roses" -> `flowers_type: Rose`). This allows the system to build `must_not` clauses in the vector search.
+  3. `semantic_query`: A text summary of desired product features.
+  4. `mentioned_now`: A list of filter keys the user explicitly stated *in the current turn*.
+  5. `insisted`: A list of filter keys the user is frustrated about or repeats (e.g., "too expensive" -> `price_max`).
 
 3. SMART CONFIRMATION (YES/NO PARSER)
 Traditional regex-based chatbots fail on conversational confirmations like "k", "yep", or "sure, I want 3".
