@@ -1,53 +1,65 @@
-=== BlossomBot Real-Payload Escalation Test (2026-06-02 12:14:09) ===
+=== BlossomBot High-Fidelity Escalation Test (2026-06-02 13:06:04) ===
 
-[12:14:12] HEALTHY USER HEALTHY_0_4c32: Salut
-[12:14:12] BOT: Bună! Cu ce te pot ajuta?
+[13:06:09] HEALTHY USER HEALTHY_3_450a: Salutare
+[13:06:09] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:13] HEALTHY USER HEALTHY_1_2ce8: Buna!
-[12:14:13] BOT: Bună! Cu ce te pot ajuta?
+[13:06:10] HEALTHY USER HEALTHY_7_363b: Salut
+[13:06:10] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:14] HEALTHY USER HEALTHY_2_f1a8: Hei
-[12:14:14] BOT: Bună! Cu ce te pot ajuta?
+[13:06:10] HEALTHY USER HEALTHY_2_9193: Buna!
+[13:06:10] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:14] HEALTHY USER HEALTHY_3_215d: Salutare
-[12:14:14] BOT: Bună! Cu ce te pot ajuta?
+[13:06:12] HEALTHY USER HEALTHY_0_1f93: Salut
+[13:06:12] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:15] HEALTHY USER HEALTHY_4_7577: Buna
-[12:14:15] BOT: Bună! Cu ce te pot ajuta?
+[13:06:12] HEALTHY USER HEALTHY_1_60b9: Hei
+[13:06:12] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:24] HEALTHY USER HEALTHY_1_2ce8: Caut un cadou sub 150 lei
-[12:14:24] BOT: Caut în catalog...
-[12:14:24] BOT: Bună! Am găsit câteva opțiuni superbe care s-ar putea să îți placă:
-
-1. *Cadou Praline Belgiene Valentino 220 gr* - Preț: 100.0 lei
-_Niciun cadou nu este complet fara un strop de dulceata. Cutia de praline Valentino (220g) este alegerea ideala pentru a desavarsi o surpriza placuta, aducand un plus de rafinament si gust buchetului de flori ales. Aceste praline sunt renumite pentru textura lor fina si gustul bogat, fiind realizate din ingrediente de calitate superioara. Cutia cont..._
-
-2. *Martisor din Rasina cu Floare de Camp si Insertii Argintii* - Preț: 80.0 lei
-_Descopera frumusetea subtila a naturii cu martisorul "Silver Meadow". Aceasta piesa handmade a fost creata pentru a celebra simplitatea sofisticata, aducand impreuna elemente organice si accente moderne. Punctul central al compozitiei este o floare de camp galbena , ramificata si delicata, care a fost culeasa si presata exact in momentul infloririi..._
-
-3. *Punga Cadou Buchete* - Preț: 20.0 lei
-_Punga cadou pentru buchete este conceputa special pentru transportul si prezentarea buchetelor de flori. Forma ei sustine buchetul in pozitie corecta, iar designul elegant adauga un plus de rafinament. Utila, estetic placuta si perfecta pentru daruri oferite intr-un mod ordonat si grijuliu._
-
-
+[13:06:13] HEALTHY USER HEALTHY_5_f901: Buna
+[13:06:13] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:29] HEALTHY USER HEALTHY_2_f1a8: Ce produse aveți?
-[12:14:29] BOT: Iată ce avem în catalog:
-[12:14:29] BOT: Vă mulțumim pentru solicitare! Iată selecția noastră de flori elegante:
+[13:06:13] HEALTHY USER HEALTHY_4_5c31: Hei
+[13:06:13] BOT: Bună! Cu ce te pot ajuta?
+--------------------------------------------------
+[13:06:14] HEALTHY USER HEALTHY_6_4119: Salut
+[13:06:14] BOT: Bună! Cu ce te pot ajuta?
+--------------------------------------------------
+[13:06:17] HEALTHY USER HEALTHY_3_450a: Al doilea suna bine si mai vreau si un cadou diferit, nu buchet
+[13:06:17] BOT: Caută ceva întâi.
+--------------------------------------------------
+[13:06:23] HEALTHY USER HEALTHY_2_9193: Caut un buchet imens de lux
+[13:06:23] BOT: Caut în catalog pentru: _Caut un buchet imens de lux_...
+[13:06:23] BOT: Bună! Am găsit câteva opțiuni superbe care s-ar putea să îți placă:
 
-1. *Cadou "Sparkle & Sweet"* - Preț: 300.0 lei
-_Atunci cand florile nu sunt de ajuns, adauga un strop de magie cu pachetul nostru "Sparkle & Sweet". Am selectat doua produse de top pentru a crea experienta gourmet completa: ciocolata belgiana si bulele fine italiene. Setul contine: Cutia cu 20 Praline Valentino: O selectie generoasa de bomboane artizanale belgiene (cca. 250g), care te vor purta ..._
+1. *Buchet de Flori "Love Symphony"* - Preț: 469.0 lei
+_Cand cuvintele nu sunt de ajuns, lasa florile sa compuna o simfonie a iubirii. Buchetul "Love Symphony" este o creatie complexa si rafinata, care imbina armonios pasiunea cu tandretea, folosind un mix spectaculos de flori premium. Piesa centrala care ofera volum si delicatete este Hortensia roz pal (sau alba, in functie de stoc), inconjurata de ele..._
 
-2. *Buchet de Flori "Protea Dream"* - Preț: 400.0 lei
-_Evadeaza din banal cu un buchet care sfideaza conventiile si se apropie de arta. "Protea Dream" nu este doar un buchet, ci o experienta vizuala complexa, construita in jurul spectaculoaseiÂ King Protea â€“ una dintre cele mai vechi si rezistente flori din lume, simbol al curajului si al diversitatii. Compozitia impresioneaza prin jocul de texturi: ..._
+2. *Buchet de Iarna "Winter Passion"* - Preț: 380.0 lei
+_Daca vrei sa impresionezi prin volum si intensitate, buchetul "Winter Passion" este alegerea ideala. Am adus impreuna doua dintre cele mai iubite flori ale sezonului rece pentru a crea un spectacol vizual desavarsit. Vedeta aranjamentului este Amaryllis-ul rosu, o floare maiestuoasa cu cupe mari, care simbolizeaza mandria si frumusetea radianta. Ac..._
 
-3. *Buchet "Red Delight" â€“ Amaryllis Rosu* - Preț: 245.0 lei
-_Lasa-te cucerit de farmecul vibrant al buchetului "Red Delight". Asa cum ii spune si numele, acest bcuhet este o adevarata incantare vizuala, dominata de eleganta impunatoare a florilor de Amaryllis (Hippeastrum) de un rosu aprins. Compozitia emana bucurie si rafinament, fiind construita in jurul tijelor inalte de Amaryllis, ale caror cupe catifela..._
+3. *Buchet de Flori "Garden Dreams"* - Preț: 589.0 lei
+_Adu prospetimea unei gradini inflorite direct in bratele persoanei dragi cu buchetul "Garden Dreams". Acest aranjament floral se remarca prin stilul sau "boho-chic", lejer si voluminos, care imita perfect naturaletea florilor proaspat culese din natura. Compozitia este un joc fascinant de texturi si culori pastelate. Vedetele buchetului sunt bujori..._
 
 
 --------------------------------------------------
-[12:14:33] HEALTHY USER HEALTHY_0_4c32: Vreau niste trandafiri rosii
-[12:14:33] BOT: Caut în catalog...
-[12:14:33] BOT: O alegere minunată! Iată cele mai proaspete opțiuni din stoc:
+[13:06:27] HEALTHY USER HEALTHY_7_363b: Vreau un buchet colorat dar fara trandafiri
+[13:06:27] BOT: Caut în catalog pentru: _Vreau un buchet colorat dar fara trandafiri_...
+[13:06:27] BOT: Vă mulțumim pentru solicitare! Iată selecția noastră de flori elegante:
+
+1. *Buchet de flori 25 lalele multicolore* - Preț: 310.0 lei
+_Daca vrei sa aduci zambete si culoare, nu poti da gres cu un buchet colorat de lalele. Am selectatÂ 25 de lalele proaspete intr-un mix vibrant de culori â€“ galben, roz, mov, alb si rosu â€“ pentru a celebra diversitatea si energia primaverii. Buchetul este un "tonic" vizual, perfect pentru a alunga monotonia. Pentru a pastra naturaletea florilor, ..._
+
+2. *Buchet de Flori "Violet Vibrant"* - Preț: 450.0 lei
+_Lasa-te invaluit de misterul si eleganta culorii regale cu buchetul "Violet Vibrant". Aceasta creatie florala este un manifest al energiei si al rafinamentului, fiind dedicata iubitorilor de nuante intense de mov, lila, magenta si purpuriu. Conceptul acestui buchet este unul de tip "Florist Choice" (Alegerea Floristului), ceea ce inseamna ca fiecar..._
+
+3. *City Flowers Bag 25 lalele multicolore* - Preț: 319.0 lei
+_Pentru iubitorii de simplitate si culoare pura, am creat acest buchet. In acest buchet, lalelele sunt vedetele absolute. Am pus 25 de lalele multicolore in punga City Flowers, fara a adauga verdeata decorativa, lasand doar frunzele naturale ale florilor sa le incadreze. Este o explozie compacta de culori â€“ rosu, galben, roz, alb, mov â€“ care ies..._
+
+
+--------------------------------------------------
+[13:06:32] HEALTHY USER HEALTHY_1_60b9: Vreau trandafiri rosii si spune-mi mai multe detalii despre prima varianta
+[13:06:32] BOT: Caut în catalog pentru: _Vreau trandafiri rosii_...
+[13:06:32] BOT: Vă mulțumim pentru solicitare! Iată selecția noastră de flori elegante:
 
 1. *Buchet de Flori 11 Trandafiri Rosii si Eucalipt* - Preț: 299.0 lei
 _Daca dragostea ar avea o culoare, cu siguranta ar fi rosul acestor trandafiri. Buchetul cu 11 trandafiri rosii si eucalipt este alegerea gentlemanilor care stiu sa impresioneze prin eleganta si semnificatie. Am selectat 11 fire de trandafiri cu petale catifelate si o nuanta profunda de rosu rubiniu. Frumusetea lor este accentuata de frunzele late d..._
@@ -60,383 +72,456 @@ _Aranjamentul Cosul Abundentei este creat pentru momente care merita un gest mem
 
 
 --------------------------------------------------
-[12:14:35] HEALTHY USER HEALTHY_3_215d: Vreau lalele mov
-[12:14:35] BOT: Caut în catalog...
-[12:14:35] BOT: Bună! Am găsit câteva opțiuni superbe care s-ar putea să îți placă:
-
-1. *Buchet de flori 25 lalele mov* - Preț: 310.0 lei
-_Pentru femeia care apreciaza eleganta, misterul si rafinamentul, am creat buchetul acesta. Movul este culoarea regalitatii si a admiratiei, iar aceste 25 de lalele mov sunt absolut spectaculoase. Buchetul iese in evidenta prin cromatica sa nobila. Lalelele violet intens sunt puse in valoare de un ambalaj in nuante deÂ lila/lavanda , creand un degra..._
-
-2. *Buchet de flori "Modern Art"- Lalele si orhidee* - Preț: 369.0 lei
-_Pentru cei care apreciaza arta si nonconformismul, am creat buchetul "Modern Art". Acest buchet redefineste eleganta clasica printr-un design contemporan, structural. Piesa centrala este formata din 20 lalele albe si 3 cupe orhidee , simbol al puritatii, printre care am inserat cupe pretioase de Orhidee Vanda mov , oferind un contrast cromatic sofi..._
-
-
+[13:06:33] HEALTHY USER HEALTHY_5_f901: vreau martisoare galbene
+[13:06:33] BOT: Caut în catalog pentru: _vreau martisoare galbene_...
+[13:06:33] BOT: 🌸 Ocupat. Poziția 1 în coadă.
 --------------------------------------------------
-[12:14:37] HEALTHY USER HEALTHY_4_7577: Vreau martisoare galbene
-[12:14:37] BOT: Caut în catalog...
-[12:14:37] BOT: Vă mulțumim pentru solicitare! Iată selecția noastră de flori elegante:
+[13:06:33] HEALTHY USER HEALTHY_0_1f93: Vreau sa cumpar un cadou pt mama mea, ceva care sa semene cu florile din gradina
+[13:06:33] BOT: Caută ceva întâi.
+--------------------------------------------------
+[13:06:37] HEALTHY USER HEALTHY_4_5c31: ce produse aveti?
+[13:06:37] BOT: Iată ce avem în catalog:
+[13:06:37] BOT: O alegere minunată! Iată cele mai proaspete opțiuni din stoc:
 
-1. *Buchet de flori 25 lalele galbene* - Preț: 310.0 lei
-_Adu o raza de soare in viata cuiva, indiferent de vremea de afara! Buchetul este o explozie de optimism si energie pozitiva. Am selectat 25 de lalele galbene vibrante, simbolul prieteniei si al succesului. Designul este unul luminos si aerisit. Lalelele sunt imbracate intr-un ambalaj asortat, intr-o nuanta de crem-galbui (vanilie) , care ofera o el..._
+1. *Cadou "Sparkle & Sweet"* - Preț: 300.0 lei
+_Atunci cand florile nu sunt de ajuns, adauga un strop de magie cu pachetul nostru "Sparkle & Sweet". Am selectat doua produse de top pentru a crea experienta gourmet completa: ciocolata belgiana si bulele fine italiene. Setul contine: Cutia cu 20 Praline Valentino: O selectie generoasa de bomboane artizanale belgiene (cca. 250g), care te vor purta ..._
 
-2. *Buchet de flori "Vivid Spring"* - Preț: 355.0 lei
-_Lasa-te surprins de creativitatea floristilor nostri! Buchetul "Vivid Spring" este o explozie de energie si culoare, creat special pentru a aduce buna dispozitie. Am conceput acest buchet ca pe un mix generos de 17 fire , avand la baza o cromatica vesela si contrastanta: galben solar, mov regal/albastru si roz vibrant . Deoarece ne dorim sa primest..._
+2. *Buchet de Flori "Protea Dream"* - Preț: 400.0 lei
+_Evadeaza din banal cu un buchet care sfideaza conventiile si se apropie de arta. "Protea Dream" nu este doar un buchet, ci o experienta vizuala complexa, construita in jurul spectaculoaseiÂ King Protea â€“ una dintre cele mai vechi si rezistente flori din lume, simbol al curajului si al diversitatii. Compozitia impresioneaza prin jocul de texturi: ..._
+
+3. *Buchet "Red Delight" â€“ Amaryllis Rosu* - Preț: 245.0 lei
+_Lasa-te cucerit de farmecul vibrant al buchetului "Red Delight". Asa cum ii spune si numele, acest bcuhet este o adevarata incantare vizuala, dominata de eleganta impunatoare a florilor de Amaryllis (Hippeastrum) de un rosu aprins. Compozitia emana bucurie si rafinament, fiind construita in jurul tijelor inalte de Amaryllis, ale caror cupe catifela..._
 
 
 --------------------------------------------------
-[12:14:38] HEALTHY USER HEALTHY_1_2ce8: o vreau pe a doua
-[12:14:38] BOT: Vrei să adăugăm *1x Martisor din Rasina cu Floare de Camp si Insertii Argintii*? (80.0 RON)
+[13:06:38] HEALTHY USER HEALTHY_6_4119: Cine esti tu?
+[13:06:38] BOT: Caut în catalog pentru: _Cine esti tu?_...
+[13:06:38] BOT: 🌸 Ocupat. Poziția 2 în coadă.
 --------------------------------------------------
-[12:14:38] HEALTHY USER HEALTHY_2_f1a8: mai multe detalii despre primul
-[12:14:38] BOT: 🔍 *Detalii complete pentru: Cadou "Sparkle & Sweet"*
-💰 *Preț:* 300.0 lei
-
-
-📖 *Descriere:* 
-_Atunci cand florile nu sunt de ajuns, adauga un strop de magie cu pachetul nostru "Sparkle & Sweet". Am selectat doua produse de top pentru a crea experienta gourmet completa: ciocolata belgiana si bulele fine italiene. Setul contine: Cutia cu 20 Praline Valentino: O selectie generoasa de bomboane artizanale belgiene (cca. 250g), care te vor purta printr-o varietate de gusturi â€“ de la crema fina de alune, la ganache de ciocolata neagra si note fructate. O cutie perfecta pentru a fi impartita. Prosecco Biscardo Millesimato (375ml): O sticla eleganta, ideala pentru a umple doua pahare si a ciocni in cinstea unui moment special. Este un spumant fin, proaspat si aromat, care curata palatul dupa degustarea ciocolatei. Fie ca sarbatoresti o aniversare, Valentine's Day sau vrei sa trimiti un cadou corporate distins, acest duo este garantia succesului._
-
-_Dorești să adaugi acest produs în comandă? Spune-mi 'Da' sau 'Îl vreau pe acesta'._
+[13:06:38] HEALTHY USER HEALTHY_3_450a: da
+[13:06:38] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:38] BURST USER BURST_10_26d7: Hei
-[12:14:38] BOT: Bună! Cu ce te pot ajuta?
+[13:06:38] HEALTHY USER HEALTHY_2_9193: foarte scumpe, n-ai ceva sub 300 lei?
+[13:06:38] BOT: Caut în catalog pentru: _foarte scumpe, n-ai ceva sub 300 lei?_...
+[13:06:38] BOT: 🌸 Ocupat. Poziția 3 în coadă.
 --------------------------------------------------
-[12:14:39] BURST USER BURST_9_d769: Buna!
-[12:14:39] BOT: Bună! Cu ce te pot ajuta?
+[13:06:39] HEALTHY USER HEALTHY_7_363b: al treilea e frumos
+[13:06:39] BOT: Vrei să adăugăm *1x Buchet de flori 25 lalele multicolore*? (310.0 RON)
 --------------------------------------------------
-[12:14:39] BURST USER BURST_6_6dc4: Buna
-[12:14:39] BOT: Bună! Cu ce te pot ajuta?
+[13:06:39] HEALTHY USER HEALTHY_1_60b9: da, baga in cos
+[13:06:39] BOT: Vrei să adăugăm *1x Buchet de Flori 11 Trandafiri Rosii si Eucalipt*? (299.0 RON)
 --------------------------------------------------
-[12:14:39] BURST USER BURST_14_5ea1: Buna
-[12:14:39] BOT: Bună! Cu ce te pot ajuta?
+[13:06:39] HEALTHY USER HEALTHY_5_f901: a doua
+[13:06:39] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:39] BURST USER BURST_4_6019: Buna
-[12:14:39] BOT: Bună! Cu ce te pot ajuta?
+[13:06:39] BURST USER BURST_3_29a6: Salutare
+[13:06:39] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:39] BURST USER BURST_5_3abd: Salut
-[12:14:39] BOT: Bună! Cu ce te pot ajuta?
+[13:06:39] BURST USER BURST_7_555b: Salut
+[13:06:39] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:40] BURST USER BURST_0_3798: Salut
-[12:14:40] BOT: Bună! Cu ce te pot ajuta?
+[13:06:40] HEALTHY USER HEALTHY_0_1f93: scumpe... ceva sub 250?
+[13:06:40] BOT: Caut în catalog pentru: _scumpe... ceva sub 250?_...
+[13:06:40] BOT: 🌸 Ocupat. Poziția 5 în coadă.
 --------------------------------------------------
-[12:14:40] BURST USER BURST_3_5b95: Salutare
-[12:14:40] BOT: Bună! Cu ce te pot ajuta?
+[13:06:40] BURST USER BURST_13_b69f: Hei
+[13:06:40] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:40] BURST USER BURST_2_b30e: Hei
-[12:14:40] BOT: Bună! Cu ce te pot ajuta?
+[13:06:40] BURST USER BURST_14_7a8d: Buna!
+[13:06:40] BOT: Caut în catalog pentru: _Buna!_...
+[13:06:40] BOT: 🌸 Ocupat. Poziția 6 în coadă.
 --------------------------------------------------
-[12:14:40] BURST USER BURST_11_6bef: Salutare
-[12:14:40] BOT: Bună! Cu ce te pot ajuta?
+[13:06:40] BURST USER BURST_5_41af: Buna
+[13:06:40] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:40] BURST USER BURST_12_4e00: Buna
-[12:14:40] BOT: Bună! Cu ce te pot ajuta?
+[13:06:39] BURST USER BURST_15_ba2e: Salutare
+[13:06:39] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:40] BURST USER BURST_13_77da: Salut
-[12:14:40] BOT: Bună! Cu ce te pot ajuta?
+[13:06:39] BURST USER BURST_1_1874: Hei
+[13:06:39] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:41] BURST USER BURST_7_d088: Hei
-[12:14:41] BOT: Bună! Cu ce te pot ajuta?
+[13:06:39] BURST USER BURST_0_7779: Salut
+[13:06:39] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:41] BURST USER BURST_1_1964: Buna!
-[12:14:41] BOT: Bună! Cu ce te pot ajuta?
+[13:06:40] BURST USER BURST_2_f826: Buna!
+[13:06:40] BOT: Caut în catalog pentru: _Buna!_...
+[13:06:40] BOT: 🌸 Ocupat. Poziția 7 în coadă.
 --------------------------------------------------
-[12:14:39] BURST USER BURST_8_4662: Salut
-[12:14:39] BOT: Bună! Cu ce te pot ajuta?
+[13:06:40] BURST USER BURST_4_92eb: Hei
+[13:06:40] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:40] HEALTHY USER HEALTHY_0_4c32: mai multe detalii despre prima varianta
-[12:14:40] BOT: 🔍 *Detalii complete pentru: Buchet de Flori 11 Trandafiri Rosii si Eucalipt*
-💰 *Preț:* 299.0 lei
-
-
-📖 *Descriere:* 
-_Daca dragostea ar avea o culoare, cu siguranta ar fi rosul acestor trandafiri. Buchetul cu 11 trandafiri rosii si eucalipt este alegerea gentlemanilor care stiu sa impresioneze prin eleganta si semnificatie. Am selectat 11 fire de trandafiri cu petale catifelate si o nuanta profunda de rosu rubiniu. Frumusetea lor este accentuata de frunzele late de Aspidistra si de ramurile delicate de Eucalipt, care adauga volum si un parfum subtil. Ceea ce face acest buchet cu adevarat spectaculos este ambalajul "ton pe ton": florile sunt imbracate intr-un ambalaj de culoare rosu-bordo, creand o imagine dramatica si rafinata. Aranjamentul este finisat cu o panglica textila verde cu auriu, pentru un contrast elegant._
-
-_Dorești să adaugi acest produs în comandă? Spune-mi 'Da' sau 'Îl vreau pe acesta'._
+[13:06:40] BURST USER BURST_8_ecaf: Hei
+[13:06:40] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:40] HEALTHY USER HEALTHY_3_215d: prima varianta
-[12:14:40] BOT: Vrei să adăugăm *1x Buchet de flori 25 lalele mov*? (310.0 RON)
+[13:06:40] BURST USER BURST_11_465d: Vreau trandafiri rosii, prima varianta si gata finalizeaza
+[13:06:40] BOT: Coș gol.
 --------------------------------------------------
-[12:14:41] BURST USER BURST_14_5ea1: Aveti ciocolata?
-[12:14:41] BOT: Caut în catalog...
-[12:14:41] BOT: 🌸 Suntem ocupați. Cererea ta e în coadă (poziția 1).
+[13:06:40] BURST USER BURST_10_316f: Salut
+[13:06:40] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:41] BURST USER BURST_10_26d7: Ce produse aveți?
-[12:14:41] BOT: Iată ce avem în catalog:
-[12:14:41] BOT: 🌸 Suntem ocupați. Cererea ta e în coadă (poziția 2).
+[13:06:41] BURST USER BURST_9_0f98: Buna
+[13:06:41] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:42] BURST USER BURST_9_d769: Caut un cadou sub 150 lei
-[12:14:42] BOT: Caut în catalog...
-[12:14:42] BOT: 🌸 Suntem ocupați. Cererea ta e în coadă (poziția 3).
+[13:06:41] BURST USER BURST_12_b39c: Salut
+[13:06:41] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:42] BURST USER BURST_0_3798: Vreau niste trandafiri rosii
-[12:14:42] BOT: Caut în catalog...
-[12:14:42] BOT: 🌸 Suntem ocupați. Cererea ta e în coadă (poziția 4).
+[13:06:41] BURST USER BURST_6_f3bd: Salut
+[13:06:41] BOT: Bună! Cu ce te pot ajuta?
 --------------------------------------------------
-[12:14:42] BURST USER BURST_6_6dc4: Aveti ciocolata?
-[12:14:42] BOT: Caut în catalog...
-[12:14:42] BOT: 🌸 Suntem ocupați. Cererea ta e în coadă (poziția 5).
+[13:06:41] BURST USER BURST_3_29a6: Al doilea suna bine si mai vreau si un cadou diferit, nu buchet
+[13:06:41] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:43] BURST USER BURST_5_3abd: Vreau ceva ieftin sub 50 lei
-[12:14:43] BOT: Caut în catalog...
-[12:14:43] BOT: 🌸 Suntem ocupați. Cererea ta e în coadă (poziția 6).
+[13:06:41] BURST USER BURST_7_555b: Vreau un buchet colorat dar fara trandafiri
+[13:06:41] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:43] BURST USER BURST_3_5b95: Vreau lalele mov
-[12:14:43] BOT: Caut în catalog...
-[12:14:43] BOT: 🌸 Suntem ocupați. Cererea ta e în coadă (poziția 7).
+[13:06:42] BURST USER BURST_13_b69f: Vreau trandafiri rosii si spune-mi mai multe detalii despre prima varianta
 --------------------------------------------------
-[12:14:43] BURST USER BURST_4_6019: Vreau martisoare galbene
-[12:14:43] BOT: Caut în catalog...
-[12:14:43] BOT: 🌸 Suntem ocupați. Cererea ta e în coadă (poziția 8).
+[13:06:42] BURST USER BURST_15_ba2e: Al doilea suna bine si mai vreau si un cadou diferit, nu buchet
+[13:06:42] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:44] BURST USER BURST_12_4e00: Vreau martisoare galbene
-[12:14:44] BOT: Caut în catalog...
-[12:14:44] BOT: 🌸 Suntem ocupați. Cererea ta e în coadă (poziția 9).
+[13:06:42] BURST USER BURST_1_1874: Vreau trandafiri rosii si spune-mi mai multe detalii despre prima varianta
 --------------------------------------------------
-[12:14:44] BURST USER BURST_2_b30e: Ce produse aveți?
-[12:14:44] BOT: Iată ce avem în catalog:
-[12:14:44] BOT: 🌸 Suntem ocupați. Cererea ta e în coadă (poziția 10).
+[13:06:42] BURST USER BURST_14_7a8d: Caut un buchet imens de lux
+[13:06:42] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:44] BURST USER BURST_11_6bef: Vreau lalele mov
-[12:14:44] BOT: Caut în catalog...
-[12:14:44] BOT: 🌸 Suntem ocupați. Cererea ta e în coadă (poziția 11).
+[13:06:43] HEALTHY USER HEALTHY_4_5c31: primul
+[13:06:43] BOT: Vrei să adăugăm *1x Cadou "Sparkle & Sweet"*? (300.0 RON)
 --------------------------------------------------
-[12:14:45] BURST USER BURST_7_d088: Vreau un buchet mare de lux
-[12:14:45] BOT: Caut în catalog...
-[12:14:45] BOT: 🌸 Suntem ocupați. Cererea ta e în coadă (poziția 12).
+[13:06:43] BURST USER BURST_2_f826: Caut un buchet imens de lux
+[13:06:43] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:45] BURST USER BURST_1_1964: Caut un cadou sub 150 lei
-[12:14:45] BOT: Caut în catalog...
-[12:14:45] BOT: 🌸 Suntem ocupați. Cererea ta e în coadă (poziția 13).
+[13:06:43] BURST USER BURST_5_41af: vreau martisoare galbene
+[13:06:43] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:45] BURST USER BURST_13_77da: Vreau ceva ieftin sub 50 lei
-[12:14:45] BOT: Caut în catalog...
-[12:14:45] BOT: 🌸 Suntem ocupați. Cererea ta e în coadă (poziția 14).
+[13:06:43] BURST USER BURST_0_7779: Vreau sa cumpar un cadou pt mama mea, ceva care sa semene cu florile din gradina
+[13:06:43] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:46] BURST USER BURST_8_4662: Vreau niste trandafiri rosii
-[12:14:46] BOT: Caut în catalog...
-[12:14:46] BOT: 🌸 Suntem ocupați. Cererea ta e în coadă (poziția 15).
+[13:06:43] HEALTHY USER HEALTHY_7_363b: da
+[13:06:43] BOT: ✅ Adăugat 1x Buchet de flori 25 lalele multicolore în coș!
 --------------------------------------------------
-[12:14:46] HEALTHY USER HEALTHY_4_7577: a doua
-[12:14:46] BOT: Vrei să adăugăm *1x Buchet de flori 25 lalele galbene*? (310.0 RON)
+[13:06:44] BURST USER BURST_4_92eb: ce produse aveti?
+[13:06:44] BOT: Caut în catalog pentru: _ce produse aveti?_...
+[13:06:44] BOT: 🌸 Ocupat. Poziția 10 în coadă.
 --------------------------------------------------
-[12:14:46] HEALTHY USER HEALTHY_1_2ce8: da, confirm
-[12:14:46] BOT: ✅ Adăugat 1x Martisor din Rasina cu Floare de Camp si Insertii Argintii în coș!
+[13:06:44] BURST USER BURST_11_465d: da
+[13:06:44] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:47] HEALTHY USER HEALTHY_2_f1a8: da, il vreau pe acesta
-[12:14:47] BOT: Caut în catalog...
-[12:14:47] BOT: 🌸 Suntem ocupați. Cererea ta e în coadă (poziția 16).
+[13:06:44] BURST USER BURST_10_316f: Arata-mi catalogul
+[13:06:44] BOT: Caut în catalog pentru: _Arata-mi catalogul_...
+[13:06:44] BOT: 🌸 Ocupat. Poziția 11 în coadă.
 --------------------------------------------------
-[12:14:47] BURST USER BURST_10_26d7: mai multe detalii despre primul
-[12:14:47] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 85 secunde.
+[13:06:44] HEALTHY USER HEALTHY_6_4119: Ce flori de primavara aveti?
+[13:06:44] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:47] BURST USER BURST_14_5ea1: detalii despre prima
-[12:14:47] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 90 secunde.
+[13:06:44] HEALTHY USER HEALTHY_1_60b9: mai vreau si ceva dulce
+[13:06:44] BOT: ✅ Adăugat 1x Buchet de Flori 11 Trandafiri Rosii si Eucalipt în coș!
 --------------------------------------------------
-[12:14:47] BURST USER BURST_0_3798: mai multe detalii despre prima varianta
-[12:14:47] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 95 secunde.
+[13:06:44] BURST USER BURST_8_ecaf: Vreau lalele mov
+[13:06:44] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:47] BURST USER BURST_9_d769: o vreau pe a doua
-[12:14:47] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 100 secunde.
+[13:06:44] HEALTHY USER HEALTHY_3_450a: hai cu pralinele
+[13:06:44] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:47] BURST USER BURST_6_6dc4: detalii despre prima
-[12:14:47] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 105 secunde.
+[13:06:45] BURST USER BURST_12_b39c: Vreau sa cumpar un cadou pt mama mea, ceva care sa semene cu florile din gradina
+[13:06:45] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:47] BURST USER BURST_5_3abd: mai ieftin
-[12:14:47] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 110 secunde.
+[13:06:45] BURST USER BURST_9_0f98: Ceva romantic si elegant pentru o aniversare sub 400 lei
+[13:06:45] BOT: Caut în catalog pentru: _Ceva romantic si elegant pentru o aniversare sub 400 lei_...
+[13:06:45] BOT: 🌸 Ocupat. Poziția 13 în coadă.
 --------------------------------------------------
-[12:14:47] BURST USER BURST_3_5b95: prima varianta
-[12:14:47] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 115 secunde.
+[13:06:45] HEALTHY USER HEALTHY_2_9193: ok prima varianta e buna
+[13:06:45] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:47] BURST USER BURST_4_6019: a doua
-[12:14:47] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 120 secunde.
+[13:06:45] HEALTHY USER HEALTHY_5_f901: da
+[13:06:45] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:47] BURST USER BURST_12_4e00: a doua
-[12:14:47] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 125 secunde.
+[13:06:45] BURST USER BURST_13_b69f: da, baga in cos
+[13:06:45] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:47] HEALTHY USER HEALTHY_0_4c32: da, il vreau
-[12:14:47] BOT: Caut în catalog...
-[12:14:47] BOT: 🌸 Suntem ocupați. Cererea ta e în coadă (poziția 26).
+[13:06:45] BURST USER BURST_6_f3bd: Cine esti tu?
+[13:06:45] BOT: Caut în catalog pentru: _Cine esti tu?_...
+[13:06:45] BOT: 🌸 Ocupat. Poziția 16 în coadă.
 --------------------------------------------------
-[12:14:47] BURST USER BURST_2_b30e: mai multe detalii despre primul
-[12:14:47] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 135 secunde.
+[13:06:46] BURST USER BURST_3_29a6: da
+[13:06:46] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:47] BURST USER BURST_7_d088: a treia varianta
-[12:14:47] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 140 secunde.
+[13:06:46] BURST USER BURST_7_555b: al treilea e frumos
+[13:06:46] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:47] BURST USER BURST_11_6bef: prima varianta
-[12:14:47] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 145 secunde.
+[13:06:46] BURST USER BURST_1_1874: da, baga in cos
+[13:06:46] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:47] HEALTHY USER HEALTHY_3_215d: da, o vreau
-[12:14:47] BOT: ✅ Adăugat 1x Buchet de flori 25 lalele mov în coș!
+[13:06:46] HEALTHY USER HEALTHY_0_1f93: al 2 lea suna bine
+[13:06:46] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:47] BURST USER BURST_1_1964: o vreau pe a doua
-[12:14:47] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 150 secunde.
+[13:06:46] BURST USER BURST_15_ba2e: da
+[13:06:46] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:47] BURST USER BURST_13_77da: mai ieftin
-[12:14:47] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 155 secunde.
+[13:06:46] BURST USER BURST_14_7a8d: foarte scumpe, n-ai ceva sub 300 lei?
+[13:06:46] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:47] BURST USER BURST_8_4662: mai multe detalii despre prima varianta
-[12:14:47] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 160 secunde.
+[13:06:46] BURST USER BURST_5_41af: a doua
+[13:06:46] BOT: Caut în catalog pentru: _a doua_...
+[13:06:46] BOT: 🌸 Ocupat. Poziția 19 în coadă.
 --------------------------------------------------
-[12:14:48] BURST USER BURST_4_6019: da, adauga in cos
-[12:14:48] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 165 secunde.
+[13:06:47] BURST USER BURST_0_7779: scumpe... ceva sub 250?
+[13:06:47] BOT: Caut în catalog pentru: _scumpe... ceva sub 250?_...
+[13:06:47] BOT: 🌸 Ocupat. Poziția 20 în coadă.
 --------------------------------------------------
-[12:14:48] BURST USER BURST_14_5ea1: da o vreau
-[12:14:48] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 170 secunde.
+[13:06:47] BURST USER BURST_2_f826: foarte scumpe, n-ai ceva sub 300 lei?
+[13:06:47] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:48] BURST USER BURST_3_5b95: da, o vreau
-[12:14:48] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 175 secunde.
+[13:06:47] BURST USER BURST_4_92eb: primul
+[13:06:47] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:48] BURST USER BURST_7_d088: confirm
-[12:14:48] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 180 secunde.
+[13:06:47] BURST USER BURST_11_465d: ok
+[13:06:47] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:48] BURST USER BURST_11_6bef: da, o vreau
-[12:14:48] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 185 secunde.
+[13:06:47] BURST USER BURST_8_ecaf: prima varianta
+[13:06:47] BOT: Caut în catalog pentru: _prima varianta_...
+[13:06:47] BOT: 🌸 Ocupat. Poziția 23 în coadă.
 --------------------------------------------------
-[12:14:48] BURST USER BURST_6_6dc4: da o vreau
-[12:14:48] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 190 secunde.
+[13:06:47] BURST USER BURST_10_316f: detalii despre al treilea
+[13:06:47] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:48] BURST USER BURST_1_1964: da, confirm
-[12:14:48] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 195 secunde.
+[13:06:48] BURST USER BURST_12_b39c: scumpe... ceva sub 250?
+[13:06:48] BOT: Caut în catalog pentru: _scumpe... ceva sub 250?_...
+[13:06:48] BOT: 🌸 Ocupat. Poziția 25 în coadă.
 --------------------------------------------------
-[12:14:48] BURST USER BURST_9_d769: da, confirm
-[12:14:48] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 200 secunde.
+[13:06:48] BURST USER BURST_9_0f98: varianta 2
+[13:06:48] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:48] BURST USER BURST_10_26d7: da, il vreau pe acesta
-[12:14:48] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 205 secunde.
+[13:06:48] BURST USER BURST_3_29a6: hai cu pralinele
+[13:06:48] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:48] BURST USER BURST_5_3abd: ok prima
-[12:14:48] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 210 secunde.
+[13:06:48] BURST USER BURST_13_b69f: mai vreau si ceva dulce
+[13:06:48] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:48] BURST USER BURST_12_4e00: da, adauga in cos
-[12:14:48] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 215 secunde.
+[13:06:48] BURST USER BURST_7_555b: da
+[13:06:48] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:48] BURST USER BURST_2_b30e: da, il vreau pe acesta
-[12:14:48] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 220 secunde.
+[13:06:48] BURST USER BURST_1_1874: mai vreau si ceva dulce
+[13:06:48] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:48] BURST USER BURST_0_3798: da, il vreau
-[12:14:48] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 225 secunde.
+[13:06:48] BURST USER BURST_15_ba2e: hai cu pralinele
+[13:06:48] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:49] BURST USER BURST_8_4662: da, il vreau
-[12:14:49] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 230 secunde.
+[13:06:48] BURST USER BURST_6_f3bd: Ce flori de primavara aveti?
+[13:06:48] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:49] BURST USER BURST_4_6019: gata
-[12:14:49] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 235 secunde.
+[13:06:48] BURST USER BURST_5_41af: da
+[13:06:48] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:49] BURST USER BURST_13_77da: ok prima
-[12:14:49] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 240 secunde.
+[13:06:48] BURST USER BURST_14_7a8d: ok prima varianta e buna
+[13:06:48] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:49] BURST USER BURST_6_6dc4: gata
-[12:14:49] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 245 secunde.
+[13:06:48] BURST USER BURST_0_7779: al 2 lea suna bine
+[13:06:48] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:50] BURST USER BURST_14_5ea1: gata
-[12:14:50] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 250 secunde.
+[13:06:48] HEALTHY USER HEALTHY_6_4119: prima
+[13:06:48] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:50] BURST USER BURST_11_6bef: gata, am terminat
-[12:14:50] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 255 secunde.
+[13:06:48] HEALTHY USER HEALTHY_4_5c31: da
+[13:06:48] BOT: ✅ Adăugat 1x Cadou "Sparkle & Sweet" în coș!
 --------------------------------------------------
-[12:14:50] BURST USER BURST_0_3798: gata, finalizeaza
-[12:14:50] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 260 secunde.
+[13:06:49] BURST USER BURST_4_92eb: da
+[13:06:49] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:50] BURST USER BURST_3_5b95: gata, am terminat
-[12:14:50] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 265 secunde.
+[13:06:49] BURST USER BURST_2_f826: ok prima varianta e buna
+[13:06:49] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:50] BURST USER BURST_10_26d7: gata, trimite
-[12:14:50] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 270 secunde.
+[13:06:49] BURST USER BURST_10_316f: da il vreau
+[13:06:49] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:50] BURST USER BURST_7_d088: finalizeaza
-[12:14:50] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 275 secunde.
+[13:06:49] HEALTHY USER HEALTHY_1_60b9: varianta 2 e perfecta
+[13:06:49] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:50] BURST USER BURST_12_4e00: gata
-[12:14:50] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 280 secunde.
+[13:06:49] HEALTHY USER HEALTHY_7_363b: gata
+[13:06:49] BOT: 🎉 *Comandă trimisă!*
+• 1 x Buchet de flori 25 lalele multicolore (310.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 310.0 RON*
+Mulțumim! 🌸
 --------------------------------------------------
-[12:14:50] BURST USER BURST_5_3abd: da
-[12:14:50] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 285 secunde.
+[13:06:49] BURST USER BURST_8_ecaf: da, pune 3 bucati
+[13:06:49] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:50] BURST USER BURST_13_77da: da
-[12:14:50] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 290 secunde.
+[13:06:49] BURST USER BURST_12_b39c: al 2 lea suna bine
+[13:06:49] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:50] BURST USER BURST_1_1964: finalizeaza comanda
-[12:14:50] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 295 secunde.
+[13:06:49] BURST USER BURST_9_0f98: da
+[13:06:49] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:50] BURST USER BURST_2_b30e: gata, trimite
-[12:14:50] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 300 secunde.
+[13:06:50] BURST USER BURST_3_29a6: da, le vreau
+[13:06:50] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:50] BURST USER BURST_9_d769: finalizeaza comanda
-[12:14:50] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 305 secunde.
+[13:06:50] BURST USER BURST_1_1874: varianta 2 e perfecta
+[13:06:50] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:50] BURST USER BURST_8_4662: gata, finalizeaza
-[12:14:50] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 310 secunde.
+[13:06:50] BURST USER BURST_13_b69f: varianta 2 e perfecta
+[13:06:50] BOT: Caută ceva întâi.
 --------------------------------------------------
-[12:14:51] HEALTHY USER HEALTHY_2_f1a8: gata, trimite
-[12:14:51] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 315 secunde.
+[13:06:50] BURST USER BURST_5_41af: mai aveti pandantive?
+[13:06:50] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:51] HEALTHY USER HEALTHY_4_7577: da, adauga in cos
-[12:14:51] BOT: ✅ Adăugat 1x Buchet de flori 25 lalele galbene în coș!
+[13:06:50] BURST USER BURST_10_316f: mai arata-mi si niste flori albe
+[13:06:50] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:51] BURST USER BURST_13_77da: gata
-[12:14:51] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 320 secunde.
+[13:06:50] BURST USER BURST_6_f3bd: prima
+[13:06:50] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:52] BURST USER BURST_5_3abd: gata
-[12:14:52] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 325 secunde.
+[13:06:50] BURST USER BURST_0_7779: da
+[13:06:50] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:52] HEALTHY USER HEALTHY_1_2ce8: finalizeaza comanda
-[12:14:52] BOT: 🎉 Comandă trimisă (80.0 RON)!
+[13:06:50] BURST USER BURST_4_92eb: si ceva de ciocolata
+[13:06:50] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:52] HEALTHY USER HEALTHY_3_215d: gata, am terminat
-[12:14:52] BOT: 🎉 Comandă trimisă (310.0 RON)!
+[13:06:50] BURST USER BURST_14_7a8d: da
+[13:06:50] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------
-[12:14:53] HEALTHY USER HEALTHY_0_4c32: gata, finalizeaza
-[12:14:53] BOT: ⏳ Procesez încă cererea ta anterioară. Am adăugat și acest mesaj în coadă.
-Estimare: 330 secunde.
+[13:06:50] BURST USER BURST_7_555b: gata
+[13:06:50] BOT: Coș gol.
 --------------------------------------------------
-[12:14:56] HEALTHY USER HEALTHY_4_7577: gata
-[12:14:56] BOT: 🎉 Comandă trimisă (310.0 RON)!
+[13:06:51] BURST USER BURST_15_ba2e: da, le vreau
+[13:06:51] BOT: Caută ceva întâi.
+--------------------------------------------------
+[13:06:51] HEALTHY USER HEALTHY_3_450a: da, le vreau
+[13:06:51] BOT: Caută ceva întâi.
+--------------------------------------------------
+[13:06:51] BURST USER BURST_12_b39c: da
+[13:06:51] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:51] BURST USER BURST_2_f826: da
+[13:06:51] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:51] HEALTHY USER HEALTHY_0_1f93: da
+[13:06:51] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:51] HEALTHY USER HEALTHY_5_f901: mai aveti pandantive?
+[13:06:51] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:51] HEALTHY USER HEALTHY_2_9193: da
+[13:06:51] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:51] BURST USER BURST_8_ecaf: mai vreau si praline
+[13:06:51] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:51] BURST USER BURST_9_0f98: trimite comanda
+[13:06:51] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:51] BURST USER BURST_10_316f: prima
+[13:06:51] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:51] BURST USER BURST_5_41af: primul
+[13:06:51] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:51] BURST USER BURST_6_f3bd: da
+[13:06:51] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:52] BURST USER BURST_14_7a8d: am terminat
+[13:06:52] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:52] BURST USER BURST_3_29a6: finalizeaza
+[13:06:52] BOT: Coș gol.
+--------------------------------------------------
+[13:06:52] BURST USER BURST_1_1874: da
+[13:06:52] BOT: Caută ceva întâi.
+--------------------------------------------------
+[13:06:52] BURST USER BURST_4_92eb: k varianta 2
+[13:06:52] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:52] BURST USER BURST_13_b69f: da
+[13:06:52] BOT: Caută ceva întâi.
+--------------------------------------------------
+[13:06:52] BURST USER BURST_0_7779: gata, finalizeaza
+[13:06:52] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:52] BURST USER BURST_15_ba2e: finalizeaza
+[13:06:52] BOT: Coș gol.
+--------------------------------------------------
+[13:06:52] BURST USER BURST_12_b39c: gata, finalizeaza
+[13:06:52] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:52] BURST USER BURST_8_ecaf: da
+[13:06:52] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:53] BURST USER BURST_2_f826: am terminat
+[13:06:53] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:53] BURST USER BURST_10_316f: da
+[13:06:53] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:53] BURST USER BURST_4_92eb: da
+[13:06:53] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:53] BURST USER BURST_6_f3bd: finalizeaza comanda
+[13:06:53] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:54] HEALTHY USER HEALTHY_4_5c31: si ceva de ciocolata
+[13:06:54] BOT: Caut în catalog pentru: _si ceva de ciocolata_...
+[13:06:54] BOT: 🌸 Ocupat. Poziția 63 în coadă.
+--------------------------------------------------
+[13:06:54] BURST USER BURST_1_1874: gata
+[13:06:54] BOT: Coș gol.
+--------------------------------------------------
+[13:06:54] BURST USER BURST_5_41af: da
+[13:06:54] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:54] HEALTHY USER HEALTHY_6_4119: da
+[13:06:54] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:54] BURST USER BURST_8_ecaf: finalizeaza
+[13:06:54] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:54] BURST USER BURST_13_b69f: gata
+[13:06:54] BOT: Coș gol.
+--------------------------------------------------
+[13:06:54] BURST USER BURST_4_92eb: atat
+[13:06:54] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:54] BURST USER BURST_10_316f: gata
+[13:06:54] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:55] HEALTHY USER HEALTHY_1_60b9: da
+[13:06:55] BOT: Caută ceva întâi.
+--------------------------------------------------
+[13:06:55] BURST USER BURST_5_41af: gata
+[13:06:55] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:56] HEALTHY USER HEALTHY_0_1f93: gata, finalizeaza
+[13:06:56] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:56] HEALTHY USER HEALTHY_5_f901: primul
+[13:06:56] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:57] HEALTHY USER HEALTHY_3_450a: finalizeaza
+[13:06:57] BOT: Coș gol.
+--------------------------------------------------
+[13:06:57] HEALTHY USER HEALTHY_2_9193: am terminat
+[13:06:57] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:58] HEALTHY USER HEALTHY_4_5c31: k varianta 2
+[13:06:58] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:06:59] HEALTHY USER HEALTHY_6_4119: finalizeaza comanda
+[13:06:59] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:07:00] HEALTHY USER HEALTHY_1_60b9: gata
+[13:07:00] BOT: 🎉 *Comandă trimisă!*
+• 1 x Buchet de Flori 11 Trandafiri Rosii si Eucalipt (299.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 299.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[13:07:01] HEALTHY USER HEALTHY_5_f901: da
+[13:07:01] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:07:02] HEALTHY USER HEALTHY_4_5c31: da
+[13:07:02] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:07:05] HEALTHY USER HEALTHY_5_f901: gata
+[13:07:05] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
+--------------------------------------------------
+[13:07:07] HEALTHY USER HEALTHY_4_5c31: atat
+[13:07:07] BOT: ⏳ Procesez încă cererea ta anterioară. Mesajul tău a fost pus în coadă.
 --------------------------------------------------

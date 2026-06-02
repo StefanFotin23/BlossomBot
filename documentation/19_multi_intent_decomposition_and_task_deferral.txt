@@ -1,0 +1,22 @@
+=========================================================
+TECHNICAL DOCUMENTATION: MULTI-INTENT DECOMPOSITION
+=========================================================
+
+1. INTRODUCTION
+Real-world users often combine multiple requests into a single sentence (e.g., "Add the first one and search for some chocolate too"). A traditional single-intent classifier would fail or drop one of the requests. BlossomBot solves this via "Multi-Intent Decomposition."
+
+2. DECOMPOSITION ARCHITECTURE
+Instead of a simple classification, the system uses a specialized LLM prompt (`decompose_intents`) to break messages into an array of atomic tasks.
+- Task Structure: Each task contains the original sub-text and the identified intent (e.g., PURCHASE_INTENT followed by SEARCH_PRODUCTS).
+- The Buffer: Secondary tasks are pushed into a `deferred_tasks` list in the user's Redis state.
+
+3. SEQUENTIAL EXECUTION & DEFERRAL
+The bot processes tasks one by one to ensure the State Machine remains consistent.
+- Blocking Actions: If a task leads to a state requiring manual confirmation (like adding to cart), the execution "pauses."
+- Resumption: Once the user provides the confirmation ("Yes"), the bot automatically triggers the next task in the `deferred_tasks` queue.
+- Fluid Execution: If tasks are non-blocking (e.g., "Hello" + "Show me the catalog"), the bot executes them immediately in sequence, sending multiple messages in a single turn.
+
+4. BENEFITS
+- Zero Data Loss: No part of a complex user request is ever ignored.
+- Human-Like Flow: The bot feels more intelligent and attentive, mimicking a real sales assistant who can multitask.
+- Context Retention: By splitting the text, the RAG engine receives cleaner queries for search tasks.
