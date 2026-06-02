@@ -28,6 +28,7 @@ class Config:
     else:
         RABBITMQ_PORT = int(_rmq_port)
     PURCHASE_QUEUE = os.environ.get("PURCHASE_QUEUE", "flower_purchases")
+    STRESS_TEST_QUEUE = os.environ.get("STRESS_TEST_QUEUE", "stress_test_purchases")
 
     # Redis
     REDIS_HOST = os.environ.get("REDIS_HOST", "redis")

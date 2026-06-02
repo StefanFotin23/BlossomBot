@@ -1,0 +1,27 @@
+=========================================================
+TECHNICAL DOCUMENTATION: CONVERSATIONAL UX & FALLBACKS
+=========================================================
+
+1. INTRODUCTION
+User experience in an AI-driven bot is heavily dependent on how the system manages expectations during failures or constraints. BlossomBot moves away from generic error messages to a "Guided Conversation" model.
+
+2. EMPATHETIC FALLBACKS (PRICE AND FILTERS)
+When a user provides a constraint that the catalog cannot satisfy (e.g., "bouquet under 100 RON"), a standard RAG system might return a dry "No results found." BlossomBot implements a two-step empathetic response:
+- Acknowledge the Effort: "💡 Am ajustat puțin căutarea..." (I've adjusted the search a bit).
+- Provide Guidance: Instead of just guessing, the bot scans the relaxed search results and identifies the actual price floor: "Cele mai apropiate opțiuni pornesc de la 179 RON." This gives the user immediate context on what is realistic within the shop's inventory.
+
+3. DYNAMIC DIVERSITY (JITTER)
+Under heavy load or vague queries, users may repeat the same question. 
+- The Challenge: Returning the same "Top 3" results repeatedly feels robotic.
+- The Solution: "Semantic Jitter." The RAG engine retrieves a larger pool (top 15) and randomly shuffles the results while keeping the absolute best match at index #1. This ensures that every "More cheaper" or "Show me more" request feels fresh and increases the "Discovery" surface area of the catalog.
+
+4. NATIVE LANGUAGE PARSING (CONFIRMATIONS)
+A critical UX friction point is the transition from browsing to ordering.
+- Smart Affirmations: Using a zero-temperature LLM classifier, the bot recognizes diverse ways of saying "Yes" (e.g., "k", "sure", "yep", "yes please").
+- Embedded Adjustments: If a user confirms but changes their mind about the quantity in the same sentence (e.g., "Yes, but I want 5 actually"), the bot captures the confirmation AND updates the cart in a single step, reducing conversational "back-and-forth" friction.
+
+5. PSYCHOLOGICAL CHECKPOINTS
+Since Slack doesn't support a "Clear Chat" feature for bots, we use conversational markers to create a sense of closure:
+- Visual Separators: Order completion is signaled with a distinct border (━━━━━━━━).
+- Professional Outro: A standard thank-you message from the "City Flowers Service" reinforces the brand and confirms that the bot's memory has been reset for the next task.
+- Status Updates: Real-time queue positions (e.g., "Position 4 in queue") provide a sense of progress, mimicking a real human being typing a response.
