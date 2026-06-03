@@ -10,7 +10,7 @@ To manage the 15-30 RPM (Requests Per Minute) limit of the Gemini Free Tier, the
 - Failure Interception: When a `GeminiOverloadedError` (HTTP 429) is caught during intent routing or filter extraction, the current execution is suspended.
 - Background Buffering: The raw Slack payload and user context are wrapped into a "Task Object" and pushed into the queue.
 - Sequential Processing: A dedicated `background_task_worker` monitors the queue and processes items one by one.
-- Rate-Limit Resets: The worker introduces a forced 4-second delay between tasks, ensuring the Gemini API has time to recover before the next request is sent.
+- Rate-Limit Resets (Optimized Throttling): The worker introduces an optimized forced delay of 1.5 seconds between tasks (reduced from 4.0s). This provides a significant boost in responsiveness while remaining safely within the Gemini Free Tier quotas.
 
 3. ATOMIC USER-LEVEL SEQUENCING (LOCKING)
 High-load scenarios often lead to race conditions where a user's second message (e.g., "Confirm Order") is processed before their first message (e.g., "Add to Cart") if the first was queued due to rate limits.
@@ -18,8 +18,9 @@ High-load scenarios often lead to race conditions where a user's second message 
 - Sequencing Constraint: If a user has a task pending in the global queue, all subsequent messages from that specific user are automatically added to the queue, even if the Gemini API currently has available quota.
 - Consistency Guarantee: This ensures that for every individual user, the "Conversational Timeline" is preserved in strict chronological order (First-In, First-Out), preventing logic errors like empty shopping carts or skipped confirmations.
 
-4. USER TRANSPARENCY
+4. USER TRANSPARENCY & LATENCY FEEDBACK
 Queuing messages can lead to user anxiety if they receive no feedback. 
 - Dynamic Positioning: When a task is queued, the bot calculates the `queue_size` and provides a specific position (e.g., "Position 3 in queue").
-- Wait Time Estimation: Based on the worker's average processing speed, the bot provides a time estimate (e.g., "Wait time: ~15 seconds").
-- Keep-Alive Heartbeats: For waits exceeding 15 seconds, a separate background task is spawned to send periodic updates to the user, ensuring they remain informed of the processing status.
+- Wait Time Estimation: Based on the worker's processing speed (1.5s/task), the bot provides a mathematical time estimate (e.g., "Timp estimat: ~15s") if the total wait exceeds 5 seconds.
+- Direct Path Feedback: For requests not in the queue but still requiring LLM analysis, the bot sends an immediate "Thinking" heartbeat ("🌸 Analizez cererea ta...") to manage user expectations during the AI round-trip.
+- Keep-Alive Heartbeats: For waits exceeding 15 seconds, a separate background task can be spawned to send periodic updates to the user, ensuring they remain informed of the processing status.

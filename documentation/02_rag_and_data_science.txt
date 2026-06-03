@@ -16,10 +16,12 @@ Qdrant serves as the vector search engine. During initialization, Qdrant receive
 4. DYNAMIC FILTER RELAXATION & EXCLUSIONS
 The search engine incorporates a synergistic "Positive + Negative" filtering system.
 - Negative Filters (Exclusions): Users can explicitly exclude features (e.g., "no roses" or "anything but yellow"). These are extracted into a `negative_filters` object and applied as `must_not` conditions in Qdrant.
+- HOLIDAY-SPECIFIC MAPPING: For Romanian traditional items like "Mărțișoare," the system applies a special mapping rule. The LLM is instructed to map these queries to `event_type`: `1 Martie`, ensuring hard-filtered relevance over loose semantic similarity.
 - Dynamic Relaxation: When a user applies multiple strict constraints, the system executes a progressive relaxation algorithm:
    * Importance Scoring: Each constraint (positive or negative) carries a score managed in `app/bot.py`.
    * Exclusion Synergy: Negative constraints are integrated into the importance hierarchy. If a user insists on "no roses," that exclusion gains points and survives longer during relaxation than a casual positive mention.
-   * Successive Search: The engine sorts all active constraints by score and executes successive Qdrant queries, dropping the least important constraint (lowest score) at each step until valid results are returned.
+   * Successive Search: The engine sorts all active constraints by score and executes successive Qdrant queries. 
+   * PRIORITIZED FALLBACK ORDER: The system now strictly prioritizes `category` and `flowers_type` over secondary attributes. If a search is over-constrained, secondary filters like `price_max` and `colors` are dropped FIRST, ensuring the user always sees the correct type of product (e.g., a "Mărțișor") even if the requested color is unavailable.
 
 5. DIVERSIFIED FALLBACK (SEMANTIC JITTER)
 If relaxation drops almost all filters and falls back to a pure "Semantic Only" search, the system avoids presenting monotonous results:

@@ -34,25 +34,35 @@ def decompose_intents(user_message: str, current_state: str = "GREETING", api_ke
         words = msg_cl.split()
 
         K_GREET = ["salut", "buna", "bună", "hei", "hello", "hi", "hey", "salutare", "ciao"]
-        K_SEARCH = ["caut", "vreau", "buchet", "flori", "recomand", "lalele", "trandafiri", "cadou", "ceva", "aranjament", "plante"]
+        K_SEARCH = ["caut", "vreau", "buchet", "flori", "recomand", "lalele", "trandafiri", "cadou", "ceva", "aranjament", "plante", "arata-mi", "arată-mi"]
         K_DETAILS = ["detalii", "info", "informatii", "informații", "descriere", "mai mult", "povesteste", "despre"]
-        K_PURCHASE = ["iau", "cumpar", "cumpăr", "adauga", "adaugă", "primul", "doilea", "treilea", "1", "2", "3"]
+        K_PURCHASE = ["iau", "cumpar", "cumpăr", "adauga", "adaugă", "primul", "doilea", "treilea", "prima", "varianta", "1", "2", "3"]
         K_FINISH = ["gata", "final", "finalizeaza", "finalizează", "trimite", "atat", "atât", "am terminat", "stop", "plateste", "plătește", "checkout"]
         K_RESTART = ["restart", "reset", "de la capat", "anuleaza tot", "anulează tot", "sterge tot", "șterge tot"]
+        K_CATALOG = ["produse", "catalog", "aveti", "aveți", "oferta", "oferiti", "recomanda", "recomandări", "recomandari", "recomandati-mi", "ce-mi recomanzi", "ce-mi recomandați"]
+        K_CONFIRM = ["da", "yes", "ok", "k", "sigur", "perfect", "confirm"]
+        K_CART = ["cos", "coș", "cosul", "coșul", "cosul meu", "coșul meu", "cart", "arata-mi cosul", "arată-mi coșul"]
 
-        # Prioritizăm RESTART și GREETING
         if any(w in K_RESTART for w in [msg_cl] + words): return [{"text": msg, "intent": "RESTART"}]
-        if any(w in K_GREET for w in [msg_cl] + words): return [{"text": msg, "intent": "GREETING"}]
-        
-        # Dacă mesajul conține cuvinte de căutare (ex: "vreau trandafiri"), e SEARCH chiar dacă are și "vreau"
-        if any(w in K_SEARCH for w in words): return [{"text": msg, "intent": "SEARCH_PRODUCTS"}]
-        
-        # Altfel verificăm restul
-        if any(w in K_DETAILS for w in words): return [{"text": msg, "intent": "PRODUCT_DETAILS"}]
-        if any(w in K_PURCHASE for w in [msg_cl] + words): return [{"text": msg, "intent": "PURCHASE_INTENT"}]
         if any(w in K_FINISH for w in [msg_cl] + words): return [{"text": msg, "intent": "FINISH_ORDER"}]
+        if any(p in msg_cl for p in ["arata-mi cosul", "arată-mi coșul"]) or any(w in K_CART for w in words): return [{"text": msg, "intent": "VIEW_CART"}]
+        if any(w in K_CATALOG for w in words): return [{"text": msg, "intent": "CATALOG_DISCOVERY"}]
         
-        return [{"text": msg, "intent": "SEARCH_PRODUCTS"}]
+        # Check for numbers/selections FIRST (high priority)
+        if re.search(r'^(\d+)$', msg_cl) or any(w in ["primul", "prima", "doilea", "treilea", "varianta"] for w in words):
+            return [{"text": msg, "intent": "PURCHASE_INTENT"}]
+        
+        if any(w in K_CONFIRM for w in [msg_cl] + words) and current in ["SEARCH_PRODUCTS", "PRODUCT_DETAILS", "PURCHASE_INTENT"]:
+             return [{"text": msg, "intent": "PURCHASE_INTENT"}]
+
+        if any(w in K_SEARCH for w in words): return [{"text": msg, "intent": "SEARCH_PRODUCTS"}]
+        if any(w in K_PURCHASE for w in [msg_cl] + words): return [{"text": msg, "intent": "PURCHASE_INTENT"}]
+        if any(w in K_DETAILS for w in words): return [{"text": msg, "intent": "PRODUCT_DETAILS"}]
+        
+        # Check greetings only if it's the exact word or first word (and short message)
+        if msg_cl in K_GREET or (words and words[0] in K_GREET and len(words) <= 3): return [{"text": msg, "intent": "GREETING"}]
+        
+        return [{"text": msg, "intent": "UNKNOWN"}]
 
 
     if not client: return manual_fallback(user_message, current_state)
@@ -61,9 +71,14 @@ def decompose_intents(user_message: str, current_state: str = "GREETING", api_ke
 
     system_prompt = (
         "Ești un expert în descompunerea mesajelor pentru un chatbot de florărie.\n"
-        "Analizează dacă mesajul are mai multe intenții și împarte-l în sarcini atomice.\n"
-        "Exemplu: 'al doilea e ok și mai vreau praline' -> \n"
-        "[{\"text\": \"al doilea e ok\", \"intent\": \"PURCHASE_INTENT\"}, {\"text\": \"mai vreau praline\", \"intent\": \"SEARCH_PRODUCTS\"}]\n"
+        "Analizează DACĂ mesajul are mai multe intenții și împarte-l în sarcini atomice.\n"
+        "IMPORTANT:\n"
+        "1. Nu ignora nicio parte a mesajului utilizatorului.\n"
+        "2. Mesajele de tip 'Vreau să cumpăr [produs]' sau 'Vreau [produs]' reprezintă o SINGURĂ intenție: SEARCH_PRODUCTS.\n"
+        "3. Mesajele de tip 'Bună, vreau [produs]' reprezintă DOUĂ intenții: GREETING și SEARCH_PRODUCTS.\n"
+        "4. Nu clasifica întregul mesaj ca GREETING dacă există o cerere de produse.\n"
+        "Exemplu: 'Bună, vreau trandafiri' -> \n"
+        "[{\"text\": \"Bună\", \"intent\": \"GREETING\"}, {\"text\": \"vreau trandafiri\", \"intent\": \"SEARCH_PRODUCTS\"}]\n"
         f"Intenții posibile: {states_desc}\n"
         "Răspunde DOAR cu un JSON (listă de obiecte)."
     )
@@ -80,6 +95,11 @@ def decompose_intents(user_message: str, current_state: str = "GREETING", api_ke
     except Exception as e:
         logger.warning(f"Intent Decomposition failed ({e}), using fallback.")
         return manual_fallback(user_message, current_state)
+
+def classify_intent(user_message: str, current_state: str = "GREETING", api_key: str = None) -> str:
+    """Clasifică un mesaj într-o singură stare (Direct path)."""
+    tasks = decompose_intents(user_message, current_state, api_key)
+    return tasks[0].get("intent", "SEARCH_PRODUCTS")
 
 # ==========================================
 # 2. RAG ROUTER (Text -> JSON pentru RAG)
@@ -122,6 +142,7 @@ def extract_filters(user_message: str, history: List[Dict] = None, api_key: str 
         f"{schema_info}\n"
         "Reguli:\n"
         "- 'filters' și 'negative_filters' trebuie să conțină valorile cumulate.\n"
+        "- Mărțișoarele trebuie mapate la 'event_type': '1 Martie'.\n"
         "- Răspunde DOAR cu obiectul JSON."
     )
 
