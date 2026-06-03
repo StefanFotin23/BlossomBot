@@ -281,7 +281,7 @@ def sota_hybrid_search(state_json: Dict[str, Any], filter_scores: Dict[str, int]
 
     # Combinăm toate cheile pentru sortare
     all_active_keys = list(conditions_map.keys()) + list(negative_map.keys())
-    fallback_order = ["dimensiune", "colors", "category", "flowers_type", "event_type", "price_max"]
+    fallback_order = ["price_max", "event_type", "colors", "dimensiune", "flowers_type", "category"]
 
     def get_sort_score(key):
         score = filter_scores.get(key, 0) if filter_scores else 0

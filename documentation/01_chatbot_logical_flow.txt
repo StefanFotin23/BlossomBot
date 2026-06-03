@@ -19,13 +19,18 @@ Each user's state is tracked persistently (via Redis) using their unique Slack `
 - GENERAL_INQUIRY: Handles small-talk and status questions ("Who are you?", "Are you there?"). It returns instant, deterministic responses based on predefined categories.
 - RESTART: Allows the user to manually clear their cart and memory, reverting the state to GREETING.
 
-3. INTENT ROUTING
-The core of the interaction lies in the `classify_intent` function (`app/llm_agent.py`).
-- Every incoming Slack message is sent to the LLM along with the user's current state.
-- The system prompt instructs the LLM to map the input to exactly one of the predefined state names.
-- The LLM temperature is strictly set to 0.0 to guarantee determinism, eliminate hallucinations, and ensure minimal latency.
+3. INTENT ROUTING & MULTI-INTENT DECOMPOSITION
+The core of the interaction lies in the `decompose_intents` and `classify_intent` functions (`app/llm_agent.py`).
+
+- COMMAND FAST-PATH (DETERMINISTIC BYPASS): To ensure maximum reliability and speed, BlossomBot implements a deterministic command layer that intercepts messages BEFORE they reach the LLM. 
+    * Core actions like numeric selection ("1", "2"), direct confirmations ("da", "ok", "vreau"), cart viewing ("cosul meu"), and catalog discovery ("recomanda") are routed instantly based on keywords and current user state.
+    * This bypasses LLM latency, reduces costs, and eliminates "Search Hallucinations" where short commands were previously misclassified as searches.
+- MULTI-INTENT DECOMPOSITION: BlossomBot bridges the gap between complex human speech and atomic bot actions. If a user says "Salut, arată-mi trandafiri", the system splits the message into two tasks: GREETING and SEARCH_PRODUCTS. 
+    * These tasks are executed sequentially. The first task is handled immediately, while subsequent tasks are stored in a `deferred_tasks` queue and automatically triggered in a recursive loop to maintain conversation flow.
+- "THINKING" INDICATORS: For operations requiring heavy AI processing (non-fast-path), the bot immediately responds with "🌸 Analizez cererea ta..." to acknowledge the user and manage perceived latency during the 2-5 second LLM round-trip.
 
 4. SHOPPING CART AND CONTEXT RESET ("HARD RESET")
-- The `cart` array lives inside the user's state dictionary. It accumulates items across the conversation.
+- The `cart` array lives inside the user's state dictionary. It accumulates items across the conversation. 
+- PERSISTENT SEARCH MEMORY: Unlike basic bots, BlossomBot preserves the `last_results` in memory even after an item is added to the cart. This allows users to perform multi-item selections from a single search result (e.g., "Add the first one... now add the second one") without needing to re-execute the search.
 - Submitting an order acts as a major conversational checkpoint. Since Slack does not offer a native "Clear Chat" feature for bots, BlossomBot responds with a strong visual delimiter (━━━━━━━━) to indicate order completion.
 - Following this visual cue, the memory associated with the `user_id` is overwritten with an empty dictionary. This "Hard Reset" ensures that the next interaction starts with a clean slate, unaffected by previous filters or cart items.
