@@ -119,6 +119,15 @@ restart-all:
 
 restart-cluster: delete-cluster create-cluster up
 
+# Suportă atât 'make scale-chat n=3' cât și 'make scale-chat 3'
+scale-chat:
+	@replicas=$(if $(filter-out $@,$(MAKECMDGOALS)),$(filter-out $@,$(MAKECMDGOALS)),$(or $(n),1)); \
+	kubectl scale deployment chat-app --replicas=$$replicas
+
+# Înghite orice argumente poziționale pentru a nu da eroare de "No rule to make target"
+%:
+	@:
+
 # ==============================================================================
 # DOCKER HUB / PRODUCTION WORKFLOW (for building and pushing, or for local Kind load)
 # ==============================================================================

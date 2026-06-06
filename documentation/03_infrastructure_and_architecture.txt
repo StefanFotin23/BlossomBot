@@ -37,3 +37,11 @@ Slack requires an acknowledgment response within 3 seconds, making performance c
 The `/healthz` endpoint aggregates the status of critical dependencies (Qdrant, Redis, RabbitMQ) at runtime. 
 - A failure in any component is logged and returns a 500 status code, triggering Kubernetes Liveness/Readiness probes to restart or isolate the failing Pod.
 - If Redis becomes completely unreachable, the `app/bot.py` logic automatically falls back to an internal Python dictionary (`_local_user_states`), allowing the bot to continue functioning in a degraded but operational mode.
+
+5. HORIZONTAL SCALABILITY & STATE SYNCHRONIZATION
+BlossomBot is architected for horizontal scaling (Scale-Out). The application can run multiple replicas (Pods) simultaneously without conversational desynchronization:
+
+- STATELESS APPLICATION LAYER: The chat-app pods do not store user session data in local memory. All conversational states, locks, and task buffers are stored in a central Redis instance.
+- DISTRIBUTED LOCKING: Atomic operations (like preventing a user from sending two simultaneous requests) are managed via global Redis keys (`busy:{user_id}`). This ensures that even if Message 1 hits Pod A and Message 2 hits Pod B, the sequencing remains consistent.
+- LOAD BALANCING: Standard Kubernetes Services distribute incoming Slack events across all available replicas, maximizing throughput and providing high availability (HA).
+- PRECOMPUTATION CONSISTENCY: The Shadow Task Buffer is also stored in Redis (`buffer:{user_id}`), allowing one pod to precompute a response and another pod to deliver it instantly, achieving zero-latency resumption across the entire cluster.

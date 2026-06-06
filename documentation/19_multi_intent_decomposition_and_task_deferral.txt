@@ -14,9 +14,18 @@ Instead of a simple classification, the system uses a specialized LLM prompt (`d
 The bot processes tasks one by one to ensure the State Machine remains consistent.
 - Blocking Actions: If a task leads to a state requiring manual confirmation (like adding to cart), the execution "pauses."
 - Resumption: Once the user provides the confirmation ("Yes"), the bot automatically triggers the next task in the `deferred_tasks` queue.
+- EMPATHETIC BRIDGE PHRASES: To make the transition feel natural, BlossomBot uses Romanian bridge phrases like "Acum să ne ocupăm de: [task]..." or "Trecem la: [task]...". This informs the user that the bot is still working on their complex request.
 - Fluid Execution: If tasks are non-blocking (e.g., "Hello" + "Show me the catalog"), the bot executes them immediately in sequence, sending multiple messages in a single turn.
 
 4. BENEFITS
 - Zero Data Loss: No part of a complex user request is ever ignored.
 - Human-Like Flow: The bot feels more intelligent and attentive, mimicking a real sales assistant who can multitask.
 - Context Retention: By splitting the text, the RAG engine receives cleaner queries for search tasks.
+
+5. SHADOW TASK BUFFERING (PARALLEL BACKEND, SEQUENTIAL FRONTEND)
+To eliminate latency during multi-part requests, BlossomBot implements "Shadow Task Buffering":
+
+- BACKGROUND PRECOMPUTATION: While a user is interacting with the first part of their request (e.g., confirming a rose choice), a background process (`fill_task_buffer`) identifies the next deferred task (e.g., "searching for wine").
+- ISOLATED CACHING: The results for the next task are pre-computed (LLM extraction + RAG search) and saved into an isolated Redis key (`buffer:{user_id}`). This prevents any chance of background tasks corrupting the user's current session or cart.
+- ZERO-LATENCY RESUMPTION: When the user is ready to move to the next item, the bot retrieves the pre-computed response from the shadow buffer. This results in an **instant** delivery of the next results, bypassing the 2-5 second wait time typically required for AI processing.
+- SMART INVALIDATION: If a user changes their mind or starts a completely new search, the shadow buffer is automatically invalidated and discarded to ensure conversational consistency.

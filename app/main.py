@@ -110,8 +110,8 @@ async def check_redis_health():
 @app.on_event("startup")
 async def startup_event():
     logger.info("Application starting up...")
-    # Pornim worker-ul de fundal pentru sarcinile AI secvențiale (QoS Queue)
-    asyncio.create_task(bot.background_task_worker(slack_app.client, publish_purchase))
+    # Pornim multiple workers pentru sarcinile AI (QoS Queue)
+    await bot.start_task_workers(count=10, client=slack_app.client, publish_purchase_callback=publish_purchase)
 
 # --- API Endpoints ---
 @app.post("/slack/events")
