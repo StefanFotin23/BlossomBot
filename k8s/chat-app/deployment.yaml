@@ -5,7 +5,7 @@ metadata:
   labels:
     app: chat-app
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: chat-app
@@ -67,6 +67,10 @@ spec:
           value: "qdrant"
         - name: QDRANT_PORT
           value: "6333"
+        - name: REDIS_HOST
+          value: "redis"
+        - name: REDIS_PORT
+          value: "6379"
         resources:
           requests:
             cpu: "500m"

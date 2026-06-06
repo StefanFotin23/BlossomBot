@@ -25,62 +25,76 @@ def getApiClient(api_key: str = None):
 # ==========================================
 # 1. CONVERSATION ROUTER (State Classification)
 # ==========================================
+def manual_fallback(msg: str, current: str) -> List[Dict[str, str]]:
+    # Normalizare text pentru matching (fără punctuație la final, lowercase)
+    msg_cl = re.sub(r'[!?.,]+$', '', msg.lower().strip())
+    words = msg_cl.split()
+
+    K_GREET = ["salut", "buna", "bună", "hei", "hello", "hi", "hey", "salutare", "ciao"]
+    K_IDENTITY = ["cine esti", "cine ești", "ce ești", "ce faci", "cine sunteti", "cine sunteți"]
+    K_SEARCH = ["caut", "vreau", "buchet", "flori", "recomand", "lalele", "trandafiri", "cadou", "ceva", "aranjament", "plante", "arata-mi", "arată-mi", "mai ieftin", "mai scump", "altceva", "vin", "prosecco", "ciocolata", "dulce", "martisoare", "mărțișoare", "mimosa", "mimoza"]
+    K_DETAILS = ["detalii", "info", "informatii", "informații", "descriere", "mai mult", "povesteste", "despre"]
+    K_PURCHASE = ["iau", "cumpar", "cumpăr", "adauga", "adaugă", "il vreau", "îl vreau", "baga", "bagă", "pune"]
+    K_SELECTION = ["primul", "prima", "doilea", "treilea", "varianta", "v1", "v2", "v3", "asta", "aceasta"]
+    K_FINISH = ["gata", "final", "finalizeaza", "finalizează", "finalizez", "trimite", "atat", "atât", "am terminat", "stop", "plateste", "plătește", "checkout"]
+    K_RESTART = ["restart", "reset", "de la capat", "anuleaza tot", "anulează tot", "sterge tot", "șterge tot"]
+    K_CATALOG = ["produse", "catalog", "aveti", "aveți", "oferta", "oferiti", "recomanda", "recomandări", "recomandari", "recomandati-mi", "ce-mi recomanzi", "ce-mi recomandați"]
+    K_CONFIRM = ["da", "yes", "ok", "k", "sigur", "perfect", "confirm", "corect", "exact", "afirmativ", "da te rog"]
+    K_CART = ["cos", "coș", "cosul", "coșul", "cosul meu", "coșul meu", "cart"]
+
+    if any(w in K_RESTART for w in [msg_cl] + words): return [{"text": msg, "intent": "RESTART"}]
+    if any(w in K_FINISH for w in [msg_cl] + words): return [{"text": msg, "intent": "FINISH_ORDER"}]
+    
+    # Priority 1: Purchase/Selection
+    is_small_digit = re.search(r'\b[1-9]\b', msg_cl)
+    has_sel_word = any(w in K_SELECTION for w in words)
+    has_pur_word = any(w in K_PURCHASE for w in words)
+    
+    if has_pur_word or has_sel_word or (len(words) <= 3 and is_small_digit):
+        return [{"text": msg, "intent": "PURCHASE_INTENT"}]
+    
+    # Priority 2: Cart View
+    if any(p in msg_cl for p in ["arata-mi cosul", "arată-mi coșul"]) or any(w in K_CART for w in words):
+        if not any(w in ["baga", "pune", "adauga", "adaugă"] for w in words):
+            return [{"text": msg, "intent": "VIEW_CART"}]
+
+    if any(w in K_CATALOG for w in words): return [{"text": msg, "intent": "CATALOG_DISCOVERY"}]
+    
+    # Priority 3: Search
+    if any(w in K_SEARCH for w in words): return [{"text": msg, "intent": "SEARCH_PRODUCTS"}]
+
+    # Priority 4: Confirmations
+    if any(w in K_CONFIRM for w in [msg_cl] + words):
+            if current in ["SEARCH_PRODUCTS", "PRODUCT_DETAILS", "PURCHASE_INTENT", "AWAITING_CONFIRMATION"]:
+                return [{"text": msg, "intent": "PURCHASE_INTENT"}]
+            return [{"text": msg, "intent": "CONTINUE"}]
+
+    if any(w in K_DETAILS for w in words): return [{"text": msg, "intent": "PRODUCT_DETAILS"}]
+    
+    if msg_cl in K_GREET or any(p in msg_cl for p in K_IDENTITY) or (words and words[0] in K_GREET and len(words) <= 3):
+        return [{"text": msg, "intent": "GREETING"}]
+    
+    return [{"text": msg, "intent": "SEARCH_PRODUCTS"}]
+
 def decompose_intents(user_message: str, current_state: str = "GREETING", api_key: str = None) -> List[Dict[str, str]]:
     """Descompune un mesaj complex în mai multe acțiuni atomice."""
     client = getApiClient(api_key)
     
-    def manual_fallback(msg, current):
-        msg_cl = msg.lower().strip()
-        words = msg_cl.split()
-
-        K_GREET = ["salut", "buna", "bună", "hei", "hello", "hi", "hey", "salutare", "ciao"]
-        K_SEARCH = ["caut", "vreau", "buchet", "flori", "recomand", "lalele", "trandafiri", "cadou", "ceva", "aranjament", "plante", "arata-mi", "arată-mi"]
-        K_DETAILS = ["detalii", "info", "informatii", "informații", "descriere", "mai mult", "povesteste", "despre"]
-        K_PURCHASE = ["iau", "cumpar", "cumpăr", "adauga", "adaugă", "primul", "doilea", "treilea", "prima", "varianta", "1", "2", "3"]
-        K_FINISH = ["gata", "final", "finalizeaza", "finalizează", "trimite", "atat", "atât", "am terminat", "stop", "plateste", "plătește", "checkout"]
-        K_RESTART = ["restart", "reset", "de la capat", "anuleaza tot", "anulează tot", "sterge tot", "șterge tot"]
-        K_CATALOG = ["produse", "catalog", "aveti", "aveți", "oferta", "oferiti", "recomanda", "recomandări", "recomandari", "recomandati-mi", "ce-mi recomanzi", "ce-mi recomandați"]
-        K_CONFIRM = ["da", "yes", "ok", "k", "sigur", "perfect", "confirm"]
-        K_CART = ["cos", "coș", "cosul", "coșul", "cosul meu", "coșul meu", "cart", "arata-mi cosul", "arată-mi coșul"]
-
-        if any(w in K_RESTART for w in [msg_cl] + words): return [{"text": msg, "intent": "RESTART"}]
-        if any(w in K_FINISH for w in [msg_cl] + words): return [{"text": msg, "intent": "FINISH_ORDER"}]
-        if any(p in msg_cl for p in ["arata-mi cosul", "arată-mi coșul"]) or any(w in K_CART for w in words): return [{"text": msg, "intent": "VIEW_CART"}]
-        if any(w in K_CATALOG for w in words): return [{"text": msg, "intent": "CATALOG_DISCOVERY"}]
-        
-        # Check for numbers/selections FIRST (high priority)
-        if re.search(r'^(\d+)$', msg_cl) or any(w in ["primul", "prima", "doilea", "treilea", "varianta"] for w in words):
-            return [{"text": msg, "intent": "PURCHASE_INTENT"}]
-        
-        if any(w in K_CONFIRM for w in [msg_cl] + words) and current in ["SEARCH_PRODUCTS", "PRODUCT_DETAILS", "PURCHASE_INTENT"]:
-             return [{"text": msg, "intent": "PURCHASE_INTENT"}]
-
-        if any(w in K_SEARCH for w in words): return [{"text": msg, "intent": "SEARCH_PRODUCTS"}]
-        if any(w in K_PURCHASE for w in [msg_cl] + words): return [{"text": msg, "intent": "PURCHASE_INTENT"}]
-        if any(w in K_DETAILS for w in words): return [{"text": msg, "intent": "PRODUCT_DETAILS"}]
-        
-        # Check greetings only if it's the exact word or first word (and short message)
-        if msg_cl in K_GREET or (words and words[0] in K_GREET and len(words) <= 3): return [{"text": msg, "intent": "GREETING"}]
-        
-        return [{"text": msg, "intent": "UNKNOWN"}]
-
-
     if not client: return manual_fallback(user_message, current_state)
 
-    states_desc = "GREETING, SEARCH_PRODUCTS, CATALOG_DISCOVERY, PRODUCT_DETAILS, PURCHASE_INTENT, VIEW_CART, FINISH_ORDER, RESTART"
+    states_desc = "GREETING, SEARCH_PRODUCTS, CATALOG_DISCOVERY, PRODUCT_DETAILS, PURCHASE_INTENT, VIEW_CART, FINISH_ORDER, RESTART, CONTINUE"
 
     system_prompt = (
-        "Ești un expert în descompunerea mesajelor pentru un chatbot de florărie.\n"
-        "Analizează DACĂ mesajul are mai multe intenții și împarte-l în sarcini atomice.\n"
-        "IMPORTANT:\n"
-        "1. Nu ignora nicio parte a mesajului utilizatorului.\n"
-        "2. Mesajele de tip 'Vreau să cumpăr [produs]' sau 'Vreau [produs]' reprezintă o SINGURĂ intenție: SEARCH_PRODUCTS.\n"
-        "3. Mesajele de tip 'Bună, vreau [produs]' reprezintă DOUĂ intenții: GREETING și SEARCH_PRODUCTS.\n"
-        "4. Nu clasifica întregul mesaj ca GREETING dacă există o cerere de produse.\n"
-        "Exemplu: 'Bună, vreau trandafiri' -> \n"
-        "[{\"text\": \"Bună\", \"intent\": \"GREETING\"}, {\"text\": \"vreau trandafiri\", \"intent\": \"SEARCH_PRODUCTS\"}]\n"
+        "Ești un expert în descompunerea mesajelor pentru un chatbot de florărie. "
+        "Descompune mesajul utilizatorului în sarcini atomice.\n"
+        "REGULI CRITICE:\n"
+        "1. PURCHASE_INTENT: Când alege un produs (ex: 'primul', 'da', 'pune-l în coș') SAU când specifică cantitatea pentru o alegere (ex: 'vreau 5 bucăți').\n"
+        "2. Dacă utilizatorul specifică un număr lângă o alegere (ex: '1, 5 bucăți'), NU crea o sarcină SEARCH_PRODUCTS pentru număr. Include totul în PURCHASE_INTENT.\n"
+        "3. SEARCH_PRODUCTS: Când caută produse noi.\n"
+        "Răspunde EXCLUSIV cu un JSON format dintr-o LISTĂ de OBIECTE.\n"
+        "Fiecare obiect TREBUIE să aibă cheile: 'text' (mesajul original filtrat pentru acea sarcină) și 'intent' (numele stării).\n"
         f"Intenții posibile: {states_desc}\n"
-        "Răspunde DOAR cu un JSON (listă de obiecte)."
+        "Exemplu: [{\"text\": \"vreau 5 bucăți din prima variantă\", \"intent\": \"PURCHASE_INTENT\"}]"
     )
 
     try:
@@ -91,7 +105,17 @@ def decompose_intents(user_message: str, current_state: str = "GREETING", api_ke
         )
         out = re.sub(r"```json|```", "", response.text).strip()
         tasks = json.loads(out)
-        return tasks if isinstance(tasks, list) else [tasks]
+        if not isinstance(tasks, list): tasks = [tasks]
+        
+        # Validare structurală strictă
+        validated = []
+        for t in tasks:
+            if isinstance(t, dict) and "intent" in t:
+                # Ne asigurăm că 'text' există mereu pentru a evita KeyError în bot.py
+                if "text" not in t or not t["text"]: t["text"] = user_message
+                validated.append(t)
+        
+        return validated if validated else manual_fallback(user_message, current_state)
     except Exception as e:
         logger.warning(f"Intent Decomposition failed ({e}), using fallback.")
         return manual_fallback(user_message, current_state)

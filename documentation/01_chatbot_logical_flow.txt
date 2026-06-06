@@ -19,18 +19,24 @@ Each user's state is tracked persistently (via Redis) using their unique Slack `
 - GENERAL_INQUIRY: Handles small-talk and status questions ("Who are you?", "Are you there?"). It returns instant, deterministic responses based on predefined categories.
 - RESTART: Allows the user to manually clear their cart and memory, reverting the state to GREETING.
 
-3. INTENT ROUTING & MULTI-INTENT DECOMPOSITION
+3. INTENT ROUTING & SMART UX FALLBACKS
 The core of the interaction lies in the `decompose_intents` and `classify_intent` functions (`app/llm_agent.py`).
 
 - COMMAND FAST-PATH (DETERMINISTIC BYPASS): To ensure maximum reliability and speed, BlossomBot implements a deterministic command layer that intercepts messages BEFORE they reach the LLM. 
-    * Core actions like numeric selection ("1", "2"), direct confirmations ("da", "ok", "vreau"), cart viewing ("cosul meu"), and catalog discovery ("recomanda") are routed instantly based on keywords and current user state.
-    * This bypasses LLM latency, reduces costs, and eliminates "Search Hallucinations" where short commands were previously misclassified as searches.
-- MULTI-INTENT DECOMPOSITION: BlossomBot bridges the gap between complex human speech and atomic bot actions. If a user says "Salut, arată-mi trandafiri", the system splits the message into two tasks: GREETING and SEARCH_PRODUCTS. 
-    * These tasks are executed sequentially. The first task is handled immediately, while subsequent tasks are stored in a `deferred_tasks` queue and automatically triggered in a recursive loop to maintain conversation flow.
-- "THINKING" INDICATORS: For operations requiring heavy AI processing (non-fast-path), the bot immediately responds with "🌸 Analizez cererea ta..." to acknowledge the user and manage perceived latency during the 2-5 second LLM round-trip.
+- SMART SELECTION PIVOT: If a user attempts to select a product (PURCHASE_INTENT) but the previous search results were lost or are empty, the bot proactively **pivots to a search mode**. Instead of an error, it uses the user's message as a search query to find the products they likely intended to pick.
+- UX-FIRST SEARCH FALLBACK: If a specific product search returns zero results, the bot automatically triggers a fallback to "Popular Products". This ensures the user is always presented with options and prevents "dead-end" conversations.
+- MULTI-INTENT DECOMPOSITION: BlossomBot splits complex messages (e.g., "Salut, arată-mi trandafiri") into atomic tasks. These tasks are executed sequentially via a background QoS queue.
+- "THINKING" INDICATORS: For operations requiring heavy AI processing, the bot manages expectations by acknowledging the user before the LLM round-trip.
 
 4. SHOPPING CART AND CONTEXT RESET ("HARD RESET")
 - The `cart` array lives inside the user's state dictionary. It accumulates items across the conversation. 
-- PERSISTENT SEARCH MEMORY: Unlike basic bots, BlossomBot preserves the `last_results` in memory even after an item is added to the cart. This allows users to perform multi-item selections from a single search result (e.g., "Add the first one... now add the second one") without needing to re-execute the search.
-- Submitting an order acts as a major conversational checkpoint. Since Slack does not offer a native "Clear Chat" feature for bots, BlossomBot responds with a strong visual delimiter (━━━━━━━━) to indicate order completion.
-- Following this visual cue, the memory associated with the `user_id` is overwritten with an empty dictionary. This "Hard Reset" ensures that the next interaction starts with a clean slate, unaffected by previous filters or cart items.
+- PERSISTENT SEARCH MEMORY: BlossomBot preserves the `last_results` in memory even after an item is added to the cart, allowing multi-item selections from a single search.
+- Submitting an order acts as a major conversational checkpoint. BlossomBot responds with a strong visual delimiter (━━━━━━━━) to indicate order completion.
+- Following this visual cue, the memory associated with the `user_id` is overwritten with an empty dictionary. This "Hard Reset" ensures that the next interaction starts with a clean slate.
+
+5. CONVERSATIONAL PACING & CONTINUATIONS
+To maintain a natural rhythm in multi-part conversations, BlossomBot implements strategic pacing and acknowledgment triggers:
+
+- THE CONTINUE INTENT: Users can manually trigger the next item in their `deferred_tasks` queue using keywords like "ok" or "continuă".
+- EMBEDDED CONTEXT RESUMPTION: When a task is resumed after a pause, the bot provides an explicit bridge message: "Acum să ne ocupăm de: [următoarea cerință]...".
+- PACED DELIVERY: A strategic 1.0 - 1.5 second delay is introduced between sequential task executions. This prevents "Message Flooding" and ensures the user has enough time to read the previous response.

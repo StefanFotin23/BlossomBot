@@ -9,18 +9,22 @@ Operating an LLM-based chatbot introduces unique failure modes, primarily relate
 Free-tier or high-traffic API models (like Gemini) often return `429 RESOURCE_EXHAUSTED` errors when limits are reached.
 - Custom Exceptions: In `app/llm_agent.py`, any API exception containing "429", "503", or "UNAVAILABLE" triggers a custom `GeminiOverloadedError`.
 - Fallback Routing: If the `classify_intent` function hits this error, it immediately falls back to a hardcoded Regex-based routing system (`manual_fallback`). This allows basic commands (Greetings, Restart, basic searches) to function even when the AI API is completely down.
-- Asynchronous Retries: If the RAG filter extraction fails due to rate limits, the bot sends a polite holding message to the user ("I am currently busy, I'll get back to you in a few seconds..."). Simultaneously, it spawns an `asyncio.create_task(retry_recommendations)` background job. This task attempts the LLM request up to 10 times with a 5-second delay, ensuring the user ultimately receives their product recommendations without needing to retype their query.
+- IN-PLACE WORKER RETRIES (EXPONENTIAL BACKOFF): If a background worker hits a rate limit, it does not release the user lock or drop the task. Instead, it waits (3s, 6s, 9s) and retries the task in-place. This preserves the conversational sequence and guarantees the user eventually receives their results without re-typing.
 
-3. LLM OUTPUT PARSING AND VALIDATION
+3. SLACK EVENT IDEMPOTENCY
+Slack often retries events if the bot doesn't respond within 3 seconds. Under heavy load, this can cause "Double-Ordering" or "Corrupted Context".
+- IDEMPOTENCY LAYER: BlossomBot uses a dedicated Redis key `evt:{msg_id}` (10-minute TTL) to track every incoming event. If a retry arrives while the original is still being processed, it is **instantly dropped**, ensuring state integrity and preventing redundant AI calls.
+
+4. LLM OUTPUT PARSING AND VALIDATION
 LLMs can occasionally format their output unexpectedly, even with strict prompts and zero temperature.
 - JSON Stripping: The outputs from functions like `extract_filters`, `extract_purchase_selection`, and `parse_confirmation` are aggressively sanitized using Regex (`re.sub(r"```json|```", "", ...).strip()`) to remove Markdown code blocks before calling `json.loads()`.
-- Type Checking: If the LLM mistakenly returns a JSON List `[{...}]` instead of a JSON Object `{...}` for purchase selections, the code explicitly checks `if isinstance(parsed, list)` and extracts the first dictionary, preventing `AttributeError` crashes downstream in the state machine.
+- STRUCTURAL HARDENING: Functions like `decompose_intents` now explicitly validate that the AI output is a list of dictionaries and repair missing keys (like `text` or `intent`) before they reach the main bot logic.
 - Safe Defaults: Every LLM extraction function wraps its execution in a `try/except` block and returns a safe default (e.g., `{"confirmed": False}`, `{"index": 0, "quantity": 1}`, or empty filters) upon failure, ensuring the application never crashes due to bad AI outputs.
 
-4. INFRASTRUCTURE HEALTH PROBES
+5. INFRASTRUCTURE HEALTH PROBES
 Kubernetes relies on the `/healthz` endpoint to determine if a pod is healthy.
 - The `app/main.py` script aggregates asynchronous checks (`check_rabbitmq_health`, `check_qdrant_health`, `check_redis_health`).
 - If any internal service throws an exception or fails to ping, the `/healthz` endpoint returns a 500 Internal Server Error. This triggers Kubernetes Liveness/Readiness probes to take the pod out of the load balancer rotation or restart it, ensuring users are never routed to a broken instance.
 
-5. LOGGING HYGIENE
+6. LOGGING HYGIENE
 To ensure debugging remains effective, noisy third-party HTTP logs (from `uvicorn.access`, `httpx`, `httpcore`, `urllib3`) are strictly suppressed to the `WARNING` level in `app/logger.py`. This guarantees that when the application runs in `DEBUG` mode, operators only see highly relevant, formatted state-machine traces and RAG metadata.

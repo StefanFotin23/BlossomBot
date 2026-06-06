@@ -10,13 +10,14 @@ To support horizontal scaling (running multiple replicas of the `chat-app` pod) 
 - Key Structure: States are stored as JSON strings with the key format `user:{user_id}`, ensuring complete isolation between different Slack users interacting with the bot simultaneously.
 - TTL (Time To Live): To prevent memory leaks and clear abandoned carts, every update to a user's state in Redis sets an expiration timer (TTL) of 24 hours (`ex=3600*24`). If a user does not interact with the bot for a day, their session is automatically purged.
 
-3. STATE PAYLOAD STRUCTURE
+3. STATE PAYLOAD STRUCTURE & SELF-HEALING
 The JSON object stored for each user contains:
 - `state`: The current node in the state machine (e.g., `SEARCH_PRODUCTS`, `AWAITING_CONFIRMATION`).
 - `history`: An array of previous messages and states, passed to the LLM to provide conversational context.
 - `filter_scores`: A dictionary mapping filter keys (like `price_max`) to integer scores. These scores dictate the RAG engine's dynamic relaxation logic.
 - `cart`: An array of product objects (name, quantity, price) representing the user's pending order.
 - `pending_item`: A temporary object holding the item currently awaiting Yes/No confirmation from the user.
+- SELF-HEALING MECHANISM: BlossomBot implements a "Structure Repair" layer. Every time a user's state is read from Redis, the system automatically verifies and repairs any missing or corrupted keys (e.g., converting a `None` cart to an `[]`). This ensures the state machine never crashes due to unexpected data types.
 
 4. FALLBACK MECHANISM (RESILIENCE)
 If the Redis service becomes unreachable (e.g., due to a network partition or pod crash), the application is designed to degrade gracefully rather than fail entirely.
