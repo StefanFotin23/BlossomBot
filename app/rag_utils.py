@@ -234,6 +234,7 @@ async def sota_hybrid_search(state_json: Dict[str, Any], filter_scores: Dict[str
         if val is None or str(val).strip() == "" or str(val).lower() == "nan": return None
         try:
             if key == "price_max" and not is_negative: return FieldCondition(key="price", range=Range(lte=float(val)))
+            if key == "price_min" and not is_negative: return FieldCondition(key="price", range=Range(gte=float(val)))
             if key == "category": return FieldCondition(key="category", match=MatchValue(value=str(val)))
             if key == "dimensiune": return FieldCondition(key="dimensiune", match=MatchValue(value=str(val)))
             if key == "event_type": return FieldCondition(key="event_type", match=MatchValue(value=str(val)))
@@ -257,7 +258,7 @@ async def sota_hybrid_search(state_json: Dict[str, Any], filter_scores: Dict[str
     query_vector = query_vector.tolist()
 
     all_active_keys = list(conditions_map.keys()) + list(negative_map.keys())
-    fallback_order = ["price_max", "event_type", "colors", "dimensiune", "flowers_type", "category"]
+    fallback_order = ["price_max", "price_min", "event_type", "colors", "dimensiune", "flowers_type", "category"]
 
     def get_sort_score(key):
         score = filter_scores.get(key, 0) if filter_scores else 0
