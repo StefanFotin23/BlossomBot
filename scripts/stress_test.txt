@@ -1,714 +1,1518 @@
-=== BlossomBot ULTIMATE Escalation Test (2026-06-06 16:29:36) ===
+=== BlossomBot ULTIMATE Escalation Test (2026-06-07 19:32:28) ===
 
-[16:29:41] HEALTHY USER HEALTHY_9_e035: Buna
-[16:29:41] BOT: Bună! Cu ce te pot ajuta astăzi?
+[19:32:32] HEALTHY USER HEALTHY_1_ec88: Buna!
+[19:32:32] BOT: Bună! Cu ce te pot ajuta astăzi?
 --------------------------------------------------
-[16:29:43] HEALTHY USER HEALTHY_2_0f9c: Hei
-[16:29:43] BOT: Bună! Cu ce te pot ajuta astăzi?
+[19:32:32] HEALTHY USER HEALTHY_4_5a3c: Buna
+[19:32:32] BOT: Bună! Cu ce te pot ajuta astăzi?
 --------------------------------------------------
-[16:29:43] HEALTHY USER HEALTHY_12_0856: Buna
-[16:29:43] BOT: Bună! Cu ce te pot ajuta astăzi?
+[19:32:33] HEALTHY USER HEALTHY_11_85e5: Salut
+[19:32:33] BOT: Bună! Cu ce te pot ajuta astăzi?
 --------------------------------------------------
-[16:29:44] HEALTHY USER HEALTHY_5_160a: Cine esti?
-[16:29:44] BOT: Sunt BlossomBot 🌸, asistentul tău virtual pentru flori și cadouri superbe! Cu ce te pot ajuta?
+[19:32:33] HEALTHY USER HEALTHY_2_c96b: Hei
+[19:32:33] BOT: Bună! Cu ce te pot ajuta astăzi?
 --------------------------------------------------
-[16:29:44] HEALTHY USER HEALTHY_10_a66a: Vreau martisoare din rasina galbene
-[16:29:44] BOT: 🌸 Ocupat. Poziția în coadă...
+[19:32:36] HEALTHY USER HEALTHY_3_c1e9: Salutare
 --------------------------------------------------
-[16:29:45] HEALTHY USER HEALTHY_6_4305: Salut
-[16:29:45] BOT: Bună! Cu ce te pot ajuta astăzi?
+[19:32:36] HEALTHY USER HEALTHY_12_707c: Buna
+[19:32:36] BOT: Bună! Cu ce te pot ajuta astăzi?
 --------------------------------------------------
-[16:29:47] HEALTHY USER HEALTHY_8_38a2: Vreau trandafiri rosii
-[16:29:47] BOT: 🌸 Ocupat. Poziția în coadă...
+[19:32:36] HEALTHY USER HEALTHY_9_2380: Buna
+[19:32:36] BOT: Bună! Cu ce te pot ajuta astăzi?
 --------------------------------------------------
-[16:29:49] HEALTHY USER HEALTHY_13_f5d9: Vreau ceva sub 100 lei
-[16:29:49] BOT: 🌸 Ocupat. Poziția în coadă...
+[19:32:36] HEALTHY USER HEALTHY_0_dbab: Salut
+[19:32:36] BOT: Bună! Cu ce te pot ajuta astăzi?
 --------------------------------------------------
-[16:29:49] HEALTHY USER HEALTHY_4_a9a7: Buna
-[16:29:49] BOT: Bună! Cu ce te pot ajuta astăzi?
+[19:32:36] HEALTHY USER HEALTHY_5_7664: Cine esti?
 --------------------------------------------------
-[16:29:49] HEALTHY USER HEALTHY_1_c5e6: Buna!
-[16:29:49] BOT: Bună! Cu ce te pot ajuta astăzi?
+[19:32:36] HEALTHY USER HEALTHY_14_444a: Salut, ce mai faci? Arata-mi ce flori aveti azi
 --------------------------------------------------
-[16:29:49] HEALTHY USER HEALTHY_11_75fb: Salut
-[16:29:49] BOT: Bună! Cu ce te pot ajuta astăzi?
+[19:32:36] HEALTHY USER HEALTHY_6_9eaa: Salut
+[19:32:36] BOT: Bună! Cu ce te pot ajuta astăzi?
 --------------------------------------------------
-[16:29:50] HEALTHY USER HEALTHY_7_9d6b: Hei
-[16:29:50] BOT: Bună! Cu ce te pot ajuta astăzi?
+[19:32:36] HEALTHY USER HEALTHY_7_b423: Hei
+[19:32:36] BOT: Bună! Cu ce te pot ajuta astăzi?
 --------------------------------------------------
-[16:29:51] HEALTHY USER HEALTHY_3_373d: Salutare
-[16:29:51] BOT: Bună! Cu ce te pot ajuta astăzi?
+[19:32:37] HEALTHY USER HEALTHY_4_5a3c: ce produse aveti?
 --------------------------------------------------
-[16:29:51] HEALTHY USER HEALTHY_14_2697: Salut, ce mai faci? Arata-mi ce flori aveti azi
-[16:29:51] BOT: 🌸 Ocupat. Poziția în coadă...
+[19:32:37] HEALTHY USER HEALTHY_11_85e5: ce produse aveti?
 --------------------------------------------------
-[16:29:52] HEALTHY USER HEALTHY_0_df70: Salut
-[16:29:52] BOT: Bună! Cu ce te pot ajuta astăzi?
+[19:32:41] HEALTHY USER HEALTHY_7_b423: Vreau cel mai scump si luxos buchet pe care il aveti
 --------------------------------------------------
-[16:29:53] HEALTHY USER HEALTHY_9_e035: Am facut o gafa si trebuie sa imi cer scuze... ceva impresionant
-[16:29:53] BOT: 🌸 Ocupat. Poziția în coadă...
+[19:32:44] HEALTHY USER HEALTHY_5_7664: Ce flori de primavara aveti?
 --------------------------------------------------
-[16:29:54] HEALTHY USER HEALTHY_2_0f9c: vreau un cadou pt mama, sa semene cu florile din gradina
-[16:29:54] BOT: 🌸 Ocupat. Poziția în coadă...
+[19:32:44] HEALTHY USER HEALTHY_13_c0eb: Vreau ceva sub 100 lei
+[19:32:44] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Ambalare Cadou Buchete* - Preț: 15.0 lei
+_Optiunea de ambalare cadou a buchetelor adauga un plus de eleganta oricarui buchet ales. Folosim ambalaje premium, culori asortate si detalii atent alese pentru a transforma buchetul intr-un cadou impecabil prezentat. Perfect pentru momente speciale, aniversari sau atunci cand vrei sa impresionezi cu stil._
+
+2. *Martisor din Rasina cu Floare Naturala Galbena* - Preț: 80.0 lei
+_Uneori, cele mai frumoase vesti de primavara vin in forme simple si pure. Martisorul "Sunny Bloom" este o odÄƒ adusa luminii si optimismului. Designul este unul minimalist si elegant: o floare naturala galbena , cu 5 petale perfect conturate, este asezata central pe un fundal alb cald (nuanta untului/crem deschis) . Aceasta combinatie cromatica cre..._
+
+3. *Bradut Natural "Nordic Light" â€“ Chamaecyparis* - Preț: 100.0 lei
+_Nu ai spatiu pentru un brad mare sau cauti cadoul ideal de Secret Santa? "Nordic Light" este solutia perfecta. Am ales un conifer natural din specia Chamaecyparis (Chiparos), cunoscut pentru coroana sa bogata, verde-crud, si l-am transformat intr-o bijuterie festiva. Bradutul vine gata impodobit cu o ghirlanda discreta de luminite LED (lumina calda..._
+
+
 --------------------------------------------------
-[16:29:54] HEALTHY USER HEALTHY_10_a66a: primul
-[16:29:54] BOT: 🌸 Ocupat. Poziția în coadă...
+[19:32:44] HEALTHY USER HEALTHY_8_a5ec: Vreau trandafiri rosii
+[19:32:44] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Buchet "Grand Amour" â€“ 101 Trandafiri Rosii* - Preț: 1899.0 lei
+_Exista cadouri care plac, si exista cadouri care taie respiratia. Buchetul "Grand Amour", compus din 101 trandafiri rosii , face parte din a doua categorie. Este declaratia suprema de dragoste, un gest grandios care spune "Tu esti unica mea iubire" fara a folosi niciun cuvant. Acest buchet nu este doar un aranjament floral, ci o experienta in sine...._
+
+2. *Aranjament Floral in Cutie Rosie cu Trandafiri si Glob cu Praline* - Preț: 290.0 lei
+_De sarbatori, cele mai frumoase daruri sunt cele care aduc un zambet si un moment de rasfat. Aranjamentul floral in cutie rosie cu trandafiri si glob cu praline este gandit ca un pachet complet de bucurie, ideal pentru a transmite "Sarbatori Fericite" intr-un mod elegant si gustos. Compozitia este realizata intr-o cutie de lemn de culoare rosie, de..._
+
+3. *Buchet flori nasa cu trandafiri portocalii si accente grena* - Preț: 445.0 lei
+_Transforma rolul de nasa intr-o aparitie memorabila cu acest buchet spectaculos, lucrat cu atentie la detalii si texturi. Compozitia florala pentru acest buchet flori nasa cu trandafiri si accente grena este un joc armonios intre lumini si umbre, avand in centru trandafiri de gradina in nuante vibrante de portocaliu (peach fuzz) si corai. Nota de m..._
+
+
 --------------------------------------------------
-[16:29:56] HEALTHY USER HEALTHY_12_0856: Vreau flori albe
-[16:29:56] BOT: 🌸 Ocupat. Poziția în coadă...
+[19:32:45] BURST USER BURST_11_d971: Salut
+[19:32:45] BOT: Bună! Cu ce te pot ajuta astăzi?
 --------------------------------------------------
-[16:29:56] HEALTHY USER HEALTHY_5_160a: Ce flori de primavara aveti?
-[16:29:56] BOT: 🌸 Ocupat. Poziția în coadă...
+[19:32:46] BURST USER BURST_7_4c7a: Hei
+[19:32:46] BOT: Bună! Cu ce te pot ajuta astăzi?
 --------------------------------------------------
-[16:29:57] HEALTHY USER HEALTHY_6_4305: Vreau ceva vesel care sa miroasa frumos
-[16:29:57] BOT: 🌸 Ocupat. Poziția în coadă...
+[19:32:46] BURST USER BURST_2_3c0c: Hei
+[19:32:46] BOT: Bună! Cu ce te pot ajuta astăzi?
 --------------------------------------------------
-[16:29:58] HEALTHY USER HEALTHY_8_38a2: prima varianta
-[16:29:58] BOT: 🌸 Ocupat. Poziția în coadă...
+[19:32:46] BURST USER BURST_22_d766: Hei
+[19:32:46] BOT: Bună! Cu ce te pot ajuta astăzi?
 --------------------------------------------------
-[16:29:58] HEALTHY USER HEALTHY_4_a9a7: ce produse aveti?
-[16:29:58] BOT: 🌸 Ocupat. Poziția în coadă...
+[19:32:46] BURST USER BURST_9_16b4: Buna
+[19:32:46] BOT: Bună! Cu ce te pot ajuta astăzi?
 --------------------------------------------------
-[16:29:59] HEALTHY USER HEALTHY_7_9d6b: Vreau cel mai scump si luxos buchet pe care il aveti
-[16:29:59] BOT: 🌸 Ocupat. Poziția în coadă...
+[19:32:46] BURST USER BURST_3_66df: Salutare
 --------------------------------------------------
-[16:29:59] HEALTHY USER HEALTHY_11_75fb: ce produse aveti?
-[16:29:59] BOT: 🌸 Ocupat. Poziția în coadă...
+[19:32:46] BURST USER BURST_1_b0fb: Buna!
+[19:32:46] BOT: Bună! Cu ce te pot ajuta astăzi?
 --------------------------------------------------
-[16:30:00] HEALTHY USER HEALTHY_13_f5d9: nu, mai ieftin!
-[16:30:00] BOT: 🌸 Ocupat. Poziția în coadă...
+[19:32:47] BURST USER BURST_24_6a30: buna
+[19:32:47] BOT: Bună! Cu ce te pot ajuta astăzi?
 --------------------------------------------------
-[16:30:02] HEALTHY USER HEALTHY_1_c5e6: Vreau niste martisoare si mai vreau si un cadou diferit, nu buchet
-[16:30:02] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:04] HEALTHY USER HEALTHY_3_373d: Vreau un buchet mare dar fara trandafiri si fara lalele
-[16:30:04] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:06] HEALTHY USER HEALTHY_0_df70: Caut ceva special pt o aniversare de 10 ani, buget cam 500 lei
-[16:30:06] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:07] HEALTHY USER HEALTHY_14_2697: al doilea e frumos
-[16:30:07] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:07] HEALTHY USER HEALTHY_2_0f9c: scumpe... ceva sub 250?
-[16:30:07] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:08] BURST USER BURST_22_d819: Hei
-[16:30:08] BOT: Bună! Cu ce te pot ajuta astăzi?
---------------------------------------------------
-[16:30:10] BURST USER BURST_23_a937: vrea flori
-[16:30:10] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:10] BURST USER BURST_21_d972: Buna
-[16:30:10] BOT: Bună! Cu ce te pot ajuta astăzi?
---------------------------------------------------
-[16:30:11] BURST USER BURST_2_f160: Hei
-[16:30:11] BOT: Bună! Cu ce te pot ajuta astăzi?
---------------------------------------------------
-[16:30:12] BURST USER BURST_15_c938: Vreau detalii despre trandafiri
-[16:30:12] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:12] BURST USER BURST_20_aeaa: Salut
-[16:30:12] BOT: Bună! Cu ce te pot ajuta astăzi?
---------------------------------------------------
-[16:30:13] BURST USER BURST_18_2971: Vreau ceva albastru
-[16:30:13] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:14] BURST USER BURST_17_05b4: Vreau trandafiri
-[16:30:14] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:15] BURST USER BURST_14_4c49: Salut, ce mai faci? Arata-mi ce flori aveti azi
-[16:30:15] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:16] BURST USER BURST_8_5194: Vreau trandafiri rosii
-[16:30:16] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:17] BURST USER BURST_9_00b6: Buna
-[16:30:17] BOT: Bună! Cu ce te pot ajuta astăzi?
---------------------------------------------------
-[16:30:18] HEALTHY USER HEALTHY_9_e035: varianta 2 e buna
-[16:30:18] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:19] BURST USER BURST_19_3cb7: Salut, vreau ceva sub 300 lei, fara trandafiri, si sa aiba si ciocolata
-[16:30:19] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:20] BURST USER BURST_13_8bb7: Vreau ceva sub 100 lei
-[16:30:20] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:21] BURST USER BURST_3_199b: Salutare
-[16:30:21] BOT: Bună! Cu ce te pot ajuta astăzi?
---------------------------------------------------
-[16:30:22] BURST USER BURST_12_7f81: Buna
-[16:30:22] BOT: Bună! Cu ce te pot ajuta astăzi?
---------------------------------------------------
-[16:30:22] BURST USER BURST_4_f00d: Buna
-[16:30:22] BOT: Bună! Cu ce te pot ajuta astăzi?
---------------------------------------------------
-[16:30:23] BURST USER BURST_0_4cf6: Salut
-[16:30:23] BOT: Bună! Cu ce te pot ajuta astăzi?
---------------------------------------------------
-[16:30:23] BURST USER BURST_1_0406: Buna!
-[16:30:23] BOT: Bună! Cu ce te pot ajuta astăzi?
---------------------------------------------------
-[16:30:24] BURST USER BURST_16_3814: Hei
-[16:30:24] BOT: Bună! Cu ce te pot ajuta astăzi?
---------------------------------------------------
-[16:30:24] BURST USER BURST_24_241c: buna
-[16:30:24] BOT: Bună! Cu ce te pot ajuta astăzi?
---------------------------------------------------
-[16:30:26] BURST USER BURST_6_a25c: Salut
-[16:30:26] BOT: Bună! Cu ce te pot ajuta astăzi?
---------------------------------------------------
-[16:30:26] BURST USER BURST_5_8ba7: Cine esti?
-[16:30:26] BOT: Sunt BlossomBot 🌸, asistentul tău virtual pentru flori și cadouri superbe! Cu ce te pot ajuta?
---------------------------------------------------
-[16:30:27] BURST USER BURST_11_58ce: Salut
-[16:30:27] BOT: Bună! Cu ce te pot ajuta astăzi?
---------------------------------------------------
-[16:30:28] BURST USER BURST_10_6385: Vreau martisoare din rasina galbene
-[16:30:28] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:28] BURST USER BURST_7_02ff: Hei
-[16:30:28] BOT: Bună! Cu ce te pot ajuta astăzi?
---------------------------------------------------
-[16:30:29] HEALTHY USER HEALTHY_12_0856: detalii despre prima
-[16:30:29] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:29] HEALTHY USER HEALTHY_10_a66a: da
---------------------------------------------------
-[16:30:30] HEALTHY USER HEALTHY_5_160a: prima
-[16:30:30] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:31] HEALTHY USER HEALTHY_6_4305: prima varianta e perfecta
-[16:30:31] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:31] HEALTHY USER HEALTHY_8_38a2: da
---------------------------------------------------
-[16:30:32] HEALTHY USER HEALTHY_11_75fb: primul
-[16:30:32] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:33] HEALTHY USER HEALTHY_13_f5d9: ok, punga cadou e buna
-[16:30:33] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:33] HEALTHY USER HEALTHY_4_a9a7: detalii despre al doilea
-[16:30:33] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:34] HEALTHY USER HEALTHY_7_9d6b: superb, il vreau
-[16:30:34] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:35] HEALTHY USER HEALTHY_1_c5e6: da primul
-[16:30:35] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:30:37] HEALTHY USER HEALTHY_3_373d: al treilea e interesant
-[16:30:37] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:37] BURST USER BURST_22_d819: recomanda
-[16:30:37] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:38] HEALTHY USER HEALTHY_0_df70: varianta 2 e superba
-[16:30:38] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:39] BURST USER BURST_23_a937: primul
-[16:30:39] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:39] BURST USER BURST_21_d972: vreau buchet
-[16:30:39] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:40] BURST USER BURST_2_f160: vreau un cadou pt mama, sa semene cu florile din gradina
-[16:30:40] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:41] HEALTHY USER HEALTHY_2_0f9c: al 2 lea suna bine
-[16:30:41] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:42] HEALTHY USER HEALTHY_14_2697: da
---------------------------------------------------
-[16:30:43] BURST USER BURST_20_aeaa: ceva ieftin
-[16:30:43] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:43] BURST USER BURST_15_c938: acum despre lalele
-[16:30:43] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:44] BURST USER BURST_18_2971: nu aveti? atunci ceva mov
-[16:30:44] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:45] BURST USER BURST_17_05b4: 1
-[16:30:45] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:46] BURST USER BURST_14_4c49: al doilea e frumos
-[16:30:46] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:47] BURST USER BURST_8_5194: prima varianta
-[16:30:47] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:48] BURST USER BURST_9_00b6: Am facut o gafa si trebuie sa imi cer scuze... ceva impresionant
-[16:30:48] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:49] BURST USER BURST_19_3cb7: varianta 2
-[16:30:49] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:50] BURST USER BURST_13_8bb7: nu, mai ieftin!
-[16:30:50] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:51] BURST USER BURST_3_199b: Vreau un buchet mare dar fara trandafiri si fara lalele
-[16:30:51] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:52] BURST USER BURST_12_7f81: Vreau flori albe
-[16:30:52] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:52] BURST USER BURST_4_f00d: ce produse aveti?
-[16:30:52] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:53] BURST USER BURST_0_4cf6: Caut ceva special pt o aniversare de 10 ani, buget cam 500 lei
-[16:30:53] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:53] BURST USER BURST_1_0406: Vreau niste martisoare si mai vreau si un cadou diferit, nu buchet
-[16:30:53] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:54] BURST USER BURST_16_3814: vreau flori rosii
-[16:30:54] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:55] HEALTHY USER HEALTHY_9_e035: da
-[16:30:55] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:30:55] BURST USER BURST_24_241c: ceva cadou
-[16:30:55] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:56] BURST USER BURST_6_a25c: Vreau ceva vesel care sa miroasa frumos
-[16:30:56] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:56] BURST USER BURST_5_8ba7: Ce flori de primavara aveti?
-[16:30:56] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:56] BURST USER BURST_11_58ce: ce produse aveti?
-[16:30:56] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:57] BURST USER BURST_7_02ff: Vreau cel mai scump si luxos buchet pe care il aveti
-[16:30:57] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:58] BURST USER BURST_10_6385: primul
-[16:30:58] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:30:59] HEALTHY USER HEALTHY_12_0856: da
-[16:30:59] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:00] HEALTHY USER HEALTHY_10_a66a: mai vreau si un buchet de mimosa
-[16:31:00] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:01] HEALTHY USER HEALTHY_6_4305: da
-[16:31:01] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:01] HEALTHY USER HEALTHY_8_38a2: gata
-[16:31:01] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:31:01] HEALTHY USER HEALTHY_5_160a: da
-[16:31:01] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:01] HEALTHY USER HEALTHY_13_f5d9: da
---------------------------------------------------
-[16:31:02] HEALTHY USER HEALTHY_4_a9a7: da, vreau 5 bucati
-[16:31:02] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:03] BURST USER BURST_22_d819: 2
-[16:31:03] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:04] HEALTHY USER HEALTHY_11_75fb: da
-[16:31:04] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:05] HEALTHY USER HEALTHY_7_9d6b: da
-[16:31:05] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:06] BURST USER BURST_23_a937: da
---------------------------------------------------
-[16:31:06] BURST USER BURST_21_d972: da
-[16:31:06] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:08] HEALTHY USER HEALTHY_1_c5e6: hai si cu niste ciocolata
-[16:31:08] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:09] BURST USER BURST_2_f160: scumpe... ceva sub 250?
-[16:31:09] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:10] HEALTHY USER HEALTHY_3_373d: da
-[16:31:10] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:11] BURST USER BURST_20_aeaa: 1
-[16:31:11] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:12] HEALTHY USER HEALTHY_0_df70: da, baga in cos
-[16:31:12] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:13] BURST USER BURST_15_c938: acum despre martisoare
-[16:31:13] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:13] BURST USER BURST_18_2971: prima
-[16:31:13] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:13] HEALTHY USER HEALTHY_14_2697: gata
-[16:31:13] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:31:14] BURST USER BURST_17_05b4: da
---------------------------------------------------
-[16:31:15] HEALTHY USER HEALTHY_2_0f9c: da
-[16:31:15] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:15] BURST USER BURST_14_4c49: da
---------------------------------------------------
-[16:31:16] BURST USER BURST_8_5194: da
---------------------------------------------------
-[16:31:17] BURST USER BURST_9_00b6: varianta 2 e buna
-[16:31:17] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:18] BURST USER BURST_19_3cb7: da
---------------------------------------------------
-[16:31:19] BURST USER BURST_13_8bb7: ok, punga cadou e buna
-[16:31:19] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:19] BURST USER BURST_3_199b: al treilea e interesant
-[16:31:19] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:20] BURST USER BURST_12_7f81: detalii despre prima
-[16:31:20] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:21] BURST USER BURST_4_f00d: detalii despre al doilea
-[16:31:21] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:22] BURST USER BURST_0_4cf6: varianta 2 e superba
-[16:31:22] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:23] BURST USER BURST_1_0406: da primul
-[16:31:23] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:24] BURST USER BURST_16_3814: 2
-[16:31:24] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:24] BURST USER BURST_6_a25c: prima varianta e perfecta
-[16:31:24] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:26] BURST USER BURST_24_241c: 2
-[16:31:26] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:26] BURST USER BURST_11_58ce: primul
-[16:31:26] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:27] BURST USER BURST_7_02ff: superb, il vreau
-[16:31:27] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:28] BURST USER BURST_5_8ba7: prima
-[16:31:28] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:28] BURST USER BURST_10_6385: da
---------------------------------------------------
-[16:31:28] HEALTHY USER HEALTHY_9_e035: finalizeaza
-[16:31:28] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:31:29] BURST USER BURST_22_d819: k
-[16:31:29] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:30] HEALTHY USER HEALTHY_12_0856: acum cauta si ceva de ciocolata
-[16:31:30] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:30] HEALTHY USER HEALTHY_6_4305: finalizeaza comanda
-[16:31:30] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:31:31] HEALTHY USER HEALTHY_5_160a: mai arata-mi si niste martisoare
-[16:31:31] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:31] HEALTHY USER HEALTHY_10_a66a: da
---------------------------------------------------
-[16:31:31] BURST USER BURST_23_a937: trimite
-[16:31:31] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:31:32] HEALTHY USER HEALTHY_4_a9a7: mai vreau si vin
-[16:31:32] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:32] BURST USER BURST_21_d972: atat
-[16:31:32] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:31:32] HEALTHY USER HEALTHY_13_f5d9: atat
-[16:31:32] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:31:32] HEALTHY USER HEALTHY_11_75fb: arata-mi cosul
-[16:31:32] BOT: 🛒 Coșul tău este gol momentan. Spune-mi ce flori cauți?
---------------------------------------------------
-[16:31:33] BURST USER BURST_2_f160: al 2 lea suna bine
-[16:31:33] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:34] HEALTHY USER HEALTHY_7_9d6b: pune si praline
-[16:31:34] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:35] BURST USER BURST_20_aeaa: da
-[16:31:35] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:36] HEALTHY USER HEALTHY_1_c5e6: k varianta 2
-[16:31:36] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:36] HEALTHY USER HEALTHY_3_373d: mai aveti pandantive?
-[16:31:36] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:37] BURST USER BURST_15_c938: ia-le pe toate
-[16:31:37] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:37] BURST USER BURST_18_2971: da
---------------------------------------------------
-[16:31:38] BURST USER BURST_17_05b4: Vreau lalele
-[16:31:38] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:39] HEALTHY USER HEALTHY_0_df70: si mai vreau si niste praline
-[16:31:39] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:39] BURST USER BURST_14_4c49: gata
-[16:31:39] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:31:39] BURST USER BURST_8_5194: gata
-[16:31:39] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:31:40] BURST USER BURST_9_00b6: da
-[16:31:40] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:40] HEALTHY USER HEALTHY_2_0f9c: am terminat
-[16:31:40] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:31:41] BURST USER BURST_19_3cb7: mai pune un pandantiv
-[16:31:41] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:42] BURST USER BURST_13_8bb7: da
---------------------------------------------------
-[16:31:46] BURST USER BURST_3_199b: da
-[16:31:46] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:49] BURST USER BURST_12_7f81: da
-[16:31:49] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:50] BURST USER BURST_4_f00d: da, vreau 5 bucati
-[16:31:50] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:51] BURST USER BURST_0_4cf6: da, baga in cos
-[16:31:51] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:51] BURST USER BURST_16_3814: k
-[16:31:51] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:52] BURST USER BURST_1_0406: hai si cu niste ciocolata
-[16:31:52] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:53] BURST USER BURST_6_a25c: da
-[16:31:53] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:54] BURST USER BURST_24_241c: dap
-[16:31:54] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:55] BURST USER BURST_11_58ce: da
-[16:31:55] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:56] BURST USER BURST_7_02ff: da
-[16:31:56] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:57] BURST USER BURST_5_8ba7: da
-[16:31:57] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:58] BURST USER BURST_10_6385: mai vreau si un buchet de mimosa
-[16:31:58] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:31:58] BURST USER BURST_22_d819: finalizeaza
-[16:31:58] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:31:58] BURST USER BURST_2_f160: da
-[16:31:58] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:31:59] HEALTHY USER HEALTHY_12_0856: da
-[16:31:59] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:32:00] HEALTHY USER HEALTHY_5_160a: varianta 2
-[16:32:00] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:00] BURST USER BURST_20_aeaa: gata
-[16:32:00] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:01] HEALTHY USER HEALTHY_4_a9a7: da prima varianta
-[16:32:01] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:32:01] HEALTHY USER HEALTHY_10_a66a: gata
-[16:32:01] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:01] BURST USER BURST_18_2971: gata
-[16:32:01] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:02] BURST USER BURST_15_c938: da
---------------------------------------------------
-[16:32:03] HEALTHY USER HEALTHY_7_9d6b: da
-[16:32:03] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:32:03] HEALTHY USER HEALTHY_11_75fb: gata finalizeaza
-[16:32:03] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:03] BURST USER BURST_17_05b4: 1
-[16:32:03] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:04] HEALTHY USER HEALTHY_1_c5e6: baga
-[16:32:04] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:05] HEALTHY USER HEALTHY_3_373d: primul e ok
-[16:32:05] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:05] BURST USER BURST_9_00b6: finalizeaza
-[16:32:05] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:05] BURST USER BURST_13_8bb7: atat
-[16:32:05] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:05] BURST USER BURST_19_3cb7: da
---------------------------------------------------
-[16:32:06] HEALTHY USER HEALTHY_0_df70: da, varianta 2
-[16:32:06] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:32:07] BURST USER BURST_3_199b: mai aveti pandantive?
-[16:32:07] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:07] BURST USER BURST_12_7f81: acum cauta si ceva de ciocolata
-[16:32:07] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:08] BURST USER BURST_4_f00d: mai vreau si vin
-[16:32:08] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:09] BURST USER BURST_0_4cf6: si mai vreau si niste praline
-[16:32:09] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:10] BURST USER BURST_16_3814: si ciocolata
-[16:32:10] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:11] BURST USER BURST_1_0406: k varianta 2
-[16:32:11] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:11] BURST USER BURST_24_241c: gata
-[16:32:11] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:11] BURST USER BURST_6_a25c: finalizeaza comanda
-[16:32:11] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:11] BURST USER BURST_11_58ce: arata-mi cosul
-[16:32:11] BOT: 🛒 Coșul tău este gol momentan. Spune-mi ce flori cauți?
---------------------------------------------------
-[16:32:13] BURST USER BURST_7_02ff: pune si praline
-[16:32:13] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:13] BURST USER BURST_5_8ba7: mai arata-mi si niste martisoare
-[16:32:13] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:14] BURST USER BURST_10_6385: da
---------------------------------------------------
-[16:32:14] BURST USER BURST_2_f160: am terminat
-[16:32:14] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:14] BURST USER BURST_15_c938: da
---------------------------------------------------
-[16:32:14] HEALTHY USER HEALTHY_12_0856: gata
-[16:32:14] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:14] BURST USER BURST_17_05b4: da
---------------------------------------------------
-[16:32:15] HEALTHY USER HEALTHY_5_160a: da
-[16:32:15] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:32:15] HEALTHY USER HEALTHY_4_a9a7: atat
-[16:32:15] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:15] BURST USER BURST_19_3cb7: finalizeaza acum
-[16:32:15] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:16] BURST USER BURST_3_199b: primul e ok
-[16:32:16] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:16] HEALTHY USER HEALTHY_1_c5e6: gata finalizeaza
-[16:32:16] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:16] BURST USER BURST_12_7f81: da
-[16:32:16] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:32:16] HEALTHY USER HEALTHY_7_9d6b: gata
-[16:32:16] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:17] BURST USER BURST_4_f00d: da prima varianta
-[16:32:17] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:32:18] HEALTHY USER HEALTHY_3_373d: da
-[16:32:18] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:32:20] BURST USER BURST_0_4cf6: da, varianta 2
-[16:32:20] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:32:20] HEALTHY USER HEALTHY_0_df70: gata, trimite
-[16:32:20] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:21] BURST USER BURST_16_3814: 1
-[16:32:21] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:22] BURST USER BURST_1_0406: baga
-[16:32:22] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:22] BURST USER BURST_11_58ce: gata finalizeaza
-[16:32:22] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:24] BURST USER BURST_7_02ff: da
-[16:32:24] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:32:24] BURST USER BURST_10_6385: gata
-[16:32:24] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:24] BURST USER BURST_5_8ba7: varianta 2
-[16:32:24] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:25] BURST USER BURST_15_c938: da
---------------------------------------------------
-[16:32:26] BURST USER BURST_17_05b4: Vreau praline
-[16:32:26] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:26] BURST USER BURST_3_199b: da
-[16:32:26] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:32:26] BURST USER BURST_12_7f81: gata
-[16:32:26] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:26] BURST USER BURST_4_f00d: atat
-[16:32:26] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:26] HEALTHY USER HEALTHY_5_160a: gata
-[16:32:26] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:26] BURST USER BURST_0_4cf6: gata, trimite
-[16:32:26] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:28] BURST USER BURST_16_3814: baga
-[16:32:28] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:28] HEALTHY USER HEALTHY_3_373d: gata
-[16:32:28] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:28] BURST USER BURST_1_0406: gata finalizeaza
-[16:32:28] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:28] BURST USER BURST_7_02ff: gata
-[16:32:28] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:29] BURST USER BURST_5_8ba7: da
-[16:32:29] BOT: Spune-mi te rog ce produs dorești să adaugi în coș?
---------------------------------------------------
-[16:32:29] BURST USER BURST_15_c938: gata
-[16:32:29] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:29] BURST USER BURST_17_05b4: 1
-[16:32:29] BOT: 🌸 Ocupat. Poziția în coadă...
---------------------------------------------------
-[16:32:29] BURST USER BURST_3_199b: gata
-[16:32:29] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:29] BURST USER BURST_16_3814: gata
-[16:32:29] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:30] BURST USER BURST_5_8ba7: gata
-[16:32:30] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
---------------------------------------------------
-[16:32:32] BURST USER BURST_17_05b4: da
---------------------------------------------------
-[16:32:33] BURST USER BURST_17_05b4: gata
-[16:32:33] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
+[19:32:47] BURST USER BURST_20_17d2: Salut
+[19:32:47] BOT: Bună! Cu ce te pot ajuta astăzi?
+--------------------------------------------------
+[19:32:47] BURST USER BURST_14_96d3: Salut, ce mai faci? Arata-mi ce flori aveti azi
+--------------------------------------------------
+[19:32:47] HEALTHY USER HEALTHY_10_a051: Vreau martisoare din rasina galbene
+[19:32:47] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Martisor din Rasina cu Floare Naturala si Glitter* - Preț: 80.0 lei
+_Daruiste o raza de soare pe care o poate purta in piept! Martisorul "Golden Spring" este o mica bijuterie handmade care captureaza esenta primelelor zile calde. In centrul compozitiei rotunde se afla o floare naturala galbena , presata cu grija in momentul de maxima deschidere a petalelor, pastrandu-si forma stelata perfecta. Floarea este incapsula..._
+
+2. *Lumanare Botez din ceara naturala "Sweet Blossom"* - Preț: 330.0 lei
+_Adauga un strop de culoare si parfum ceremoniei de botez cu lumanarea "Sweet Blossom". Am conceput acest model gandindu-ne in primul rand la confortul nasei: lumanarea este realizata din foi de ceara naturala rulate (tip fagure), fiind extrem de usoara si usor de manevrat pe toata durata slujbei, spre deosebire de lumanarile clasice grele. Aranjame..._
+
+3. *Cadou "Sparkle & Sweet"* - Preț: 300.0 lei
+_Atunci cand florile nu sunt de ajuns, adauga un strop de magie cu pachetul nostru "Sparkle & Sweet". Am selectat doua produse de top pentru a crea experienta gourmet completa: ciocolata belgiana si bulele fine italiene. Setul contine: Cutia cu 20 Praline Valentino: O selectie generoasa de bomboane artizanale belgiene (cca. 250g), care te vor purta ..._
+
+
+--------------------------------------------------
+[19:32:47] BURST USER BURST_12_f722: Buna
+[19:32:47] BOT: Bună! Cu ce te pot ajuta astăzi?
+--------------------------------------------------
+[19:32:47] BURST USER BURST_6_4258: Salut
+[19:32:47] BOT: Bună! Cu ce te pot ajuta astăzi?
+--------------------------------------------------
+[19:32:47] BURST USER BURST_16_4950: Hei
+[19:32:47] BOT: Bună! Cu ce te pot ajuta astăzi?
+--------------------------------------------------
+[19:32:47] BURST USER BURST_0_02f2: Salut
+[19:32:47] BOT: Bună! Cu ce te pot ajuta astăzi?
+--------------------------------------------------
+[19:32:47] BURST USER BURST_4_1706: Buna
+[19:32:47] BOT: Bună! Cu ce te pot ajuta astăzi?
+--------------------------------------------------
+[19:32:47] BURST USER BURST_21_2598: Buna
+[19:32:47] BOT: Bună! Cu ce te pot ajuta astăzi?
+--------------------------------------------------
+[19:32:47] BURST USER BURST_5_70ad: Cine esti?
+--------------------------------------------------
+[19:32:47] BURST USER BURST_11_d971: ce produse aveti?
+--------------------------------------------------
+[19:32:47] BURST USER BURST_7_4c7a: Vreau cel mai scump si luxos buchet pe care il aveti
+--------------------------------------------------
+[19:32:48] BURST USER BURST_22_d766: recomanda
+--------------------------------------------------
+[19:32:52] BURST USER BURST_5_70ad: Ce flori de primavara aveti?
+--------------------------------------------------
+[19:32:54] HEALTHY USER HEALTHY_8_a5ec: prima varianta
+[19:32:54] BOT: Vrei să adăugăm *1x Buchet "Grand Amour" â€“ 101 Trandafiri Rosii*? (1899.0 RON)
+--------------------------------------------------
+[19:32:55] BURST USER BURST_4_1706: ce produse aveti?
+--------------------------------------------------
+[19:32:55] HEALTHY USER HEALTHY_13_c0eb: nu, mai ieftin!
+[19:32:55] BOT: Vrei să adăugăm *1x Martisor din Rasina cu Floare Naturala Galbena*? (80.0 RON)
+--------------------------------------------------
+[19:32:55] HEALTHY USER HEALTHY_2_c96b: vreau un cadou pt mama, sa semene cu florile din gradina
+[19:32:55] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Buchet Flori 5 Hortensii Delicate* - Preț: 310.0 lei
+_Daca vrei sa oferi un cadou care sa lase o impresie puternica, alege acest buchet cu 5 hortensii delicate. Hortensia este regina volumului, iar acest buchet este o adevarata demonstratie de generozitate florala. Am selectat 5 fire de Hortensie (Hydrangea) in cele mai iubite culori: bleu senin, roz pudrat, alb imaculat si verde crud. Aceasta combina..._
+
+2. *Aranjament Floral "Cosul Abundentei"* - Preț: 330.0 lei
+_Aranjamentul Cosul Abundentei este creat pentru momente care merita un gest memorabil. Trandafirii rosii, hortensia grena si amaranthusul bogat se imbina cu fructele de toamna pentru a oferi un mix spectaculos de culori si texturi. Strugurele negru si macesele adauga acel aer rustic-elegant care transforma fiecare detaliu intr-o poveste vizuala. To..._
+
+3. *Aranjament Floral "Cosulet cu flori de toamna"* - Preț: 360.0 lei
+_Creati o atmosfera calda, primitoare si plina de farmec rustic cu acest aranjament floral "Cosulet cu flori de toamna"! Â Acest aranjament imbina eleganta florilor cu bogatia naturii, fiind prezentat intr-un cosulet impletit care evoca spiritul recoltei si al serilor confortabile de toamna. Â Este cadoul perfect pentru a aduce bucurie si culoare in..._
+
+
+--------------------------------------------------
+[19:32:55] HEALTHY USER HEALTHY_1_ec88: Vreau niste martisoare si mai vreau si un cadou diferit, nu buchet
+[19:32:55] BOT: Iată selecția noastră de flori:
+
+1. *Buchet "Grand Amour" â€“ 101 Trandafiri Rosii* - Preț: 1899.0 lei
+_Exista cadouri care plac, si exista cadouri care taie respiratia. Buchetul "Grand Amour", compus din 101 trandafiri rosii , face parte din a doua categorie. Este declaratia suprema de dragoste, un gest grandios care spune "Tu esti unica mea iubire" fara a folosi niciun cuvant. Acest buchet nu este doar un aranjament floral, ci o experienta in sine...._
+
+2. *Buchet Flori 5 Hortensii Delicate* - Preț: 310.0 lei
+_Daca vrei sa oferi un cadou care sa lase o impresie puternica, alege acest buchet cu 5 hortensii delicate. Hortensia este regina volumului, iar acest buchet este o adevarata demonstratie de generozitate florala. Am selectat 5 fire de Hortensie (Hydrangea) in cele mai iubite culori: bleu senin, roz pudrat, alb imaculat si verde crud. Aceasta combina..._
+
+3. *Buchet de flori 49 lalele albe* - Preț: 535.0 lei
+_Exista cadouri frumoase si exista cadouri care te lasa fara cuvinte. Buchetul acesta face parte din a doua categorie. Am reunit 49 de lalele albe , proaspete si imaculate, pentru a crea un "nor" floral de o eleganta desavarsita. Volumul acestui buchet este impresionant. Pentru a pastra o linie estetica pura si moderna, am ales un design "all-white"..._
+
+
+--------------------------------------------------
+[19:32:55] HEALTHY USER HEALTHY_10_a051: primul
+[19:32:55] BOT: Vrei să adăugăm *1x Martisor din Rasina cu Floare Naturala si Glitter*? (80.0 RON)
+--------------------------------------------------
+[19:33:00] HEALTHY USER HEALTHY_10_a051: da
+[19:33:00] BOT: ✅ Adăugat 1x Martisor din Rasina cu Floare Naturala si Glitter în coș!
+--------------------------------------------------
+[19:33:01] HEALTHY USER HEALTHY_8_a5ec: da
+[19:33:01] BOT: ✅ Adăugat 1x Buchet "Grand Amour" â€“ 101 Trandafiri Rosii în coș!
+--------------------------------------------------
+[19:33:01] HEALTHY USER HEALTHY_6_9eaa: Vreau ceva vesel care sa miroasa frumos
+[19:33:01] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Cadou "Sparkle & Sweet"* - Preț: 300.0 lei
+_Atunci cand florile nu sunt de ajuns, adauga un strop de magie cu pachetul nostru "Sparkle & Sweet". Am selectat doua produse de top pentru a crea experienta gourmet completa: ciocolata belgiana si bulele fine italiene. Setul contine: Cutia cu 20 Praline Valentino: O selectie generoasa de bomboane artizanale belgiene (cca. 250g), care te vor purta ..._
+
+2. *Pachet "Sweet Passion" - Buchet si praline* - Preț: 299.0 lei
+_Pachetul "Sweet Passion" este combinatia irezistibila dintre frumusetea naturala si gustul rafinat, creata pentru a impresiona. Acest set cadou aduce impreuna un buchet pasional in nuante de rosu si o cutie eleganta de praline belgiene, fiind solutia completa pentru momentele romantice. Nota Importanta despre Buchet (Florist Choice): Buchetul din a..._
+
+3. *Buchet de Flori "Ruby Passion"* - Preț: 309.0 lei
+_Rosu pe rosu â€“ definitia pasiunii absolute. Buchetul "Ruby Passion" este creat pentru cei care nu se tem sa isi exprime sentimentele cu intensitate. Acest aranjament impresioneaza prin designul sau monocromatic, o tendinta foarte apreciata in arta florala moderna. Buchetul este construit in jurul unor trandafiri rosii premium , cu petale catifela..._
+
+
+--------------------------------------------------
+[19:33:01] HEALTHY USER HEALTHY_12_707c: Vreau flori albe
+[19:33:01] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Buchet "Pure White" â€“ 9 Fire Liliac Alb* - Preț: 599.0 lei
+_Descopera eleganta absoluta a simplitatii cu buchetul "Pure White". Acest aranjament floral este un omagiu adus puritatii si prospetimii, fiind compus exclusiv din liliac alb, floarea care vesteste cele mai frumoase zile de primavara. Buchetul contine 9 fire generoase de liliac alb, selectate cu grija pentru parfumul lor inconfundabil si aspectul b..._
+
+2. *Buchet de Flori "All White"* - Preț: 450.0 lei
+_Buchetul All White contine un mix armonios de flori de sezon, alese cu grija pentru a oferi o varietate de texturi si forme. Fiecare floare, de un alb imaculat, aduce o nota de prospetime si delicatete. Insertiile de verdeata completeaza perfect ansamblul, adaugand un contrast subtil si natural. Ambalat cu grija intr-un ambalaj elegant, asortat cu ..._
+
+3. *Buchet de Flori "Sugar Pink"* - Preț: 400.0 lei
+_Buchetul Sugar Pink este compus dintr-un mix minunat de flori de sezon in nuante fine de alb, roz si blush. Fiecare floare este aleasa cu grija de floristii nostri pentru a crea un ansamblu armonios si plin de rafinament. Insertiile de verdeata adauga un contrast placut si natural, evidentiind frumusetea florilor. Ambalat cu atentie intr-un ambalaj..._
+
+
+--------------------------------------------------
+[19:33:02] HEALTHY USER HEALTHY_1_ec88: da primul
+[19:33:02] BOT: Vrei să adăugăm *1x Buchet "Grand Amour" â€“ 101 Trandafiri Rosii*? (1899.0 RON)
+--------------------------------------------------
+[19:33:06] HEALTHY USER HEALTHY_0_dbab: Caut ceva special pt o aniversare de 10 ani, buget cam 500 lei
+[19:33:06] BOT: Iată selecția noastră de flori:
+
+1. *Buchet de Flori 11 Trandafiri Mov si Eucalipt* - Preț: 299.0 lei
+_Daca vrei sa oferi ceva cu adevarat memorabil, alege buchetul cu 11 trandafiri mov. Trandafirii mov transmit un mesaj puternic de admiratie profunda si incantare. Am selectat 11 fire de trandafiri dintr-un soi special (adesea bicolori, cu centrul mai deschis si petalele exterioare intr-un magenta-mov intens), care creeaza un efect vizual spectaculo..._
+
+2. *Buchet de Flori 11 Trandafiri Ciclam si Eucalipt* - Preț: 299.0 lei
+_Daca vrei sa impresionezi prin culoare si energie, buchetul "Magenta Love" este alegerea ideala. Am selectat 11 trandafiri intr-o nuanta intensa de ciclam (roz fuchsia) , o culoare care simbolizeaza admiratia profunda, gratia si bucuria de a trai. Designul este unul modern si monocromatic. Trandafirii catifelati sunt pusi in valoare de frunzele arg..._
+
+3. *City Flowers Bag 9 trandafiri multicolori* - Preț: 279.0 lei
+_Daca iti doresti un cadou care sa iasa din tipare prin prezentare si utilitate, alege City Flowers Bags. Am inlocuit ambalajul clasic cu o cutie alba eleganta tip "Flowers Bag", prevazuta cu manere din snur, transformand florile intr-un veritabil accesoriu urban. Compozitia este plina de viata, continand 9 trandafiri intr-un mix vesel de culori: po..._
+
+
+--------------------------------------------------
+[19:33:06] HEALTHY USER HEALTHY_8_a5ec: gata
+[19:33:06] BOT: 🎉 *Comandă trimisă!*
+• 1 x Buchet "Grand Amour" â€“ 101 Trandafiri Rosii (1899.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 1899.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:33:08] HEALTHY USER HEALTHY_6_9eaa: prima varianta e perfecta
+[19:33:08] BOT: Vrei să adăugăm *1x Cadou "Sparkle & Sweet"*? (300.0 RON)
+--------------------------------------------------
+[19:33:09] HEALTHY USER HEALTHY_12_707c: detalii despre prima
+[19:33:09] BOT: 🔍 *Detalii complete pentru: Buchet "Pure White" â€“ 9 Fire Liliac Alb*
+💰 *Preț:* 599.0 lei
+
+
+📖 *Descriere:* 
+_Descopera eleganta absoluta a simplitatii cu buchetul "Pure White". Acest aranjament floral este un omagiu adus puritatii si prospetimii, fiind compus exclusiv din liliac alb, floarea care vesteste cele mai frumoase zile de primavara. Buchetul contine 9 fire generoase de liliac alb, selectate cu grija pentru parfumul lor inconfundabil si aspectul bogat. Albul imaculat al florilor este scos in evidenta de frunzele de eucalipt verde-argintiu, care adauga textura si un miros subtil, racoritor. Prezentarea este una autentica si moderna: ambalajul din hartie kraft naturala (maro) ofera un contrast superb cu albul florilor, creand un aspect rustic-chic, foarte apreciat in tendintele actuale. Legat cu o panglica fina, acest buchet este mesagerul perfect al gandurilor sincere si curate. Nota despre sezon: Liliacul este o floare sezoniera, disponibila in special in lunile de primavara. Va recomandam sa verificati disponibilitatea inainte de a plasa comanda in afara sezonului. Cui daruim acest buchet? Albul simbolizeaza sinceritatea, inocenta si noile inceputuri. Este cadoul ideal pentru o tanara domnisoara, pentru a sarbatori ziua numelui (Florii), pentru o cununie civila relaxata sau pur si simplu pentru a aduce lumina si parfum in casa unei persoane dragi._
+
+_Dorești să adaugi acest produs în comandă? Spune-mi 'Da' sau 'Îl vreau pe acesta'._
+--------------------------------------------------
+[19:33:11] HEALTHY USER HEALTHY_14_444a: al doilea e frumos
+[19:33:11] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Buchet "Red Delight" â€“ Amaryllis Rosu* - Preț: 245.0 lei
+_Lasa-te cucerit de farmecul vibrant al buchetului "Red Delight". Asa cum ii spune si numele, acest bcuhet este o adevarata incantare vizuala, dominata de eleganta impunatoare a florilor de Amaryllis (Hippeastrum) de un rosu aprins. Compozitia emana bucurie si rafinament, fiind construita in jurul tijelor inalte de Amaryllis, ale caror cupe catifela..._
+
+2. *Martisor din Rasina cu Floare Naturala Galbena* - Preț: 80.0 lei
+_Uneori, cele mai frumoase vesti de primavara vin in forme simple si pure. Martisorul "Sunny Bloom" este o odÄƒ adusa luminii si optimismului. Designul este unul minimalist si elegant: o floare naturala galbena , cu 5 petale perfect conturate, este asezata central pe un fundal alb cald (nuanta untului/crem deschis) . Aceasta combinatie cromatica cre..._
+
+3. *Set Cosuri Mama & Fiica "Sunny Smiles"* - Preț: 699.0 lei
+_Adu o raza de soare in viata lor! Setul "Sunny Smiles" este o explozie de veselie, conceput special pentru a celebra legatura luminoasa dintre o mama si fiica ei. Am creat doua aranjamente asortate, pline de viata, care simbolizeaza admiratia si fericirea. Piesa centrala a acestor aranjamente este Floarea Soarelui , simbolul loialitatii si al energ..._
+
+
+--------------------------------------------------
+[19:33:11] HEALTHY USER HEALTHY_0_dbab: varianta 2 e superba
+[19:33:11] BOT: Vrei să adăugăm *1x Buchet de Flori 11 Trandafiri Ciclam si Eucalipt*? (299.0 RON)
+--------------------------------------------------
+[19:33:12] HEALTHY USER HEALTHY_9_2380: Am facut o gafa si trebuie sa imi cer scuze... ceva impresionant
+[19:33:12] BOT: Iată selecția noastră de flori:
+
+1. *Cupola Decorativa de Craciun "Spargatorul de Nuci"* - Preț: 280.0 lei
+_Retraieste farmecul basmelor de odinioara cu aceasta decoratiune rafinata. Cupola "Spargatorul de Nuci" nu este doar un obiect decorativ, ci o mica lume de basm care aduce bucurie privitorului. Piesa centrala este figurina clasica a Spargatorului de Nuci, gardianul povestilor de iarna, imbracat in uniforma sa festiva. Acesta troneaza in mijlocul un..._
+
+2. *Coroana Funerara Garoafe Rosii* - Preț: 490.0 lei
+_In momentele de grea incercare si despartire, florile raman cel mai sincer mod de a exprima regretele, respectul si iubirea pentru persoana care a plecat dintre noi. Coroana funerara rotunda "Respect Etern" este un omagiu clasic si elegant, creat pentru a aduce un ultim salut plin de demnitate. Aranjamentul are un diametru de 40 de centimetri si es..._
+
+3. *Cadou Praline Belgiene Valentino 220 gr* - Preț: 100.0 lei
+_Niciun cadou nu este complet fara un strop de dulceata. Cutia de praline Valentino (220g) este alegerea ideala pentru a desavarsi o surpriza placuta, aducand un plus de rafinament si gust buchetului de flori ales. Aceste praline sunt renumite pentru textura lor fina si gustul bogat, fiind realizate din ingrediente de calitate superioara. Cutia cont..._
+
+
+--------------------------------------------------
+[19:33:13] HEALTHY USER HEALTHY_6_9eaa: da
+[19:33:13] BOT: ✅ Adăugat 1x Cadou "Sparkle & Sweet" în coș!
+--------------------------------------------------
+[19:33:16] HEALTHY USER HEALTHY_12_707c: da
+[19:33:16] BOT: Vrei să adăugăm *1x Buchet "Pure White" â€“ 9 Fire Liliac Alb*? (599.0 RON)
+--------------------------------------------------
+[19:33:16] HEALTHY USER HEALTHY_14_444a: da
+--------------------------------------------------
+[19:33:17] HEALTHY USER HEALTHY_0_dbab: da, baga in cos
+[19:33:17] BOT: ✅ Adăugat 1x Buchet de Flori 11 Trandafiri Ciclam si Eucalipt în coș!
+[19:33:17] BOT: Vrei să adăugăm *1x Buchet de Flori 11 Trandafiri Mov si Eucalipt*? (299.0 RON)
+--------------------------------------------------
+[19:33:17] HEALTHY USER HEALTHY_4_5a3c: detalii despre al doilea
+[19:33:17] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Aranjament funerar "Lumina si Pace"* - Preț: 550.0 lei
+_In momentele de despartire, florile aduc o ultima mangaiere si transmit un mesaj de pace sufleteasca. Aranjamentul funerar "Lumina si Pace" este un aranjament elegant, cu o forma alungita, creat special pentru a onora memoria unei persoane dragi cu delicatete si respect. Compozitia este dominata de crinii albi imperiali, flori care simbolizeaza ina..._
+
+2. *Pandantiv din Rasina cu Floare Daucus Carota* - Preț: 210.0 lei
+_Poarta natura aproape de inima ta cu acest colier fascinant, o mica fereastra catre frumusetea complexa a florei salbatice. Piesa centrala este un pandantiv oval realizat manual din rasina epoxidica de inalta claritate, in care a fost "inghetat" in timp un exemplar superb de Daucus Carota (Morcovul Salbatic) . Ceea ce face aceasta bijuterie cu adev..._
+
+3. *Buchet de Flori "Protea Dream"* - Preț: 400.0 lei
+_Evadeaza din banal cu un buchet care sfideaza conventiile si se apropie de arta. "Protea Dream" nu este doar un buchet, ci o experienta vizuala complexa, construita in jurul spectaculoaseiÂ King Protea â€“ una dintre cele mai vechi si rezistente flori din lume, simbol al curajului si al diversitatii. Compozitia impresioneaza prin jocul de texturi: ..._
+
+
+--------------------------------------------------
+[19:33:18] HEALTHY USER HEALTHY_3_c1e9: Vreau un buchet mare dar fara trandafiri si fara lalele
+[19:33:18] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Buchet "Grand Amour" â€“ 101 Trandafiri Rosii* - Preț: 1899.0 lei
+_Exista cadouri care plac, si exista cadouri care taie respiratia. Buchetul "Grand Amour", compus din 101 trandafiri rosii , face parte din a doua categorie. Este declaratia suprema de dragoste, un gest grandios care spune "Tu esti unica mea iubire" fara a folosi niciun cuvant. Acest buchet nu este doar un aranjament floral, ci o experienta in sine...._
+
+2. *Aranjament Floral in cutie "Sweet Hugs"* - Preț: 719.0 lei
+_Cauti un cadou care sa topeasca inima oricui? Cutia "Sweet Hugs" este definitia dragalaseniei. Am combinat eleganta unui aranjament floral premium cu nostalgia si caldura unui ursulet de plus, creand astfel surpriza perfecta pentru momente pline de tandrete. Aranjamentul floral este realizat intr-o cutie rotunda de lux, marca "City Flowers", de cul..._
+
+3. *Aranjament Floral in Cutie Rosie cu Trandafiri si Glob cu Praline* - Preț: 290.0 lei
+_De sarbatori, cele mai frumoase daruri sunt cele care aduc un zambet si un moment de rasfat. Aranjamentul floral in cutie rosie cu trandafiri si glob cu praline este gandit ca un pachet complet de bucurie, ideal pentru a transmite "Sarbatori Fericite" intr-un mod elegant si gustos. Compozitia este realizata intr-o cutie de lemn de culoare rosie, de..._
+
+
+--------------------------------------------------
+[19:33:19] HEALTHY USER HEALTHY_9_2380: varianta 2 e buna
+[19:33:19] BOT: Vrei să adăugăm *1x Coroana Funerara Garoafe Rosii*? (490.0 RON)
+--------------------------------------------------
+[19:33:20] HEALTHY USER HEALTHY_6_9eaa: finalizeaza comanda
+[19:33:20] BOT: 🎉 *Comandă trimisă!*
+• 1 x Cadou "Sparkle & Sweet" (300.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 300.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:33:21] HEALTHY USER HEALTHY_11_85e5: primul
+[19:33:21] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Buchet de flori 25 lalele albe* - Preț: 310.0 lei
+_Uneori, simplitatea este cea mai sofisticata forma de eleganta. Buchetul de lalele albe este creat pentru cei care apreciaza frumusetea imaculata si detaliile fine. Am selectatÂ 25 de lalele de un alb pur , simbol al sinceritatii, respectului si al noilor inceputuri. Pentru a scoate in evidenta albul petalelor, am adaugat crengute de Eucalipt argin..._
+
+2. *Buchet de flori 25 lalele mov* - Preț: 310.0 lei
+_Pentru femeia care apreciaza eleganta, misterul si rafinamentul, am creat buchetul acesta. Movul este culoarea regalitatii si a admiratiei, iar aceste 25 de lalele mov sunt absolut spectaculoase. Buchetul iese in evidenta prin cromatica sa nobila. Lalelele violet intens sunt puse in valoare de un ambalaj in nuante deÂ lila/lavanda , creand un degra..._
+
+3. *Pandantiv din Rasina cu Floare Daucus Carota* - Preț: 210.0 lei
+_Poarta natura aproape de inima ta cu acest colier fascinant, o mica fereastra catre frumusetea complexa a florei salbatice. Piesa centrala este un pandantiv oval realizat manual din rasina epoxidica de inalta claritate, in care a fost "inghetat" in timp un exemplar superb de Daucus Carota (Morcovul Salbatic) . Ceea ce face aceasta bijuterie cu adev..._
+
+
+--------------------------------------------------
+[19:33:23] HEALTHY USER HEALTHY_0_dbab: si mai vreau si niste praline
+[19:33:23] BOT: Vrei să adăugăm *1x Buchet de Flori 11 Trandafiri Mov si Eucalipt*? (299.0 RON)
+--------------------------------------------------
+[19:33:23] HEALTHY USER HEALTHY_14_444a: gata
+[19:33:23] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
+--------------------------------------------------
+[19:33:23] HEALTHY USER HEALTHY_3_c1e9: al treilea e interesant
+[19:33:23] BOT: Vrei să adăugăm *1x Aranjament Floral in Cutie Rosie cu Trandafiri si Glob cu Praline*? (290.0 RON)
+--------------------------------------------------
+[19:33:25] HEALTHY USER HEALTHY_9_2380: da
+[19:33:25] BOT: ✅ Adăugat 1x Coroana Funerara Garoafe Rosii în coș!
+--------------------------------------------------
+[19:33:25] HEALTHY USER HEALTHY_11_85e5: da
+[19:33:25] BOT: Vrei să adăugăm *1x Buchet de flori 25 lalele albe*? (310.0 RON)
+--------------------------------------------------
+[19:33:26] BURST USER BURST_13_da22: Vreau ceva sub 100 lei
+[19:33:26] BOT: Iată selecția noastră de flori:
+
+1. *Ambalare Cadou Buchete* - Preț: 15.0 lei
+_Optiunea de ambalare cadou a buchetelor adauga un plus de eleganta oricarui buchet ales. Folosim ambalaje premium, culori asortate si detalii atent alese pentru a transforma buchetul intr-un cadou impecabil prezentat. Perfect pentru momente speciale, aniversari sau atunci cand vrei sa impresionezi cu stil._
+
+2. *Martisor din Rasina cu Floare Naturala Galbena* - Preț: 80.0 lei
+_Uneori, cele mai frumoase vesti de primavara vin in forme simple si pure. Martisorul "Sunny Bloom" este o odÄƒ adusa luminii si optimismului. Designul este unul minimalist si elegant: o floare naturala galbena , cu 5 petale perfect conturate, este asezata central pe un fundal alb cald (nuanta untului/crem deschis) . Aceasta combinatie cromatica cre..._
+
+3. *Bradut Natural "Nordic Light" â€“ Chamaecyparis* - Preț: 100.0 lei
+_Nu ai spatiu pentru un brad mare sau cauti cadoul ideal de Secret Santa? "Nordic Light" este solutia perfecta. Am ales un conifer natural din specia Chamaecyparis (Chiparos), cunoscut pentru coroana sa bogata, verde-crud, si l-am transformat intr-o bijuterie festiva. Bradutul vine gata impodobit cu o ghirlanda discreta de luminite LED (lumina calda..._
+
+
+--------------------------------------------------
+[19:33:27] BURST USER BURST_17_7011: Vreau trandafiri
+[19:33:27] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Buchet "Grand Amour" â€“ 101 Trandafiri Rosii* - Preț: 1899.0 lei
+_Exista cadouri care plac, si exista cadouri care taie respiratia. Buchetul "Grand Amour", compus din 101 trandafiri rosii , face parte din a doua categorie. Este declaratia suprema de dragoste, un gest grandios care spune "Tu esti unica mea iubire" fara a folosi niciun cuvant. Acest buchet nu este doar un aranjament floral, ci o experienta in sine...._
+
+2. *Buchet flori nasa cu trandafiri portocalii si accente grena* - Preț: 445.0 lei
+_Transforma rolul de nasa intr-o aparitie memorabila cu acest buchet spectaculos, lucrat cu atentie la detalii si texturi. Compozitia florala pentru acest buchet flori nasa cu trandafiri si accente grena este un joc armonios intre lumini si umbre, avand in centru trandafiri de gradina in nuante vibrante de portocaliu (peach fuzz) si corai. Nota de m..._
+
+3. *Aranjament Floral in Cutie Rosie cu Trandafiri si Glob cu Praline* - Preț: 290.0 lei
+_De sarbatori, cele mai frumoase daruri sunt cele care aduc un zambet si un moment de rasfat. Aranjamentul floral in cutie rosie cu trandafiri si glob cu praline este gandit ca un pachet complet de bucurie, ideal pentru a transmite "Sarbatori Fericite" intr-un mod elegant si gustos. Compozitia este realizata intr-o cutie de lemn de culoare rosie, de..._
+
+
+--------------------------------------------------
+[19:33:27] HEALTHY USER HEALTHY_0_dbab: da, varianta 2
+[19:33:27] BOT: Vrei să adăugăm *1x Buchet de Flori 11 Trandafiri Ciclam si Eucalipt*? (299.0 RON)
+--------------------------------------------------
+[19:33:28] BURST USER BURST_13_da22: nu, mai ieftin!
+[19:33:28] BOT: Vrei să adăugăm *1x Martisor din Rasina cu Floare Naturala Galbena*? (80.0 RON)
+--------------------------------------------------
+[19:33:29] BURST USER BURST_17_7011: 1
+[19:33:29] BOT: Vrei să adăugăm *1x Buchet "Grand Amour" â€“ 101 Trandafiri Rosii*? (1899.0 RON)
+--------------------------------------------------
+[19:33:30] HEALTHY USER HEALTHY_11_85e5: arata-mi cosul
+[19:33:30] BOT: 🛒 Coșul tău este gol momentan.
+--------------------------------------------------
+[19:33:30] HEALTHY USER HEALTHY_3_c1e9: da
+[19:33:30] BOT: ✅ Adăugat 1x Aranjament Floral in Cutie Rosie cu Trandafiri si Glob cu Praline în coș!
+--------------------------------------------------
+[19:33:31] HEALTHY USER HEALTHY_9_2380: finalizeaza
+[19:33:31] BOT: 🎉 *Comandă trimisă!*
+• 1 x Coroana Funerara Garoafe Rosii (490.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 490.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:33:31] BURST USER BURST_23_f47f: vrea flori
+[19:33:31] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Buchet Flori "Garden Dream"* - Preț: 310.0 lei
+_Daca vrei sa impresionezi o persoana cu gusturi rafinate, buchetul "GardenÂ Dream" este alegerea perfecta. Am creat un mix floral care iese din tipare, combinand texturi catifelate cu culori electrizante. Vedetele buchetului sunt florile de Orhidee Vanda, recunoscute pentru modelul lor unic, pestrit, in nuante de violet intens. Acestea sunt acompan..._
+
+2. *Buchet de Flori "Sugar Pink"* - Preț: 400.0 lei
+_Buchetul Sugar Pink este compus dintr-un mix minunat de flori de sezon in nuante fine de alb, roz si blush. Fiecare floare este aleasa cu grija de floristii nostri pentru a crea un ansamblu armonios si plin de rafinament. Insertiile de verdeata adauga un contrast placut si natural, evidentiind frumusetea florilor. Ambalat cu atentie intr-un ambalaj..._
+
+3. *Buchet Flori 25 Frezii Multicolore Parfumate* - Preț: 382.5 lei
+_Exista flori care impresioneaza prin marime, iar altele care cuceresc prin parfum. Freziile le fac pe amandoua, intr-un mod delicat si feminin. Buchetul cu 25 frezii multicolore este o declaratie de optimism, reunind 25 de fire de frezii intr-un mix vesel de culori: galben solar, mov regal, rosu intens si alb pur. Aceste flori sunt simbolul inocent..._
+
+
+--------------------------------------------------
+[19:33:31] BURST USER BURST_17_7011: da
+[19:33:31] BOT: ✅ Adăugat 1x Buchet "Grand Amour" â€“ 101 Trandafiri Rosii în coș!
+--------------------------------------------------
+[19:33:33] BURST USER BURST_23_f47f: primul
+[19:33:33] BOT: Vrei să adăugăm *1x Buchet Flori "Garden Dream"*? (310.0 RON)
+--------------------------------------------------
+[19:33:33] BURST USER BURST_10_87fb: Vreau martisoare din rasina galbene
+[19:33:33] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Martisor din Rasina cu Floare Naturala si Glitter* - Preț: 80.0 lei
+_Daruiste o raza de soare pe care o poate purta in piept! Martisorul "Golden Spring" este o mica bijuterie handmade care captureaza esenta primelelor zile calde. In centrul compozitiei rotunde se afla o floare naturala galbena , presata cu grija in momentul de maxima deschidere a petalelor, pastrandu-si forma stelata perfecta. Floarea este incapsula..._
+
+2. *Lumanare Botez din ceara naturala "Sweet Blossom"* - Preț: 330.0 lei
+_Adauga un strop de culoare si parfum ceremoniei de botez cu lumanarea "Sweet Blossom". Am conceput acest model gandindu-ne in primul rand la confortul nasei: lumanarea este realizata din foi de ceara naturala rulate (tip fagure), fiind extrem de usoara si usor de manevrat pe toata durata slujbei, spre deosebire de lumanarile clasice grele. Aranjame..._
+
+3. *Cadou "Sparkle & Sweet"* - Preț: 300.0 lei
+_Atunci cand florile nu sunt de ajuns, adauga un strop de magie cu pachetul nostru "Sparkle & Sweet". Am selectat doua produse de top pentru a crea experienta gourmet completa: ciocolata belgiana si bulele fine italiene. Setul contine: Cutia cu 20 Praline Valentino: O selectie generoasa de bomboane artizanale belgiene (cca. 250g), care te vor purta ..._
+
+
+--------------------------------------------------
+[19:33:34] HEALTHY USER HEALTHY_0_dbab: gata, trimite
+[19:33:34] BOT: ✅ Adăugat 1x Buchet de Flori 11 Trandafiri Ciclam si Eucalipt în coș!
+--------------------------------------------------
+[19:33:34] BURST USER BURST_23_f47f: da
+[19:33:34] BOT: ✅ Adăugat 1x Buchet Flori "Garden Dream" în coș!
+--------------------------------------------------
+[19:33:35] HEALTHY USER HEALTHY_3_c1e9: mai aveti pandantive?
+[19:33:35] BOT: Vrei să adăugăm *1x Aranjament Floral in Cutie Rosie cu Trandafiri si Glob cu Praline*? (290.0 RON)
+--------------------------------------------------
+[19:33:35] BURST USER BURST_10_87fb: primul
+[19:33:35] BOT: Vrei să adăugăm *1x Martisor din Rasina cu Floare Naturala si Glitter*? (80.0 RON)
+--------------------------------------------------
+[19:33:35] HEALTHY USER HEALTHY_11_85e5: gata finalizeaza
+[19:33:35] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
+--------------------------------------------------
+[19:33:36] BURST USER BURST_19_14b7: Salut, vreau ceva sub 300 lei, fara trandafiri, si sa aiba si ciocolata
+[19:33:36] BOT: 💡 *Am ajustat căutarea.* Cele mai apropiate opțiuni pornesc de la 90.0 RON:
+
+O alegere minunată! Iată opțiunile din stoc:
+
+1. *Cadou Praline Belgiene Valentino 220 gr* - Preț: 100.0 lei
+_Niciun cadou nu este complet fara un strop de dulceata. Cutia de praline Valentino (220g) este alegerea ideala pentru a desavarsi o surpriza placuta, aducand un plus de rafinament si gust buchetului de flori ales. Aceste praline sunt renumite pentru textura lor fina si gustul bogat, fiind realizate din ingrediente de calitate superioara. Cutia cont..._
+
+2. *Cadou "Sparkle & Sweet"* - Preț: 300.0 lei
+_Atunci cand florile nu sunt de ajuns, adauga un strop de magie cu pachetul nostru "Sparkle & Sweet". Am selectat doua produse de top pentru a crea experienta gourmet completa: ciocolata belgiana si bulele fine italiene. Setul contine: Cutia cu 20 Praline Valentino: O selectie generoasa de bomboane artizanale belgiene (cca. 250g), care te vor purta ..._
+
+3. *Cadou Cutie cu 12 Praline Belgiene Valentino* - Preț: 90.0 lei
+_Nu stii ce sa alegi intre ciocolata alba, neagra sau cu lapte? Cu aceasta cutie de la Valentino Chocolatier, le ai pe toate. Am pregatit o selectie de 12 bomboane fine, create de maestrii ciocolatieri belgieni, care impresioneaza atat prin gust, cat si prin aspect. In interiorul cutiei vei descoperi o explozie de arome: de la praline clasice cu cre..._
+
+
+--------------------------------------------------
+[19:33:36] BURST USER BURST_23_f47f: trimite
+[19:33:36] BOT: 🎉 *Comandă trimisă!*
+• 1 x Buchet Flori "Garden Dream" (310.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 310.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:33:36] BURST USER BURST_10_87fb: da
+[19:33:36] BOT: ✅ Adăugat 1x Martisor din Rasina cu Floare Naturala si Glitter în coș!
+--------------------------------------------------
+[19:33:38] BURST USER BURST_19_14b7: varianta 2
+[19:33:38] BOT: Vrei să adăugăm *1x Cadou "Sparkle & Sweet"*? (300.0 RON)
+--------------------------------------------------
+[19:33:38] BURST USER BURST_15_49ca: Vreau detalii despre trandafiri
+[19:33:38] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Buchet flori nasa cu trandafiri portocalii si accente grena* - Preț: 445.0 lei
+_Transforma rolul de nasa intr-o aparitie memorabila cu acest buchet spectaculos, lucrat cu atentie la detalii si texturi. Compozitia florala pentru acest buchet flori nasa cu trandafiri si accente grena este un joc armonios intre lumini si umbre, avand in centru trandafiri de gradina in nuante vibrante de portocaliu (peach fuzz) si corai. Nota de m..._
+
+2. *Aranjament Floral in Cutie Rosie cu Trandafiri si Glob cu Praline* - Preț: 290.0 lei
+_De sarbatori, cele mai frumoase daruri sunt cele care aduc un zambet si un moment de rasfat. Aranjamentul floral in cutie rosie cu trandafiri si glob cu praline este gandit ca un pachet complet de bucurie, ideal pentru a transmite "Sarbatori Fericite" intr-un mod elegant si gustos. Compozitia este realizata intr-o cutie de lemn de culoare rosie, de..._
+
+3. *Buchet de Flori Pastel cu Hortensii si Trandafiri* - Preț: 810.0 lei
+_Buchetul Pastel cu Hortensii si Trandafiri este creat pentru momente pline de tandrete si eleganta. Mixul de trandafiri albi si roz, hortensii delicate si lisianthus in nuante pastel creeaza o compozitie echilibrata, luminoasa si extrem de rafinata. Fiecare floare este aleasa cu grija pentru a pune in valoare armonia culorilor si a texturilor, rezu..._
+
+
+--------------------------------------------------
+[19:33:39] BURST USER BURST_19_14b7: da
+[19:33:39] BOT: ✅ Adăugat 1x Cadou "Sparkle & Sweet" în coș!
+--------------------------------------------------
+[19:33:41] BURST USER BURST_19_14b7: mai pune un pandantiv
+[19:33:41] BOT: Vrei să adăugăm *1x Cadou Praline Belgiene Valentino 220 gr*? (100.0 RON)
+--------------------------------------------------
+[19:33:41] BURST USER BURST_18_92f0: Vreau ceva albastru
+[19:33:41] BOT: Iată selecția noastră de flori:
+
+1. *Lumanare Botez din Ceara Naturala "Baby Blue"* - Preț: 420.0 lei
+_Alege o lumanare de botez care trece testul timpului si pastreaza vie amintirea crestinarii micutului tau. Modelul "Baby Blue" este creat pe o baza de lumanare din ceara naturala de albine, cu textura de fagure, emanand un parfum subtil si placut de miere. Aranjamentul floral este realizat exclusiv din plante uscate si flori criogenate, ceea ce ins..._
+
+2. *Buchet de Flori 9 Zambile Multicolore* - Preț: 290.0 lei
+_Daca vrei sa daruiesti "parfumul primaverii", acesta este buchetul ideal. Am creat o simfonie de culoare si arome folosind 9 fire de zambile proaspete, intr-un mix vesel de nuante: albastru-indigo, roz bombon si alb crem. Ceea ce face acest buchet special este designul sau natural si compact. In loc de ambalajul clasic din hartie, am optat pentru u..._
+
+3. *Cos "Spring Shine" â€“ Mix de 5 Bulbi de Primavara* - Preț: 200.0 lei
+_Adu lumina si prospetime in orice incapere cu cosul "Spring Shine". Acest aranjament se remarca prin eleganta sa simpla, fiind realizat intr-un cos impletit de culoare alba , care pune in valoare culorile vibrante ale florilor de primavara. Ce contine acest cos? La fel ca natura care se trezeste la viata, acest cos este o surpriza placuta. Function..._
+
+
+--------------------------------------------------
+[19:33:42] HEALTHY USER HEALTHY_3_c1e9: primul e ok
+[19:33:42] BOT: ✅ Adăugat 1x Aranjament Floral in Cutie Rosie cu Trandafiri si Glob cu Praline în coș!
+--------------------------------------------------
+[19:33:43] BURST USER BURST_18_92f0: nu aveti? atunci ceva mov
+[19:33:43] BOT: Vrei să adăugăm *1x Cos "Spring Shine" â€“ Mix de 5 Bulbi de Primavara*? (200.0 RON)
+--------------------------------------------------
+[19:33:43] BURST USER BURST_19_14b7: da
+[19:33:43] BOT: ✅ Adăugat 1x Cadou Praline Belgiene Valentino 220 gr în coș!
+--------------------------------------------------
+[19:33:44] BURST USER BURST_18_92f0: prima
+[19:33:44] BOT: Vrei să adăugăm *1x Lumanare Botez din Ceara Naturala "Baby Blue"*? (420.0 RON)
+--------------------------------------------------
+[19:33:44] BURST USER BURST_8_a098: Vreau trandafiri rosii
+[19:33:44] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Buchet "Grand Amour" â€“ 101 Trandafiri Rosii* - Preț: 1899.0 lei
+_Exista cadouri care plac, si exista cadouri care taie respiratia. Buchetul "Grand Amour", compus din 101 trandafiri rosii , face parte din a doua categorie. Este declaratia suprema de dragoste, un gest grandios care spune "Tu esti unica mea iubire" fara a folosi niciun cuvant. Acest buchet nu este doar un aranjament floral, ci o experienta in sine...._
+
+2. *Aranjament Floral in Cutie Rosie cu Trandafiri si Glob cu Praline* - Preț: 290.0 lei
+_De sarbatori, cele mai frumoase daruri sunt cele care aduc un zambet si un moment de rasfat. Aranjamentul floral in cutie rosie cu trandafiri si glob cu praline este gandit ca un pachet complet de bucurie, ideal pentru a transmite "Sarbatori Fericite" intr-un mod elegant si gustos. Compozitia este realizata intr-o cutie de lemn de culoare rosie, de..._
+
+3. *Buchet flori nasa cu trandafiri portocalii si accente grena* - Preț: 445.0 lei
+_Transforma rolul de nasa intr-o aparitie memorabila cu acest buchet spectaculos, lucrat cu atentie la detalii si texturi. Compozitia florala pentru acest buchet flori nasa cu trandafiri si accente grena este un joc armonios intre lumini si umbre, avand in centru trandafiri de gradina in nuante vibrante de portocaliu (peach fuzz) si corai. Nota de m..._
+
+
+--------------------------------------------------
+[19:33:45] BURST USER BURST_19_14b7: finalizeaza acum
+[19:33:45] BOT: 🎉 *Comandă trimisă!*
+• 1 x Cadou "Sparkle & Sweet" (300.0 RON)
+• 1 x Cadou Praline Belgiene Valentino 220 gr (100.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 400.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:33:46] BURST USER BURST_8_a098: prima varianta
+[19:33:46] BOT: Vrei să adăugăm *1x Buchet "Grand Amour" â€“ 101 Trandafiri Rosii*? (1899.0 RON)
+--------------------------------------------------
+[19:33:46] BURST USER BURST_18_92f0: da
+[19:33:46] BOT: ✅ Adăugat 1x Lumanare Botez din Ceara Naturala "Baby Blue" în coș!
+--------------------------------------------------
+[19:33:47] HEALTHY USER HEALTHY_3_c1e9: da
+[19:33:47] BOT: Vrei să adăugăm *1x Buchet "Grand Amour" â€“ 101 Trandafiri Rosii*? (1899.0 RON)
+--------------------------------------------------
+[19:33:47] BURST USER BURST_2_3c0c: vreau un cadou pt mama, sa semene cu florile din gradina
+[19:33:47] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Buchet Flori 5 Hortensii Delicate* - Preț: 310.0 lei
+_Daca vrei sa oferi un cadou care sa lase o impresie puternica, alege acest buchet cu 5 hortensii delicate. Hortensia este regina volumului, iar acest buchet este o adevarata demonstratie de generozitate florala. Am selectat 5 fire de Hortensie (Hydrangea) in cele mai iubite culori: bleu senin, roz pudrat, alb imaculat si verde crud. Aceasta combina..._
+
+2. *Aranjament Floral "Cosul Abundentei"* - Preț: 330.0 lei
+_Aranjamentul Cosul Abundentei este creat pentru momente care merita un gest memorabil. Trandafirii rosii, hortensia grena si amaranthusul bogat se imbina cu fructele de toamna pentru a oferi un mix spectaculos de culori si texturi. Strugurele negru si macesele adauga acel aer rustic-elegant care transforma fiecare detaliu intr-o poveste vizuala. To..._
+
+3. *Aranjament Floral "Cosulet cu flori de toamna"* - Preț: 360.0 lei
+_Creati o atmosfera calda, primitoare si plina de farmec rustic cu acest aranjament floral "Cosulet cu flori de toamna"! Â Acest aranjament imbina eleganta florilor cu bogatia naturii, fiind prezentat intr-un cosulet impletit care evoca spiritul recoltei si al serilor confortabile de toamna. Â Este cadoul perfect pentru a aduce bucurie si culoare in..._
+
+
+--------------------------------------------------
+[19:33:48] BURST USER BURST_8_a098: da
+[19:33:48] BOT: ✅ Adăugat 1x Buchet "Grand Amour" â€“ 101 Trandafiri Rosii în coș!
+--------------------------------------------------
+[19:33:48] BURST USER BURST_18_92f0: gata
+[19:33:48] BOT: 🎉 *Comandă trimisă!*
+• 1 x Lumanare Botez din Ceara Naturala "Baby Blue" (420.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 420.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:33:49] HEALTHY USER HEALTHY_7_b423: superb, il vreau
+[19:33:49] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Buchet de Flori 11 Trandafiri Mov si Eucalipt* - Preț: 299.0 lei
+_Daca vrei sa oferi ceva cu adevarat memorabil, alege buchetul cu 11 trandafiri mov. Trandafirii mov transmit un mesaj puternic de admiratie profunda si incantare. Am selectat 11 fire de trandafiri dintr-un soi special (adesea bicolori, cu centrul mai deschis si petalele exterioare intr-un magenta-mov intens), care creeaza un efect vizual spectaculo..._
+
+2. *Buchet "Red Delight" â€“ Amaryllis Rosu* - Preț: 245.0 lei
+_Lasa-te cucerit de farmecul vibrant al buchetului "Red Delight". Asa cum ii spune si numele, acest bcuhet este o adevarata incantare vizuala, dominata de eleganta impunatoare a florilor de Amaryllis (Hippeastrum) de un rosu aprins. Compozitia emana bucurie si rafinament, fiind construita in jurul tijelor inalte de Amaryllis, ale caror cupe catifela..._
+
+3. *Buchet de Flori "Ruby Passion"* - Preț: 309.0 lei
+_Rosu pe rosu â€“ definitia pasiunii absolute. Buchetul "Ruby Passion" este creat pentru cei care nu se tem sa isi exprime sentimentele cu intensitate. Acest aranjament impresioneaza prin designul sau monocromatic, o tendinta foarte apreciata in arta florala moderna. Buchetul este construit in jurul unor trandafiri rosii premium , cu petale catifela..._
+
+
+--------------------------------------------------
+[19:33:50] BURST USER BURST_8_a098: gata
+[19:33:50] BOT: 🎉 *Comandă trimisă!*
+• 1 x Buchet "Grand Amour" â€“ 101 Trandafiri Rosii (1899.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 1899.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:33:52] HEALTHY USER HEALTHY_3_c1e9: gata
+[19:33:52] BOT: ✅ Adăugat 1x Buchet "Grand Amour" â€“ 101 Trandafiri Rosii în coș!
+--------------------------------------------------
+[19:33:54] BURST USER BURST_9_16b4: Am facut o gafa si trebuie sa imi cer scuze... ceva impresionant
+[19:33:54] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Cupola Decorativa de Craciun "Spargatorul de Nuci"* - Preț: 280.0 lei
+_Retraieste farmecul basmelor de odinioara cu aceasta decoratiune rafinata. Cupola "Spargatorul de Nuci" nu este doar un obiect decorativ, ci o mica lume de basm care aduce bucurie privitorului. Piesa centrala este figurina clasica a Spargatorului de Nuci, gardianul povestilor de iarna, imbracat in uniforma sa festiva. Acesta troneaza in mijlocul un..._
+
+2. *Coroana Funerara Garoafe Rosii* - Preț: 490.0 lei
+_In momentele de grea incercare si despartire, florile raman cel mai sincer mod de a exprima regretele, respectul si iubirea pentru persoana care a plecat dintre noi. Coroana funerara rotunda "Respect Etern" este un omagiu clasic si elegant, creat pentru a aduce un ultim salut plin de demnitate. Aranjamentul are un diametru de 40 de centimetri si es..._
+
+3. *Cadou Praline Belgiene Valentino 220 gr* - Preț: 100.0 lei
+_Niciun cadou nu este complet fara un strop de dulceata. Cutia de praline Valentino (220g) este alegerea ideala pentru a desavarsi o surpriza placuta, aducand un plus de rafinament si gust buchetului de flori ales. Aceste praline sunt renumite pentru textura lor fina si gustul bogat, fiind realizate din ingrediente de calitate superioara. Cutia cont..._
+
+
+--------------------------------------------------
+[19:33:55] HEALTHY USER HEALTHY_7_b423: da
+[19:33:55] BOT: Vrei să adăugăm *1x Buchet de Flori 11 Trandafiri Mov si Eucalipt*? (299.0 RON)
+--------------------------------------------------
+[19:33:56] BURST USER BURST_3_66df: Vreau un buchet mare dar fara trandafiri si fara lalele
+[19:33:56] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Buchet "Grand Amour" â€“ 101 Trandafiri Rosii* - Preț: 1899.0 lei
+_Exista cadouri care plac, si exista cadouri care taie respiratia. Buchetul "Grand Amour", compus din 101 trandafiri rosii , face parte din a doua categorie. Este declaratia suprema de dragoste, un gest grandios care spune "Tu esti unica mea iubire" fara a folosi niciun cuvant. Acest buchet nu este doar un aranjament floral, ci o experienta in sine...._
+
+2. *Aranjament Floral in cutie "Sweet Hugs"* - Preț: 719.0 lei
+_Cauti un cadou care sa topeasca inima oricui? Cutia "Sweet Hugs" este definitia dragalaseniei. Am combinat eleganta unui aranjament floral premium cu nostalgia si caldura unui ursulet de plus, creand astfel surpriza perfecta pentru momente pline de tandrete. Aranjamentul floral este realizat intr-o cutie rotunda de lux, marca "City Flowers", de cul..._
+
+3. *Aranjament Floral in Cutie Rosie cu Trandafiri si Glob cu Praline* - Preț: 290.0 lei
+_De sarbatori, cele mai frumoase daruri sunt cele care aduc un zambet si un moment de rasfat. Aranjamentul floral in cutie rosie cu trandafiri si glob cu praline este gandit ca un pachet complet de bucurie, ideal pentru a transmite "Sarbatori Fericite" intr-un mod elegant si gustos. Compozitia este realizata intr-o cutie de lemn de culoare rosie, de..._
+
+
+--------------------------------------------------
+[19:33:56] BURST USER BURST_9_16b4: varianta 2 e buna
+[19:33:56] BOT: Vrei să adăugăm *1x Coroana Funerara Garoafe Rosii*? (490.0 RON)
+--------------------------------------------------
+[19:33:57] BURST USER BURST_3_66df: al treilea e interesant
+[19:33:57] BOT: Vrei să adăugăm *1x Aranjament Floral in Cutie Rosie cu Trandafiri si Glob cu Praline*? (290.0 RON)
+--------------------------------------------------
+[19:33:57] BURST USER BURST_9_16b4: da
+[19:33:57] BOT: ✅ Adăugat 1x Coroana Funerara Garoafe Rosii în coș!
+--------------------------------------------------
+[19:33:59] BURST USER BURST_9_16b4: finalizeaza
+[19:33:59] BOT: 🎉 *Comandă trimisă!*
+• 1 x Coroana Funerara Garoafe Rosii (490.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 490.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:33:59] BURST USER BURST_3_66df: da
+[19:33:59] BOT: ✅ Adăugat 1x Aranjament Floral in Cutie Rosie cu Trandafiri si Glob cu Praline în coș!
+--------------------------------------------------
+[19:34:00] HEALTHY USER HEALTHY_7_b423: pune si praline
+[19:34:00] BOT: Vrei să adăugăm *1x Buchet de Flori 11 Trandafiri Mov si Eucalipt*? (299.0 RON)
+--------------------------------------------------
+[19:34:00] BURST USER BURST_1_b0fb: Vreau niste martisoare si mai vreau si un cadou diferit, nu buchet
+[19:34:00] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Buchet "Grand Amour" â€“ 101 Trandafiri Rosii* - Preț: 1899.0 lei
+_Exista cadouri care plac, si exista cadouri care taie respiratia. Buchetul "Grand Amour", compus din 101 trandafiri rosii , face parte din a doua categorie. Este declaratia suprema de dragoste, un gest grandios care spune "Tu esti unica mea iubire" fara a folosi niciun cuvant. Acest buchet nu este doar un aranjament floral, ci o experienta in sine...._
+
+2. *Buchet Flori 5 Hortensii Delicate* - Preț: 310.0 lei
+_Daca vrei sa oferi un cadou care sa lase o impresie puternica, alege acest buchet cu 5 hortensii delicate. Hortensia este regina volumului, iar acest buchet este o adevarata demonstratie de generozitate florala. Am selectat 5 fire de Hortensie (Hydrangea) in cele mai iubite culori: bleu senin, roz pudrat, alb imaculat si verde crud. Aceasta combina..._
+
+3. *Buchet de flori 49 lalele albe* - Preț: 535.0 lei
+_Exista cadouri frumoase si exista cadouri care te lasa fara cuvinte. Buchetul acesta face parte din a doua categorie. Am reunit 49 de lalele albe , proaspete si imaculate, pentru a crea un "nor" floral de o eleganta desavarsita. Volumul acestui buchet este impresionant. Pentru a pastra o linie estetica pura si moderna, am ales un design "all-white"..._
+
+
+--------------------------------------------------
+[19:34:01] BURST USER BURST_3_66df: mai aveti pandantive?
+[19:34:01] BOT: Vrei să adăugăm *1x Aranjament Floral in Cutie Rosie cu Trandafiri si Glob cu Praline*? (290.0 RON)
+--------------------------------------------------
+[19:34:02] BURST USER BURST_16_4950: vreau flori rosii
+[19:34:02] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Buchet Flori "Garden Dream"* - Preț: 310.0 lei
+_Daca vrei sa impresionezi o persoana cu gusturi rafinate, buchetul "GardenÂ Dream" este alegerea perfecta. Am creat un mix floral care iese din tipare, combinand texturi catifelate cu culori electrizante. Vedetele buchetului sunt florile de Orhidee Vanda, recunoscute pentru modelul lor unic, pestrit, in nuante de violet intens. Acestea sunt acompan..._
+
+2. *Buchet de flori "Red Passion"* - Preț: 450.0 lei
+_Aprinde flacara pasiunii cu buchetul "Red Passion", o declaratie de dragoste scrisa in limbajul florilor. Asa cum ii spune si numele, acest aranjament este dominat de rosul profund, culoarea iubirii eterne si a dorintei, fiind conceput pentru a face inimile sa bata mai repede. Acest produs functioneaza pe conceptul "Florist Choice" (Alegerea Floris..._
+
+3. *Buchet de Flori "Life in Pink"* - Preț: 430.0 lei
+_Buchetul Life in Pink imbina intr-un mod spectaculos nuantele de roz, roz pal si fuchsia, creand un mix vibrant de flori de sezon. Fiecare floare este aleasa cu grija de floristi pentru a reproduce cat mai fidel cromatica, textura si dimensiunea buchetului din fotografia de prezentare, astfel incat rezultatul final sa fie la fel de armonios si expr..._
+
+
+--------------------------------------------------
+[19:34:02] BURST USER BURST_1_b0fb: da primul
+[19:34:02] BOT: Vrei să adăugăm *1x Buchet "Grand Amour" â€“ 101 Trandafiri Rosii*? (1899.0 RON)
+--------------------------------------------------
+[19:34:03] BURST USER BURST_3_66df: primul e ok
+[19:34:03] BOT: ✅ Adăugat 1x Aranjament Floral in Cutie Rosie cu Trandafiri si Glob cu Praline în coș!
+--------------------------------------------------
+[19:34:04] BURST USER BURST_16_4950: 2
+[19:34:04] BOT: Vrei să adăugăm *1x Buchet de flori "Red Passion"*? (450.0 RON)
+--------------------------------------------------
+[19:34:05] BURST USER BURST_3_66df: da
+[19:34:05] BOT: Vrei să adăugăm *1x Buchet "Grand Amour" â€“ 101 Trandafiri Rosii*? (1899.0 RON)
+--------------------------------------------------
+[19:34:05] BURST USER BURST_16_4950: k
+[19:34:05] BOT: ✅ Adăugat 1x Buchet de flori "Red Passion" în coș!
+--------------------------------------------------
+[19:34:06] HEALTHY USER HEALTHY_7_b423: da
+[19:34:06] BOT: ✅ Adăugat 1x Buchet de Flori 11 Trandafiri Mov si Eucalipt în coș!
+--------------------------------------------------
+[19:34:06] BURST USER BURST_20_17d2: ceva ieftin
+[19:34:06] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Buchet de flori 25 lalele albe* - Preț: 310.0 lei
+_Uneori, simplitatea este cea mai sofisticata forma de eleganta. Buchetul de lalele albe este creat pentru cei care apreciaza frumusetea imaculata si detaliile fine. Am selectatÂ 25 de lalele de un alb pur , simbol al sinceritatii, respectului si al noilor inceputuri. Pentru a scoate in evidenta albul petalelor, am adaugat crengute de Eucalipt argin..._
+
+2. *Buchet de flori 25 Ranunculus Hanoi* - Preț: 976.5 lei
+_Daca vrei sa oferi un "nor" de flori, alege buchetul "Blush Elegance". Am reunit 25 de fire de Ranunculus Hanoi intr-un buchet compact, rotund si extrem de bogat. Pe masura ce aceste flori se deschid, volumul lor se dubleaza, semanand izbitor cu bujorii. Aranjamentul este finisat la baza cu o "manseta" eleganta din frunze de Aspidistra indoite si E..._
+
+3. *Cadou Praline Belgiene Valentino 220 gr* - Preț: 100.0 lei
+_Niciun cadou nu este complet fara un strop de dulceata. Cutia de praline Valentino (220g) este alegerea ideala pentru a desavarsi o surpriza placuta, aducand un plus de rafinament si gust buchetului de flori ales. Aceste praline sunt renumite pentru textura lor fina si gustul bogat, fiind realizate din ingrediente de calitate superioara. Cutia cont..._
+
+
+--------------------------------------------------
+[19:34:07] BURST USER BURST_3_66df: gata
+[19:34:07] BOT: ✅ Adăugat 1x Buchet "Grand Amour" â€“ 101 Trandafiri Rosii în coș!
+--------------------------------------------------
+[19:34:08] BURST USER BURST_12_f722: Vreau flori albe
+[19:34:08] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Buchet "Pure White" â€“ 9 Fire Liliac Alb* - Preț: 599.0 lei
+_Descopera eleganta absoluta a simplitatii cu buchetul "Pure White". Acest aranjament floral este un omagiu adus puritatii si prospetimii, fiind compus exclusiv din liliac alb, floarea care vesteste cele mai frumoase zile de primavara. Buchetul contine 9 fire generoase de liliac alb, selectate cu grija pentru parfumul lor inconfundabil si aspectul b..._
+
+2. *Buchet de Flori "All White"* - Preț: 450.0 lei
+_Buchetul All White contine un mix armonios de flori de sezon, alese cu grija pentru a oferi o varietate de texturi si forme. Fiecare floare, de un alb imaculat, aduce o nota de prospetime si delicatete. Insertiile de verdeata completeaza perfect ansamblul, adaugand un contrast subtil si natural. Ambalat cu grija intr-un ambalaj elegant, asortat cu ..._
+
+3. *Buchet de Flori "Sugar Pink"* - Preț: 400.0 lei
+_Buchetul Sugar Pink este compus dintr-un mix minunat de flori de sezon in nuante fine de alb, roz si blush. Fiecare floare este aleasa cu grija de floristii nostri pentru a crea un ansamblu armonios si plin de rafinament. Insertiile de verdeata adauga un contrast placut si natural, evidentiind frumusetea florilor. Ambalat cu atentie intr-un ambalaj..._
+
+
+--------------------------------------------------
+[19:34:09] BURST USER BURST_20_17d2: 1
+[19:34:09] BOT: Vrei să adăugăm *1x Buchet de flori 25 lalele albe*? (310.0 RON)
+--------------------------------------------------
+[19:34:10] BURST USER BURST_12_f722: detalii despre prima
+[19:34:10] BOT: 🔍 *Detalii complete pentru: Buchet "Pure White" â€“ 9 Fire Liliac Alb*
+💰 *Preț:* 599.0 lei
+
+
+📖 *Descriere:* 
+_Descopera eleganta absoluta a simplitatii cu buchetul "Pure White". Acest aranjament floral este un omagiu adus puritatii si prospetimii, fiind compus exclusiv din liliac alb, floarea care vesteste cele mai frumoase zile de primavara. Buchetul contine 9 fire generoase de liliac alb, selectate cu grija pentru parfumul lor inconfundabil si aspectul bogat. Albul imaculat al florilor este scos in evidenta de frunzele de eucalipt verde-argintiu, care adauga textura si un miros subtil, racoritor. Prezentarea este una autentica si moderna: ambalajul din hartie kraft naturala (maro) ofera un contrast superb cu albul florilor, creand un aspect rustic-chic, foarte apreciat in tendintele actuale. Legat cu o panglica fina, acest buchet este mesagerul perfect al gandurilor sincere si curate. Nota despre sezon: Liliacul este o floare sezoniera, disponibila in special in lunile de primavara. Va recomandam sa verificati disponibilitatea inainte de a plasa comanda in afara sezonului. Cui daruim acest buchet? Albul simbolizeaza sinceritatea, inocenta si noile inceputuri. Este cadoul ideal pentru o tanara domnisoara, pentru a sarbatori ziua numelui (Florii), pentru o cununie civila relaxata sau pur si simplu pentru a aduce lumina si parfum in casa unei persoane dragi._
+
+_Dorești să adaugi acest produs în comandă? Spune-mi 'Da' sau 'Îl vreau pe acesta'._
+--------------------------------------------------
+[19:34:11] BURST USER BURST_20_17d2: da
+[19:34:11] BOT: ✅ Adăugat 1x Buchet de flori 25 lalele albe în coș!
+--------------------------------------------------
+[19:34:11] BURST USER BURST_24_6a30: ceva cadou
+[19:34:11] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Cadou Praline Belgiene Valentino 220 gr* - Preț: 100.0 lei
+_Niciun cadou nu este complet fara un strop de dulceata. Cutia de praline Valentino (220g) este alegerea ideala pentru a desavarsi o surpriza placuta, aducand un plus de rafinament si gust buchetului de flori ales. Aceste praline sunt renumite pentru textura lor fina si gustul bogat, fiind realizate din ingrediente de calitate superioara. Cutia cont..._
+
+2. *Buchet de flori 49 lalele albe* - Preț: 535.0 lei
+_Exista cadouri frumoase si exista cadouri care te lasa fara cuvinte. Buchetul acesta face parte din a doua categorie. Am reunit 49 de lalele albe , proaspete si imaculate, pentru a crea un "nor" floral de o eleganta desavarsita. Volumul acestui buchet este impresionant. Pentru a pastra o linie estetica pura si moderna, am ales un design "all-white"..._
+
+3. *Aranjament Floral de Craciun "Red Velvet"* - Preț: 225.0 lei
+_Cauti un cadou care sa exprime caldura si rafinament? Aranjamentul "Red Velvet" este definitia elegantei festive. Am ales o cutie de catifea fina de culoare visinie, care ofera o senzatie placuta la atingere si un aspect premium. Inima aranjamentului este spectaculoasa floare de Amaryllis rosu (Crin de iarna), inconjurata de o coronita bogata din T..._
+
+
+--------------------------------------------------
+[19:34:12] BURST USER BURST_12_f722: da
+[19:34:12] BOT: Vrei să adăugăm *1x Buchet "Pure White" â€“ 9 Fire Liliac Alb*? (599.0 RON)
+--------------------------------------------------
+[19:34:12] HEALTHY USER HEALTHY_7_b423: gata
+[19:34:12] BOT: 🎉 *Comandă trimisă!*
+• 1 x Buchet de Flori 11 Trandafiri Mov si Eucalipt (299.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 299.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:34:13] BURST USER BURST_24_6a30: 2
+[19:34:13] BOT: Vrei să adăugăm *1x Buchet de flori 49 lalele albe*? (535.0 RON)
+--------------------------------------------------
+[19:34:13] BURST USER BURST_20_17d2: gata
+[19:34:13] BOT: 🎉 *Comandă trimisă!*
+• 1 x Buchet de flori 25 lalele albe (310.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 310.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:34:14] BURST USER BURST_14_96d3: al doilea e frumos
+[19:34:14] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Buchet "Red Delight" â€“ Amaryllis Rosu* - Preț: 245.0 lei
+_Lasa-te cucerit de farmecul vibrant al buchetului "Red Delight". Asa cum ii spune si numele, acest bcuhet este o adevarata incantare vizuala, dominata de eleganta impunatoare a florilor de Amaryllis (Hippeastrum) de un rosu aprins. Compozitia emana bucurie si rafinament, fiind construita in jurul tijelor inalte de Amaryllis, ale caror cupe catifela..._
+
+2. *Martisor din Rasina cu Floare Naturala Galbena* - Preț: 80.0 lei
+_Uneori, cele mai frumoase vesti de primavara vin in forme simple si pure. Martisorul "Sunny Bloom" este o odÄƒ adusa luminii si optimismului. Designul este unul minimalist si elegant: o floare naturala galbena , cu 5 petale perfect conturate, este asezata central pe un fundal alb cald (nuanta untului/crem deschis) . Aceasta combinatie cromatica cre..._
+
+3. *Set Cosuri Mama & Fiica "Sunny Smiles"* - Preț: 699.0 lei
+_Adu o raza de soare in viata lor! Setul "Sunny Smiles" este o explozie de veselie, conceput special pentru a celebra legatura luminoasa dintre o mama si fiica ei. Am creat doua aranjamente asortate, pline de viata, care simbolizeaza admiratia si fericirea. Piesa centrala a acestor aranjamente este Floarea Soarelui , simbolul loialitatii si al energ..._
+
+
+--------------------------------------------------
+[19:34:15] BURST USER BURST_24_6a30: dap
+[19:34:15] BOT: ✅ Adăugat 1x Buchet de flori 49 lalele albe în coș!
+--------------------------------------------------
+[19:34:15] BURST USER BURST_14_96d3: da
+--------------------------------------------------
+[19:34:16] BURST USER BURST_24_6a30: gata
+[19:34:16] BOT: 🎉 *Comandă trimisă!*
+• 1 x Buchet de flori 49 lalele albe (535.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 535.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:34:17] BURST USER BURST_14_96d3: gata
+[19:34:17] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
+--------------------------------------------------
+[19:34:18] BURST USER BURST_6_4258: Vreau ceva vesel care sa miroasa frumos
+[19:34:18] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Cadou "Sparkle & Sweet"* - Preț: 300.0 lei
+_Atunci cand florile nu sunt de ajuns, adauga un strop de magie cu pachetul nostru "Sparkle & Sweet". Am selectat doua produse de top pentru a crea experienta gourmet completa: ciocolata belgiana si bulele fine italiene. Setul contine: Cutia cu 20 Praline Valentino: O selectie generoasa de bomboane artizanale belgiene (cca. 250g), care te vor purta ..._
+
+2. *Pachet "Sweet Passion" - Buchet si praline* - Preț: 299.0 lei
+_Pachetul "Sweet Passion" este combinatia irezistibila dintre frumusetea naturala si gustul rafinat, creata pentru a impresiona. Acest set cadou aduce impreuna un buchet pasional in nuante de rosu si o cutie eleganta de praline belgiene, fiind solutia completa pentru momentele romantice. Nota Importanta despre Buchet (Florist Choice): Buchetul din a..._
+
+3. *Buchet de Flori "Ruby Passion"* - Preț: 309.0 lei
+_Rosu pe rosu â€“ definitia pasiunii absolute. Buchetul "Ruby Passion" este creat pentru cei care nu se tem sa isi exprime sentimentele cu intensitate. Acest aranjament impresioneaza prin designul sau monocromatic, o tendinta foarte apreciata in arta florala moderna. Buchetul este construit in jurul unor trandafiri rosii premium , cu petale catifela..._
+
+
+--------------------------------------------------
+[19:34:19] BURST USER BURST_6_4258: prima varianta e perfecta
+[19:34:19] BOT: Vrei să adăugăm *1x Cadou "Sparkle & Sweet"*? (300.0 RON)
+--------------------------------------------------
+[19:34:19] BURST USER BURST_21_2598: vreau buchet
+[19:34:19] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Cadou "Sparkle & Sweet"* - Preț: 300.0 lei
+_Atunci cand florile nu sunt de ajuns, adauga un strop de magie cu pachetul nostru "Sparkle & Sweet". Am selectat doua produse de top pentru a crea experienta gourmet completa: ciocolata belgiana si bulele fine italiene. Setul contine: Cutia cu 20 Praline Valentino: O selectie generoasa de bomboane artizanale belgiene (cca. 250g), care te vor purta ..._
+
+2. *Cadou Praline Belgiene Valentino 220 gr* - Preț: 100.0 lei
+_Niciun cadou nu este complet fara un strop de dulceata. Cutia de praline Valentino (220g) este alegerea ideala pentru a desavarsi o surpriza placuta, aducand un plus de rafinament si gust buchetului de flori ales. Aceste praline sunt renumite pentru textura lor fina si gustul bogat, fiind realizate din ingrediente de calitate superioara. Cutia cont..._
+
+3. *Praline Valentino "Red Heart" 340g* - Preț: 209.0 lei
+_Atunci cand cuvintele nu sunt suficiente, o inima rosie plina cu ciocolata fina vorbeste de la sine. Cutia de praline Valentino "Red Heart" (340g) este cadoul suprem pentru momentele romantice, imbinand pasiunea culorii rosii cu rafinamentul ciocolatei belgiene autentice. Aceasta cutie generoasa, in forma de inima, este realizata dintr-un carton pr..._
+
+
+--------------------------------------------------
+[19:34:21] BURST USER BURST_6_4258: da
+[19:34:21] BOT: ✅ Adăugat 1x Cadou "Sparkle & Sweet" în coș!
+--------------------------------------------------
+[19:34:21] BURST USER BURST_21_2598: da
+[19:34:21] BOT: Vrei să adăugăm *1x Cadou "Sparkle & Sweet"*? (300.0 RON)
+--------------------------------------------------
+[19:34:23] BURST USER BURST_21_2598: atat
+[19:34:23] BOT: ✅ Adăugat 1x Cadou "Sparkle & Sweet" în coș!
+--------------------------------------------------
+[19:34:23] BURST USER BURST_6_4258: finalizeaza comanda
+[19:34:23] BOT: 🎉 *Comandă trimisă!*
+• 1 x Cadou "Sparkle & Sweet" (300.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 300.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:34:24] BURST USER BURST_0_02f2: Caut ceva special pt o aniversare de 10 ani, buget cam 500 lei
+[19:34:24] BOT: Iată selecția noastră de flori:
+
+1. *Buchet de Flori 11 Trandafiri Mov si Eucalipt* - Preț: 299.0 lei
+_Daca vrei sa oferi ceva cu adevarat memorabil, alege buchetul cu 11 trandafiri mov. Trandafirii mov transmit un mesaj puternic de admiratie profunda si incantare. Am selectat 11 fire de trandafiri dintr-un soi special (adesea bicolori, cu centrul mai deschis si petalele exterioare intr-un magenta-mov intens), care creeaza un efect vizual spectaculo..._
+
+2. *Buchet de Flori 11 Trandafiri Ciclam si Eucalipt* - Preț: 299.0 lei
+_Daca vrei sa impresionezi prin culoare si energie, buchetul "Magenta Love" este alegerea ideala. Am selectat 11 trandafiri intr-o nuanta intensa de ciclam (roz fuchsia) , o culoare care simbolizeaza admiratia profunda, gratia si bucuria de a trai. Designul este unul modern si monocromatic. Trandafirii catifelati sunt pusi in valoare de frunzele arg..._
+
+3. *City Flowers Bag 9 trandafiri multicolori* - Preț: 279.0 lei
+_Daca iti doresti un cadou care sa iasa din tipare prin prezentare si utilitate, alege City Flowers Bags. Am inlocuit ambalajul clasic cu o cutie alba eleganta tip "Flowers Bag", prevazuta cu manere din snur, transformand florile intr-un veritabil accesoriu urban. Compozitia este plina de viata, continand 9 trandafiri intr-un mix vesel de culori: po..._
+
+
+--------------------------------------------------
+[19:34:25] BURST USER BURST_7_4c7a: superb, il vreau
+[19:34:25] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Buchet de Flori 11 Trandafiri Mov si Eucalipt* - Preț: 299.0 lei
+_Daca vrei sa oferi ceva cu adevarat memorabil, alege buchetul cu 11 trandafiri mov. Trandafirii mov transmit un mesaj puternic de admiratie profunda si incantare. Am selectat 11 fire de trandafiri dintr-un soi special (adesea bicolori, cu centrul mai deschis si petalele exterioare intr-un magenta-mov intens), care creeaza un efect vizual spectaculo..._
+
+2. *Buchet "Red Delight" â€“ Amaryllis Rosu* - Preț: 245.0 lei
+_Lasa-te cucerit de farmecul vibrant al buchetului "Red Delight". Asa cum ii spune si numele, acest bcuhet este o adevarata incantare vizuala, dominata de eleganta impunatoare a florilor de Amaryllis (Hippeastrum) de un rosu aprins. Compozitia emana bucurie si rafinament, fiind construita in jurul tijelor inalte de Amaryllis, ale caror cupe catifela..._
+
+3. *Buchet de Flori "Ruby Passion"* - Preț: 309.0 lei
+_Rosu pe rosu â€“ definitia pasiunii absolute. Buchetul "Ruby Passion" este creat pentru cei care nu se tem sa isi exprime sentimentele cu intensitate. Acest aranjament impresioneaza prin designul sau monocromatic, o tendinta foarte apreciata in arta florala moderna. Buchetul este construit in jurul unor trandafiri rosii premium , cu petale catifela..._
+
+
+--------------------------------------------------
+[19:34:26] BURST USER BURST_0_02f2: varianta 2 e superba
+[19:34:26] BOT: Vrei să adăugăm *1x Buchet de Flori 11 Trandafiri Ciclam si Eucalipt*? (299.0 RON)
+--------------------------------------------------
+[19:34:27] BURST USER BURST_7_4c7a: da
+[19:34:27] BOT: Vrei să adăugăm *1x Buchet de Flori 11 Trandafiri Mov si Eucalipt*? (299.0 RON)
+--------------------------------------------------
+[19:34:28] BURST USER BURST_0_02f2: da, baga in cos
+[19:34:28] BOT: ✅ Adăugat 1x Buchet de Flori 11 Trandafiri Ciclam si Eucalipt în coș!
+[19:34:28] BOT: Vrei să adăugăm *1x Buchet de Flori 11 Trandafiri Mov si Eucalipt*? (299.0 RON)
+--------------------------------------------------
+[19:34:28] BURST USER BURST_7_4c7a: pune si praline
+[19:34:28] BOT: Vrei să adăugăm *1x Buchet de Flori 11 Trandafiri Mov si Eucalipt*? (299.0 RON)
+--------------------------------------------------
+[19:34:29] BURST USER BURST_0_02f2: si mai vreau si niste praline
+[19:34:29] BOT: Vrei să adăugăm *1x Buchet de Flori 11 Trandafiri Mov si Eucalipt*? (299.0 RON)
+--------------------------------------------------
+[19:34:30] BURST USER BURST_7_4c7a: da
+[19:34:30] BOT: ✅ Adăugat 1x Buchet de Flori 11 Trandafiri Mov si Eucalipt în coș!
+--------------------------------------------------
+[19:34:30] BURST USER BURST_11_d971: primul
+[19:34:30] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Buchet de flori 25 lalele albe* - Preț: 310.0 lei
+_Uneori, simplitatea este cea mai sofisticata forma de eleganta. Buchetul de lalele albe este creat pentru cei care apreciaza frumusetea imaculata si detaliile fine. Am selectatÂ 25 de lalele de un alb pur , simbol al sinceritatii, respectului si al noilor inceputuri. Pentru a scoate in evidenta albul petalelor, am adaugat crengute de Eucalipt argin..._
+
+2. *Buchet de flori 25 lalele mov* - Preț: 310.0 lei
+_Pentru femeia care apreciaza eleganta, misterul si rafinamentul, am creat buchetul acesta. Movul este culoarea regalitatii si a admiratiei, iar aceste 25 de lalele mov sunt absolut spectaculoase. Buchetul iese in evidenta prin cromatica sa nobila. Lalelele violet intens sunt puse in valoare de un ambalaj in nuante deÂ lila/lavanda , creand un degra..._
+
+3. *Pandantiv din Rasina cu Floare Daucus Carota* - Preț: 210.0 lei
+_Poarta natura aproape de inima ta cu acest colier fascinant, o mica fereastra catre frumusetea complexa a florei salbatice. Piesa centrala este un pandantiv oval realizat manual din rasina epoxidica de inalta claritate, in care a fost "inghetat" in timp un exemplar superb de Daucus Carota (Morcovul Salbatic) . Ceea ce face aceasta bijuterie cu adev..._
+
+
+--------------------------------------------------
+[19:34:32] BURST USER BURST_0_02f2: da, varianta 2
+[19:34:32] BOT: Vrei să adăugăm *1x Buchet de Flori 11 Trandafiri Ciclam si Eucalipt*? (299.0 RON)
+--------------------------------------------------
+[19:34:32] HEALTHY USER HEALTHY_5_7664: prima
+[19:34:32] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Set Cosuri Mama & Fiica "Sunny Smiles"* - Preț: 699.0 lei
+_Adu o raza de soare in viata lor! Setul "Sunny Smiles" este o explozie de veselie, conceput special pentru a celebra legatura luminoasa dintre o mama si fiica ei. Am creat doua aranjamente asortate, pline de viata, care simbolizeaza admiratia si fericirea. Piesa centrala a acestor aranjamente este Floarea Soarelui , simbolul loialitatii si al energ..._
+
+2. *Buchet "Red Delight" â€“ Amaryllis Rosu* - Preț: 245.0 lei
+_Lasa-te cucerit de farmecul vibrant al buchetului "Red Delight". Asa cum ii spune si numele, acest bcuhet este o adevarata incantare vizuala, dominata de eleganta impunatoare a florilor de Amaryllis (Hippeastrum) de un rosu aprins. Compozitia emana bucurie si rafinament, fiind construita in jurul tijelor inalte de Amaryllis, ale caror cupe catifela..._
+
+3. *Pachet "Sweet Delight" - Buchet & Tort Bezea 500 gr* - Preț: 410.0 lei
+_Atunci cand vrei sa faci o surpriza completa, alege pachetul "Sweet Delight". Am creat combinatia ideala intre frumusetea vizuala a florilor si gustul divin al unui desert premium. Este cadoul perfect pentru a sarbatori o zi de nastere sau pentru a transforma o zi obisnuita intr-o sarbatoare. BuchetulÂ este plin de viata si culoare, dominat de nuan..._
+
+
+--------------------------------------------------
+[19:34:32] BURST USER BURST_7_4c7a: gata
+[19:34:32] BOT: 🎉 *Comandă trimisă!*
+• 1 x Buchet de Flori 11 Trandafiri Mov si Eucalipt (299.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 299.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:34:32] BURST USER BURST_11_d971: da
+[19:34:32] BOT: Vrei să adăugăm *1x Buchet de flori 25 lalele albe*? (310.0 RON)
+--------------------------------------------------
+[19:34:34] BURST USER BURST_0_02f2: gata, trimite
+[19:34:34] BOT: ✅ Adăugat 1x Buchet de Flori 11 Trandafiri Ciclam si Eucalipt în coș!
+--------------------------------------------------
+[19:34:34] BURST USER BURST_11_d971: arata-mi cosul
+[19:34:34] BOT: 🛒 Coșul tău este gol momentan.
+--------------------------------------------------
+[19:34:36] BURST USER BURST_11_d971: gata finalizeaza
+[19:34:36] BOT: Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!
+--------------------------------------------------
+[19:34:36] HEALTHY USER HEALTHY_5_7664: da
+--------------------------------------------------
+[19:34:37] BURST USER BURST_22_d766: 2
+[19:34:37] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Pachet "Sweet Contrast" - Buchet & Tort Bezea 500 gr* - Preț: 550.0 lei
+_Cauti un cadou care sa iasa in evidenta? Pachetul "Sweet Contrast" este alegerea ideala pentru persoanele care iubesc culorile vibrante si gusturile rafinate. Am alaturat un buchet plin de personalitate unui tort artizanal delicios, creand surpriza perfecta pentru orice ocazie festiva. BuchetulÂ impresioneaza prin jocul de culori complementare. Flo..._
+
+2. *Buchet "Red Delight" â€“ Amaryllis Rosu* - Preț: 245.0 lei
+_Lasa-te cucerit de farmecul vibrant al buchetului "Red Delight". Asa cum ii spune si numele, acest bcuhet este o adevarata incantare vizuala, dominata de eleganta impunatoare a florilor de Amaryllis (Hippeastrum) de un rosu aprins. Compozitia emana bucurie si rafinament, fiind construita in jurul tijelor inalte de Amaryllis, ale caror cupe catifela..._
+
+3. *Pandantiv din Rasina cu Floare Daucus Carota* - Preț: 210.0 lei
+_Poarta natura aproape de inima ta cu acest colier fascinant, o mica fereastra catre frumusetea complexa a florei salbatice. Piesa centrala este un pandantiv oval realizat manual din rasina epoxidica de inalta claritate, in care a fost "inghetat" in timp un exemplar superb de Daucus Carota (Morcovul Salbatic) . Ceea ce face aceasta bijuterie cu adev..._
+
+
+--------------------------------------------------
+[19:34:38] BURST USER BURST_5_70ad: prima
+[19:34:38] BOT: Iată selecția noastră de flori:
+
+1. *Set Cosuri Mama & Fiica "Sunny Smiles"* - Preț: 699.0 lei
+_Adu o raza de soare in viata lor! Setul "Sunny Smiles" este o explozie de veselie, conceput special pentru a celebra legatura luminoasa dintre o mama si fiica ei. Am creat doua aranjamente asortate, pline de viata, care simbolizeaza admiratia si fericirea. Piesa centrala a acestor aranjamente este Floarea Soarelui , simbolul loialitatii si al energ..._
+
+2. *Buchet "Red Delight" â€“ Amaryllis Rosu* - Preț: 245.0 lei
+_Lasa-te cucerit de farmecul vibrant al buchetului "Red Delight". Asa cum ii spune si numele, acest bcuhet este o adevarata incantare vizuala, dominata de eleganta impunatoare a florilor de Amaryllis (Hippeastrum) de un rosu aprins. Compozitia emana bucurie si rafinament, fiind construita in jurul tijelor inalte de Amaryllis, ale caror cupe catifela..._
+
+3. *Pachet "Sweet Delight" - Buchet & Tort Bezea 500 gr* - Preț: 410.0 lei
+_Atunci cand vrei sa faci o surpriza completa, alege pachetul "Sweet Delight". Am creat combinatia ideala intre frumusetea vizuala a florilor si gustul divin al unui desert premium. Este cadoul perfect pentru a sarbatori o zi de nastere sau pentru a transforma o zi obisnuita intr-o sarbatoare. BuchetulÂ este plin de viata si culoare, dominat de nuan..._
+
+
+--------------------------------------------------
+[19:34:39] BURST USER BURST_22_d766: k
+[19:34:39] BOT: Vrei să adăugăm *1x Pachet "Sweet Contrast" - Buchet & Tort Bezea 500 gr*? (550.0 RON)
+--------------------------------------------------
+[19:34:40] BURST USER BURST_5_70ad: da
+--------------------------------------------------
+[19:34:40] BURST USER BURST_22_d766: finalizeaza
+[19:34:40] BOT: ✅ Adăugat 1x Pachet "Sweet Contrast" - Buchet & Tort Bezea 500 gr în coș!
+[19:34:40] BOT: 🎉 *Comandă trimisă!*
+• 1 x Pachet "Sweet Contrast" - Buchet & Tort Bezea 500 gr (550.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 550.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:34:43] BURST USER BURST_4_1706: detalii despre al doilea
+[19:34:43] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Aranjament funerar "Lumina si Pace"* - Preț: 550.0 lei
+_In momentele de despartire, florile aduc o ultima mangaiere si transmit un mesaj de pace sufleteasca. Aranjamentul funerar "Lumina si Pace" este un aranjament elegant, cu o forma alungita, creat special pentru a onora memoria unei persoane dragi cu delicatete si respect. Compozitia este dominata de crinii albi imperiali, flori care simbolizeaza ina..._
+
+2. *Pandantiv din Rasina cu Floare Daucus Carota* - Preț: 210.0 lei
+_Poarta natura aproape de inima ta cu acest colier fascinant, o mica fereastra catre frumusetea complexa a florei salbatice. Piesa centrala este un pandantiv oval realizat manual din rasina epoxidica de inalta claritate, in care a fost "inghetat" in timp un exemplar superb de Daucus Carota (Morcovul Salbatic) . Ceea ce face aceasta bijuterie cu adev..._
+
+3. *Buchet de Flori "Protea Dream"* - Preț: 400.0 lei
+_Evadeaza din banal cu un buchet care sfideaza conventiile si se apropie de arta. "Protea Dream" nu este doar un buchet, ci o experienta vizuala complexa, construita in jurul spectaculoaseiÂ King Protea â€“ una dintre cele mai vechi si rezistente flori din lume, simbol al curajului si al diversitatii. Compozitia impresioneaza prin jocul de texturi: ..._
+
+
+--------------------------------------------------
+[19:34:45] HEALTHY USER HEALTHY_13_c0eb: ok, punga cadou e buna
+[19:34:45] BOT: Iată selecția noastră de flori:
+
+1. *Pachet "Sweet Passion" - Buchet si praline* - Preț: 299.0 lei
+_Pachetul "Sweet Passion" este combinatia irezistibila dintre frumusetea naturala si gustul rafinat, creata pentru a impresiona. Acest set cadou aduce impreuna un buchet pasional in nuante de rosu si o cutie eleganta de praline belgiene, fiind solutia completa pentru momentele romantice. Nota Importanta despre Buchet (Florist Choice): Buchetul din a..._
+
+2. *Cadou Praline Belgiene Valentino 220 gr* - Preț: 100.0 lei
+_Niciun cadou nu este complet fara un strop de dulceata. Cutia de praline Valentino (220g) este alegerea ideala pentru a desavarsi o surpriza placuta, aducand un plus de rafinament si gust buchetului de flori ales. Aceste praline sunt renumite pentru textura lor fina si gustul bogat, fiind realizate din ingrediente de calitate superioara. Cutia cont..._
+
+3. *Buchet "Grand Amour" â€“ 101 Trandafiri Rosii* - Preț: 1899.0 lei
+_Exista cadouri care plac, si exista cadouri care taie respiratia. Buchetul "Grand Amour", compus din 101 trandafiri rosii , face parte din a doua categorie. Este declaratia suprema de dragoste, un gest grandios care spune "Tu esti unica mea iubire" fara a folosi niciun cuvant. Acest buchet nu este doar un aranjament floral, ci o experienta in sine...._
+
+
+--------------------------------------------------
+[19:34:48] HEALTHY USER HEALTHY_2_c96b: scumpe... ceva sub 250?
+[19:34:48] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Buchet de flori 25 lalele albe* - Preț: 310.0 lei
+_Uneori, simplitatea este cea mai sofisticata forma de eleganta. Buchetul de lalele albe este creat pentru cei care apreciaza frumusetea imaculata si detaliile fine. Am selectatÂ 25 de lalele de un alb pur , simbol al sinceritatii, respectului si al noilor inceputuri. Pentru a scoate in evidenta albul petalelor, am adaugat crengute de Eucalipt argin..._
+
+2. *Praline Valentino "Red Heart" 340g* - Preț: 209.0 lei
+_Atunci cand cuvintele nu sunt suficiente, o inima rosie plina cu ciocolata fina vorbeste de la sine. Cutia de praline Valentino "Red Heart" (340g) este cadoul suprem pentru momentele romantice, imbinand pasiunea culorii rosii cu rafinamentul ciocolatei belgiene autentice. Aceasta cutie generoasa, in forma de inima, este realizata dintr-un carton pr..._
+
+3. *Buchet Flori 5 Hortensii Delicate* - Preț: 310.0 lei
+_Daca vrei sa oferi un cadou care sa lase o impresie puternica, alege acest buchet cu 5 hortensii delicate. Hortensia este regina volumului, iar acest buchet este o adevarata demonstratie de generozitate florala. Am selectat 5 fire de Hortensie (Hydrangea) in cele mai iubite culori: bleu senin, roz pudrat, alb imaculat si verde crud. Aceasta combina..._
+
+
+--------------------------------------------------
+[19:34:48] HEALTHY USER HEALTHY_10_a051: mai vreau si un buchet de mimosa
+[19:34:48] BOT: Iată selecția noastră de flori:
+
+1. *Buchet "Golden Spring" â€“ 5 Fire Mimosa* - Preț: 209.0 lei
+_Adu soarele si energia pozitiva in viata cuiva drag cu buchetul "Golden Spring". Mimosa (Acacia Dealbata) este simbolul international al Zilei Femeii si vestitorul oficial al primaverii, fiind iubita pentru culoarea sa galben-electric si textura inconfundabila, pufoasa. Acest buchet este o explozie de bucurie, continand 5 fire bogate de Mimosa, ale..._
+
+2. *Buchet "Pure Sunshine" â€“ 5 Fire Mimosa* - Preț: 179.0 lei
+_Pentru cei care apreciaza naturaletea absoluta, am creat buchetul "Pure Sunshine". Aceasta varianta pune in valoare frumusetea nealterata a florilor de Mimosa, renuntand la ambalajele clasice de hartie in favoarea unei prezentari "la liber", lejera si sofisticata. Buchetul este compus din 5 ramuri bogate de Mimosa (Acacia Dealbata), selectate pentr..._
+
+
+--------------------------------------------------
+[19:34:51] HEALTHY USER HEALTHY_13_c0eb: da
+[19:34:51] BOT: Vrei să adăugăm *1x Pachet "Sweet Passion" - Buchet si praline*? (299.0 RON)
+--------------------------------------------------
+[19:34:52] HEALTHY USER HEALTHY_1_ec88: hai si cu niste ciocolata
+[19:34:52] BOT: 💡 *Am ajustat căutarea.* Cele mai apropiate opțiuni pornesc de la 90.0 RON:
+
+Iată selecția noastră de flori:
+
+1. *Tort Bezea Crocanta cu Crema de Ciocolata Alba 1 Kg* - Preț: 349.0 lei
+_Descopera un desert care redefineste placerea: Tortul de Bezea cu Ciocolata Alba. Aceasta creatie este dedicata celor care iubesc gustul fin, laptos si invaluitor al ciocolatei albe de calitate superioara. Spre deosebire de variantele clasice, acest tort aduce un plus de decadenta prin crema sa bogata (ganache sau mousse) de ciocolata alba belgiana..._
+
+2. *Cadou Cutie Ciocolata Valentino "Single Origin" (250g)* - Preț: 170.0 lei
+_Pentru iubitorii de ciocolata fina, am pregatit ceva cu adevarat special. Colectia "Single Origin" de la Valentino Chocolatier nu este doar un desert, ci o experienta educativa si rafinata. Fiecare pralina este creata folosind cacao provenita dintr-o singura regiune geografica, pastrand astfel amprenta specifica a solului si a climei (terroir-ul). ..._
+
+3. *Cadou Cutie cu 12 Praline Belgiene Valentino* - Preț: 90.0 lei
+_Nu stii ce sa alegi intre ciocolata alba, neagra sau cu lapte? Cu aceasta cutie de la Valentino Chocolatier, le ai pe toate. Am pregatit o selectie de 12 bomboane fine, create de maestrii ciocolatieri belgieni, care impresioneaza atat prin gust, cat si prin aspect. In interiorul cutiei vei descoperi o explozie de arome: de la praline clasice cu cre..._
+
+
+--------------------------------------------------
+[19:34:52] HEALTHY USER HEALTHY_2_c96b: al 2 lea suna bine
+[19:34:52] BOT: Vrei să adăugăm *1x Praline Valentino "Red Heart" 340g*? (209.0 RON)
+--------------------------------------------------
+[19:34:55] HEALTHY USER HEALTHY_10_a051: da
+[19:34:55] BOT: Vrei să adăugăm *1x Buchet "Golden Spring" â€“ 5 Fire Mimosa*? (209.0 RON)
+--------------------------------------------------
+[19:34:55] HEALTHY USER HEALTHY_4_5a3c: da, vreau 5 bucati
+[19:34:55] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Buchet Flori 5 Hortensii Delicate* - Preț: 310.0 lei
+_Daca vrei sa oferi un cadou care sa lase o impresie puternica, alege acest buchet cu 5 hortensii delicate. Hortensia este regina volumului, iar acest buchet este o adevarata demonstratie de generozitate florala. Am selectat 5 fire de Hortensie (Hydrangea) in cele mai iubite culori: bleu senin, roz pudrat, alb imaculat si verde crud. Aceasta combina..._
+
+2. *Buchet de Flori 9 Zambile Multicolore* - Preț: 290.0 lei
+_Daca vrei sa daruiesti "parfumul primaverii", acesta este buchetul ideal. Am creat o simfonie de culoare si arome folosind 9 fire de zambile proaspete, intr-un mix vesel de nuante: albastru-indigo, roz bombon si alb crem. Ceea ce face acest buchet special este designul sau natural si compact. In loc de ambalajul clasic din hartie, am optat pentru u..._
+
+3. *Buchet de flori 25 Ranunculus Hanoi* - Preț: 976.5 lei
+_Daca vrei sa oferi un "nor" de flori, alege buchetul "Blush Elegance". Am reunit 25 de fire de Ranunculus Hanoi intr-un buchet compact, rotund si extrem de bogat. Pe masura ce aceste flori se deschid, volumul lor se dubleaza, semanand izbitor cu bujorii. Aranjamentul este finisat la baza cu o "manseta" eleganta din frunze de Aspidistra indoite si E..._
+
+
+--------------------------------------------------
+[19:34:56] HEALTHY USER HEALTHY_13_c0eb: atat
+[19:34:56] BOT: ✅ Adăugat 1x Pachet "Sweet Passion" - Buchet si praline în coș!
+--------------------------------------------------
+[19:34:57] HEALTHY USER HEALTHY_12_707c: acum cauta si ceva de ciocolata
+[19:34:57] BOT: 💡 *Am ajustat căutarea.* Cele mai apropiate opțiuni pornesc de la 170.0 RON:
+
+Bună! Am găsit câteva opțiuni superbe:
+
+1. *Cadou Cutie Ciocolata Valentino "Single Origin" (250g)* - Preț: 170.0 lei
+_Pentru iubitorii de ciocolata fina, am pregatit ceva cu adevarat special. Colectia "Single Origin" de la Valentino Chocolatier nu este doar un desert, ci o experienta educativa si rafinata. Fiecare pralina este creata folosind cacao provenita dintr-o singura regiune geografica, pastrand astfel amprenta specifica a solului si a climei (terroir-ul). ..._
+
+2. *Tort Bezea Crocanta cu Crema de Ciocolata Alba 1 Kg* - Preț: 349.0 lei
+_Descopera un desert care redefineste placerea: Tortul de Bezea cu Ciocolata Alba. Aceasta creatie este dedicata celor care iubesc gustul fin, laptos si invaluitor al ciocolatei albe de calitate superioara. Spre deosebire de variantele clasice, acest tort aduce un plus de decadenta prin crema sa bogata (ganache sau mousse) de ciocolata alba belgiana..._
+
+3. *Tort Bezea Crocanta cu Crema de Fistic 1 Kg* - Preț: 349.0 lei
+_Daca esti in cautarea unui desert care sa impresioneze atat prin aspect, cat si prin gustul inedit, Tortul "Pistachio Dream" este alegerea perfecta. Aceasta varianta de Pavlova reinterpretata aduce impreuna textura inconfundabila a bezelei cu aroma bogata si nobila a fisticului. Tortul este construit din discuri de bezea coapta lent, care raman cro..._
+
+
+--------------------------------------------------
+[19:34:57] HEALTHY USER HEALTHY_2_c96b: da
+[19:34:57] BOT: ✅ Adăugat 1x Praline Valentino "Red Heart" 340g în coș!
+--------------------------------------------------
+[19:34:57] HEALTHY USER HEALTHY_1_ec88: k varianta 2
+[19:34:57] BOT: Vrei să adăugăm *1x Cadou Cutie Ciocolata Valentino "Single Origin" (250g)*? (170.0 RON)
+--------------------------------------------------
+[19:35:00] HEALTHY USER HEALTHY_10_a051: gata
+[19:35:00] BOT: ✅ Adăugat 1x Buchet "Golden Spring" â€“ 5 Fire Mimosa în coș!
+--------------------------------------------------
+[19:35:02] BURST USER BURST_13_da22: ok, punga cadou e buna
+[19:35:02] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Pachet "Sweet Passion" - Buchet si praline* - Preț: 299.0 lei
+_Pachetul "Sweet Passion" este combinatia irezistibila dintre frumusetea naturala si gustul rafinat, creata pentru a impresiona. Acest set cadou aduce impreuna un buchet pasional in nuante de rosu si o cutie eleganta de praline belgiene, fiind solutia completa pentru momentele romantice. Nota Importanta despre Buchet (Florist Choice): Buchetul din a..._
+
+2. *Cadou Praline Belgiene Valentino 220 gr* - Preț: 100.0 lei
+_Niciun cadou nu este complet fara un strop de dulceata. Cutia de praline Valentino (220g) este alegerea ideala pentru a desavarsi o surpriza placuta, aducand un plus de rafinament si gust buchetului de flori ales. Aceste praline sunt renumite pentru textura lor fina si gustul bogat, fiind realizate din ingrediente de calitate superioara. Cutia cont..._
+
+3. *Buchet "Grand Amour" â€“ 101 Trandafiri Rosii* - Preț: 1899.0 lei
+_Exista cadouri care plac, si exista cadouri care taie respiratia. Buchetul "Grand Amour", compus din 101 trandafiri rosii , face parte din a doua categorie. Este declaratia suprema de dragoste, un gest grandios care spune "Tu esti unica mea iubire" fara a folosi niciun cuvant. Acest buchet nu este doar un aranjament floral, ci o experienta in sine...._
+
+
+--------------------------------------------------
+[19:35:03] HEALTHY USER HEALTHY_12_707c: da
+[19:35:03] BOT: Vrei să adăugăm *1x Cadou Cutie Ciocolata Valentino "Single Origin" (250g)*? (170.0 RON)
+--------------------------------------------------
+[19:35:03] BURST USER BURST_17_7011: Vreau lalele
+[19:35:03] BOT: Iată selecția noastră de flori:
+
+1. *Buchet de Flori 25 Lalele Duble Multicolore* - Preț: 436.0 lei
+_Daca vrei sa impresionezi cu adevarat, alege volumul si rafinamentului buchetului cu lalele duble multicolore. Am multiplicat bucuria primaverii, reunind 25 de lalele duble intr-un buchet generos, care atrage toate privirile. Buchetul este o simfonie de culori vibrante â€“ galben solar, mov regal, roz si lila â€“ care impreuna creeaza un efect vizu..._
+
+2. *Buchet de flori 25 lalele multicolore* - Preț: 310.0 lei
+_Daca vrei sa aduci zambete si culoare, nu poti da gres cu un buchet colorat de lalele. Am selectatÂ 25 de lalele proaspete intr-un mix vibrant de culori â€“ galben, roz, mov, alb si rosu â€“ pentru a celebra diversitatea si energia primaverii. Buchetul este un "tonic" vizual, perfect pentru a alunga monotonia. Pentru a pastra naturaletea florilor, ..._
+
+3. *Buchet de flori 25 lalele albe* - Preț: 310.0 lei
+_Uneori, simplitatea este cea mai sofisticata forma de eleganta. Buchetul de lalele albe este creat pentru cei care apreciaza frumusetea imaculata si detaliile fine. Am selectatÂ 25 de lalele de un alb pur , simbol al sinceritatii, respectului si al noilor inceputuri. Pentru a scoate in evidenta albul petalelor, am adaugat crengute de Eucalipt argin..._
+
+
+--------------------------------------------------
+[19:35:03] HEALTHY USER HEALTHY_2_c96b: am terminat
+[19:35:03] BOT: 🎉 *Comandă trimisă!*
+• 1 x Praline Valentino "Red Heart" 340g (209.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 209.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:35:04] HEALTHY USER HEALTHY_1_ec88: baga
+[19:35:04] BOT: ✅ Adăugat 1x Cadou Cutie Ciocolata Valentino "Single Origin" (250g) în coș!
+--------------------------------------------------
+[19:35:04] BURST USER BURST_13_da22: da
+[19:35:04] BOT: Vrei să adăugăm *1x Pachet "Sweet Passion" - Buchet si praline*? (299.0 RON)
+--------------------------------------------------
+[19:35:05] BURST USER BURST_17_7011: 1
+[19:35:05] BOT: Vrei să adăugăm *1x Buchet de Flori 25 Lalele Duble Multicolore*? (436.0 RON)
+--------------------------------------------------
+[19:35:05] BURST USER BURST_10_87fb: mai vreau si un buchet de mimosa
+[19:35:05] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Buchet "Golden Spring" â€“ 5 Fire Mimosa* - Preț: 209.0 lei
+_Adu soarele si energia pozitiva in viata cuiva drag cu buchetul "Golden Spring". Mimosa (Acacia Dealbata) este simbolul international al Zilei Femeii si vestitorul oficial al primaverii, fiind iubita pentru culoarea sa galben-electric si textura inconfundabila, pufoasa. Acest buchet este o explozie de bucurie, continand 5 fire bogate de Mimosa, ale..._
+
+2. *Buchet "Pure Sunshine" â€“ 5 Fire Mimosa* - Preț: 179.0 lei
+_Pentru cei care apreciaza naturaletea absoluta, am creat buchetul "Pure Sunshine". Aceasta varianta pune in valoare frumusetea nealterata a florilor de Mimosa, renuntand la ambalajele clasice de hartie in favoarea unei prezentari "la liber", lejera si sofisticata. Buchetul este compus din 5 ramuri bogate de Mimosa (Acacia Dealbata), selectate pentr..._
+
+
+--------------------------------------------------
+[19:35:06] BURST USER BURST_13_da22: atat
+[19:35:06] BOT: ✅ Adăugat 1x Pachet "Sweet Passion" - Buchet si praline în coș!
+--------------------------------------------------
+[19:35:06] BURST USER BURST_17_7011: da
+[19:35:06] BOT: ✅ Adăugat 1x Buchet de Flori 25 Lalele Duble Multicolore în coș!
+--------------------------------------------------
+[19:35:07] BURST USER BURST_10_87fb: da
+[19:35:07] BOT: Vrei să adăugăm *1x Buchet "Golden Spring" â€“ 5 Fire Mimosa*? (209.0 RON)
+--------------------------------------------------
+[19:35:08] BURST USER BURST_10_87fb: gata
+[19:35:08] BOT: ✅ Adăugat 1x Buchet "Golden Spring" â€“ 5 Fire Mimosa în coș!
+--------------------------------------------------
+[19:35:08] HEALTHY USER HEALTHY_12_707c: gata
+[19:35:08] BOT: ✅ Adăugat 1x Cadou Cutie Ciocolata Valentino "Single Origin" (250g) în coș!
+--------------------------------------------------
+[19:35:10] BURST USER BURST_15_49ca: acum despre lalele
+[19:35:10] BOT: Iată selecția noastră de flori:
+
+1. *Buchet de flori 25 lalele albe* - Preț: 310.0 lei
+_Uneori, simplitatea este cea mai sofisticata forma de eleganta. Buchetul de lalele albe este creat pentru cei care apreciaza frumusetea imaculata si detaliile fine. Am selectatÂ 25 de lalele de un alb pur , simbol al sinceritatii, respectului si al noilor inceputuri. Pentru a scoate in evidenta albul petalelor, am adaugat crengute de Eucalipt argin..._
+
+2. *Buchet de flori 25 lalele mov* - Preț: 310.0 lei
+_Pentru femeia care apreciaza eleganta, misterul si rafinamentul, am creat buchetul acesta. Movul este culoarea regalitatii si a admiratiei, iar aceste 25 de lalele mov sunt absolut spectaculoase. Buchetul iese in evidenta prin cromatica sa nobila. Lalelele violet intens sunt puse in valoare de un ambalaj in nuante deÂ lila/lavanda , creand un degra..._
+
+3. *Buchet de flori 25 lalele galbene* - Preț: 310.0 lei
+_Adu o raza de soare in viata cuiva, indiferent de vremea de afara! Buchetul este o explozie de optimism si energie pozitiva. Am selectat 25 de lalele galbene vibrante, simbolul prieteniei si al succesului. Designul este unul luminos si aerisit. Lalelele sunt imbracate intr-un ambalaj asortat, intr-o nuanta de crem-galbui (vanilie) , care ofera o el..._
+
+
+--------------------------------------------------
+[19:35:10] HEALTHY USER HEALTHY_1_ec88: gata finalizeaza
+[19:35:10] BOT: 🎉 *Comandă trimisă!*
+• 1 x Cadou Cutie Ciocolata Valentino "Single Origin" (250g) (170.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 170.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:35:11] BURST USER BURST_2_3c0c: scumpe... ceva sub 250?
+[19:35:11] BOT: Iată selecția noastră de flori:
+
+1. *Buchet de flori 25 lalele albe* - Preț: 310.0 lei
+_Uneori, simplitatea este cea mai sofisticata forma de eleganta. Buchetul de lalele albe este creat pentru cei care apreciaza frumusetea imaculata si detaliile fine. Am selectatÂ 25 de lalele de un alb pur , simbol al sinceritatii, respectului si al noilor inceputuri. Pentru a scoate in evidenta albul petalelor, am adaugat crengute de Eucalipt argin..._
+
+2. *Praline Valentino "Red Heart" 340g* - Preț: 209.0 lei
+_Atunci cand cuvintele nu sunt suficiente, o inima rosie plina cu ciocolata fina vorbeste de la sine. Cutia de praline Valentino "Red Heart" (340g) este cadoul suprem pentru momentele romantice, imbinand pasiunea culorii rosii cu rafinamentul ciocolatei belgiene autentice. Aceasta cutie generoasa, in forma de inima, este realizata dintr-un carton pr..._
+
+3. *Buchet Flori 5 Hortensii Delicate* - Preț: 310.0 lei
+_Daca vrei sa oferi un cadou care sa lase o impresie puternica, alege acest buchet cu 5 hortensii delicate. Hortensia este regina volumului, iar acest buchet este o adevarata demonstratie de generozitate florala. Am selectat 5 fire de Hortensie (Hydrangea) in cele mai iubite culori: bleu senin, roz pudrat, alb imaculat si verde crud. Aceasta combina..._
+
+
+--------------------------------------------------
+[19:35:13] BURST USER BURST_2_3c0c: al 2 lea suna bine
+[19:35:13] BOT: Vrei să adăugăm *1x Praline Valentino "Red Heart" 340g*? (209.0 RON)
+--------------------------------------------------
+[19:35:14] BURST USER BURST_1_b0fb: hai si cu niste ciocolata
+[19:35:14] BOT: 💡 *Am ajustat căutarea.* Cele mai apropiate opțiuni pornesc de la 90.0 RON:
+
+O alegere minunată! Iată opțiunile din stoc:
+
+1. *Tort Bezea Crocanta cu Crema de Ciocolata Alba 1 Kg* - Preț: 349.0 lei
+_Descopera un desert care redefineste placerea: Tortul de Bezea cu Ciocolata Alba. Aceasta creatie este dedicata celor care iubesc gustul fin, laptos si invaluitor al ciocolatei albe de calitate superioara. Spre deosebire de variantele clasice, acest tort aduce un plus de decadenta prin crema sa bogata (ganache sau mousse) de ciocolata alba belgiana..._
+
+2. *Cadou Cutie Ciocolata Valentino "Single Origin" (250g)* - Preț: 170.0 lei
+_Pentru iubitorii de ciocolata fina, am pregatit ceva cu adevarat special. Colectia "Single Origin" de la Valentino Chocolatier nu este doar un desert, ci o experienta educativa si rafinata. Fiecare pralina este creata folosind cacao provenita dintr-o singura regiune geografica, pastrand astfel amprenta specifica a solului si a climei (terroir-ul). ..._
+
+3. *Cadou Cutie cu 12 Praline Belgiene Valentino* - Preț: 90.0 lei
+_Nu stii ce sa alegi intre ciocolata alba, neagra sau cu lapte? Cu aceasta cutie de la Valentino Chocolatier, le ai pe toate. Am pregatit o selectie de 12 bomboane fine, create de maestrii ciocolatieri belgieni, care impresioneaza atat prin gust, cat si prin aspect. In interiorul cutiei vei descoperi o explozie de arome: de la praline clasice cu cre..._
+
+
+--------------------------------------------------
+[19:35:15] BURST USER BURST_2_3c0c: da
+[19:35:15] BOT: ✅ Adăugat 1x Praline Valentino "Red Heart" 340g în coș!
+--------------------------------------------------
+[19:35:17] BURST USER BURST_1_b0fb: k varianta 2
+[19:35:17] BOT: Vrei să adăugăm *1x Cadou Cutie Ciocolata Valentino "Single Origin" (250g)*? (170.0 RON)
+--------------------------------------------------
+[19:35:17] BURST USER BURST_16_4950: si ciocolata
+[19:35:17] BOT: 💡 *Am ajustat căutarea.* Cele mai apropiate opțiuni pornesc de la 100.0 RON:
+
+O alegere minunată! Iată opțiunile din stoc:
+
+1. *Cadou Cutie Ciocolata Valentino "Single Origin" (250g)* - Preț: 170.0 lei
+_Pentru iubitorii de ciocolata fina, am pregatit ceva cu adevarat special. Colectia "Single Origin" de la Valentino Chocolatier nu este doar un desert, ci o experienta educativa si rafinata. Fiecare pralina este creata folosind cacao provenita dintr-o singura regiune geografica, pastrand astfel amprenta specifica a solului si a climei (terroir-ul). ..._
+
+2. *Cadou Praline Belgiene Valentino 220 gr* - Preț: 100.0 lei
+_Niciun cadou nu este complet fara un strop de dulceata. Cutia de praline Valentino (220g) este alegerea ideala pentru a desavarsi o surpriza placuta, aducand un plus de rafinament si gust buchetului de flori ales. Aceste praline sunt renumite pentru textura lor fina si gustul bogat, fiind realizate din ingrediente de calitate superioara. Cutia cont..._
+
+3. *Tort Bezea Crocanta cu Crema de Ciocolata Alba 1 Kg* - Preț: 349.0 lei
+_Descopera un desert care redefineste placerea: Tortul de Bezea cu Ciocolata Alba. Aceasta creatie este dedicata celor care iubesc gustul fin, laptos si invaluitor al ciocolatei albe de calitate superioara. Spre deosebire de variantele clasice, acest tort aduce un plus de decadenta prin crema sa bogata (ganache sau mousse) de ciocolata alba belgiana..._
+
+
+--------------------------------------------------
+[19:35:17] BURST USER BURST_2_3c0c: am terminat
+[19:35:17] BOT: 🎉 *Comandă trimisă!*
+• 1 x Praline Valentino "Red Heart" 340g (209.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 209.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:35:18] BURST USER BURST_16_4950: 1
+[19:35:18] BOT: Vrei să adăugăm *1x Cadou Cutie Ciocolata Valentino "Single Origin" (250g)*? (170.0 RON)
+--------------------------------------------------
+[19:35:18] BURST USER BURST_1_b0fb: baga
+[19:35:18] BOT: ✅ Adăugat 1x Cadou Cutie Ciocolata Valentino "Single Origin" (250g) în coș!
+--------------------------------------------------
+[19:35:19] BURST USER BURST_16_4950: baga
+[19:35:19] BOT: ✅ Adăugat 1x Cadou Cutie Ciocolata Valentino "Single Origin" (250g) în coș!
+--------------------------------------------------
+[19:35:20] BURST USER BURST_1_b0fb: gata finalizeaza
+[19:35:20] BOT: 🎉 *Comandă trimisă!*
+• 1 x Cadou Cutie Ciocolata Valentino "Single Origin" (250g) (170.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 170.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:35:21] BURST USER BURST_12_f722: acum cauta si ceva de ciocolata
+[19:35:21] BOT: 💡 *Am ajustat căutarea.* Cele mai apropiate opțiuni pornesc de la 170.0 RON:
+
+O alegere minunată! Iată opțiunile din stoc:
+
+1. *Cadou Cutie Ciocolata Valentino "Single Origin" (250g)* - Preț: 170.0 lei
+_Pentru iubitorii de ciocolata fina, am pregatit ceva cu adevarat special. Colectia "Single Origin" de la Valentino Chocolatier nu este doar un desert, ci o experienta educativa si rafinata. Fiecare pralina este creata folosind cacao provenita dintr-o singura regiune geografica, pastrand astfel amprenta specifica a solului si a climei (terroir-ul). ..._
+
+2. *Tort Bezea Crocanta cu Crema de Ciocolata Alba 1 Kg* - Preț: 349.0 lei
+_Descopera un desert care redefineste placerea: Tortul de Bezea cu Ciocolata Alba. Aceasta creatie este dedicata celor care iubesc gustul fin, laptos si invaluitor al ciocolatei albe de calitate superioara. Spre deosebire de variantele clasice, acest tort aduce un plus de decadenta prin crema sa bogata (ganache sau mousse) de ciocolata alba belgiana..._
+
+3. *Tort Bezea Crocanta cu Crema de Fistic 1 Kg* - Preț: 349.0 lei
+_Daca esti in cautarea unui desert care sa impresioneze atat prin aspect, cat si prin gustul inedit, Tortul "Pistachio Dream" este alegerea perfecta. Aceasta varianta de Pavlova reinterpretata aduce impreuna textura inconfundabila a bezelei cu aroma bogata si nobila a fisticului. Tortul este construit din discuri de bezea coapta lent, care raman cro..._
+
+
+--------------------------------------------------
+[19:35:21] BURST USER BURST_16_4950: gata
+[19:35:21] BOT: 🎉 *Comandă trimisă!*
+• 1 x Buchet de flori "Red Passion" (450.0 RON)
+• 1 x Cadou Cutie Ciocolata Valentino "Single Origin" (250g) (170.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 620.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:35:22] BURST USER BURST_12_f722: da
+[19:35:22] BOT: Vrei să adăugăm *1x Cadou Cutie Ciocolata Valentino "Single Origin" (250g)*? (170.0 RON)
+--------------------------------------------------
+[19:35:24] BURST USER BURST_5_70ad: mai arata-mi si niste martisoare
+[19:35:24] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Buchet de Flori 11 Trandafiri Mov si Eucalipt* - Preț: 299.0 lei
+_Daca vrei sa oferi ceva cu adevarat memorabil, alege buchetul cu 11 trandafiri mov. Trandafirii mov transmit un mesaj puternic de admiratie profunda si incantare. Am selectat 11 fire de trandafiri dintr-un soi special (adesea bicolori, cu centrul mai deschis si petalele exterioare intr-un magenta-mov intens), care creeaza un efect vizual spectaculo..._
+
+2. *Buchet de flori 25 lalele mov* - Preț: 310.0 lei
+_Pentru femeia care apreciaza eleganta, misterul si rafinamentul, am creat buchetul acesta. Movul este culoarea regalitatii si a admiratiei, iar aceste 25 de lalele mov sunt absolut spectaculoase. Buchetul iese in evidenta prin cromatica sa nobila. Lalelele violet intens sunt puse in valoare de un ambalaj in nuante deÂ lila/lavanda , creand un degra..._
+
+3. *Pandantiv din Rasina cu Floare Daucus Carota* - Preț: 210.0 lei
+_Poarta natura aproape de inima ta cu acest colier fascinant, o mica fereastra catre frumusetea complexa a florei salbatice. Piesa centrala este un pandantiv oval realizat manual din rasina epoxidica de inalta claritate, in care a fost "inghetat" in timp un exemplar superb de Daucus Carota (Morcovul Salbatic) . Ceea ce face aceasta bijuterie cu adev..._
+
+
+--------------------------------------------------
+[19:35:24] BURST USER BURST_12_f722: gata
+[19:35:24] BOT: ✅ Adăugat 1x Cadou Cutie Ciocolata Valentino "Single Origin" (250g) în coș!
+--------------------------------------------------
+[19:35:25] BURST USER BURST_5_70ad: varianta 2
+[19:35:25] BOT: Vrei să adăugăm *1x Buchet de flori 25 lalele mov*? (310.0 RON)
+--------------------------------------------------
+[19:35:27] BURST USER BURST_5_70ad: da
+[19:35:27] BOT: ✅ Adăugat 1x Buchet de flori 25 lalele mov în coș!
+--------------------------------------------------
+[19:35:27] HEALTHY USER HEALTHY_5_7664: mai arata-mi si niste martisoare
+[19:35:27] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Buchet de Flori 11 Trandafiri Mov si Eucalipt* - Preț: 299.0 lei
+_Daca vrei sa oferi ceva cu adevarat memorabil, alege buchetul cu 11 trandafiri mov. Trandafirii mov transmit un mesaj puternic de admiratie profunda si incantare. Am selectat 11 fire de trandafiri dintr-un soi special (adesea bicolori, cu centrul mai deschis si petalele exterioare intr-un magenta-mov intens), care creeaza un efect vizual spectaculo..._
+
+2. *Buchet de flori 25 lalele mov* - Preț: 310.0 lei
+_Pentru femeia care apreciaza eleganta, misterul si rafinamentul, am creat buchetul acesta. Movul este culoarea regalitatii si a admiratiei, iar aceste 25 de lalele mov sunt absolut spectaculoase. Buchetul iese in evidenta prin cromatica sa nobila. Lalelele violet intens sunt puse in valoare de un ambalaj in nuante deÂ lila/lavanda , creand un degra..._
+
+3. *Pandantiv din Rasina cu Floare Daucus Carota* - Preț: 210.0 lei
+_Poarta natura aproape de inima ta cu acest colier fascinant, o mica fereastra catre frumusetea complexa a florei salbatice. Piesa centrala este un pandantiv oval realizat manual din rasina epoxidica de inalta claritate, in care a fost "inghetat" in timp un exemplar superb de Daucus Carota (Morcovul Salbatic) . Ceea ce face aceasta bijuterie cu adev..._
+
+
+--------------------------------------------------
+[19:35:28] BURST USER BURST_4_1706: da, vreau 5 bucati
+[19:35:28] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Buchet Flori 5 Hortensii Delicate* - Preț: 310.0 lei
+_Daca vrei sa oferi un cadou care sa lase o impresie puternica, alege acest buchet cu 5 hortensii delicate. Hortensia este regina volumului, iar acest buchet este o adevarata demonstratie de generozitate florala. Am selectat 5 fire de Hortensie (Hydrangea) in cele mai iubite culori: bleu senin, roz pudrat, alb imaculat si verde crud. Aceasta combina..._
+
+2. *Buchet de Flori 9 Zambile Multicolore* - Preț: 290.0 lei
+_Daca vrei sa daruiesti "parfumul primaverii", acesta este buchetul ideal. Am creat o simfonie de culoare si arome folosind 9 fire de zambile proaspete, intr-un mix vesel de nuante: albastru-indigo, roz bombon si alb crem. Ceea ce face acest buchet special este designul sau natural si compact. In loc de ambalajul clasic din hartie, am optat pentru u..._
+
+3. *Buchet de flori 25 Ranunculus Hanoi* - Preț: 976.5 lei
+_Daca vrei sa oferi un "nor" de flori, alege buchetul "Blush Elegance". Am reunit 25 de fire de Ranunculus Hanoi intr-un buchet compact, rotund si extrem de bogat. Pe masura ce aceste flori se deschid, volumul lor se dubleaza, semanand izbitor cu bujorii. Aranjamentul este finisat la baza cu o "manseta" eleganta din frunze de Aspidistra indoite si E..._
+
+
+--------------------------------------------------
+[19:35:29] BURST USER BURST_5_70ad: gata
+[19:35:29] BOT: 🎉 *Comandă trimisă!*
+• 1 x Buchet de flori 25 lalele mov (310.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 310.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:35:32] HEALTHY USER HEALTHY_5_7664: varianta 2
+[19:35:32] BOT: Vrei să adăugăm *1x Buchet de flori 25 lalele mov*? (310.0 RON)
+--------------------------------------------------
+[19:35:34] HEALTHY USER HEALTHY_4_5a3c: mai vreau si vin
+[19:35:34] BOT: 💡 *Am ajustat căutarea.* Cele mai apropiate opțiuni pornesc de la 299.0 RON:
+
+Iată selecția noastră de flori:
+
+1. *Buchet de Flori 11 Trandafiri Mov si Eucalipt* - Preț: 299.0 lei
+_Daca vrei sa oferi ceva cu adevarat memorabil, alege buchetul cu 11 trandafiri mov. Trandafirii mov transmit un mesaj puternic de admiratie profunda si incantare. Am selectat 11 fire de trandafiri dintr-un soi special (adesea bicolori, cu centrul mai deschis si petalele exterioare intr-un magenta-mov intens), care creeaza un efect vizual spectaculo..._
+
+2. *Buchet de Flori 11 Trandafiri Albi si Eucalipt* - Preț: 299.0 lei
+_Atunci cand vrei sa transmiti un mesaj clar si onest, alege albul. Buchetul cu 11 trandafiri albi si eucalipt impresioneaza nu prin stridente, ci prin liniste si armonie. Am selectat 11 trandafiri albi, recunoscuti pentru eleganta cupei si prospetime. Albul petalelor este pus in valoare de un mix de verdeata atent ales: frunze deÂ Aspidistra pliata..._
+
+3. *Buchet de Flori 11 Trandafiri Ciclam si Eucalipt* - Preț: 299.0 lei
+_Daca vrei sa impresionezi prin culoare si energie, buchetul "Magenta Love" este alegerea ideala. Am selectat 11 trandafiri intr-o nuanta intensa de ciclam (roz fuchsia) , o culoare care simbolizeaza admiratia profunda, gratia si bucuria de a trai. Designul este unul modern si monocromatic. Trandafirii catifelati sunt pusi in valoare de frunzele arg..._
+
+
+--------------------------------------------------
+[19:35:34] BURST USER BURST_17_7011: Vreau praline
+[19:35:34] BOT: 💡 *Am ajustat căutarea.* Cele mai apropiate opțiuni pornesc de la 100.0 RON:
+
+Iată selecția noastră de flori:
+
+1. *Cadou Praline Belgiene Valentino 220 gr* - Preț: 100.0 lei
+_Niciun cadou nu este complet fara un strop de dulceata. Cutia de praline Valentino (220g) este alegerea ideala pentru a desavarsi o surpriza placuta, aducand un plus de rafinament si gust buchetului de flori ales. Aceste praline sunt renumite pentru textura lor fina si gustul bogat, fiind realizate din ingrediente de calitate superioara. Cutia cont..._
+
+2. *Buchet de Flori cu 9 Bujori Coral* - Preț: 370.0 lei
+_Buchetul 9 Bujori Corai este alegerea perfecta pentru momente in care vrei sa transmiti energie, prospetime si eleganta intr-o singura privire. Cei 9 bujori Coral Charm impresioneaza prin nuanta lor vibranta si forma luxurianta, oferind un efect vizual spectaculos. Verdeata decorativa completeaza buchetul cu un contrast delicat, punand si mai bine ..._
+
+3. *Buchet de Iarna "Rustic Warmth"* - Preț: 230.0 lei
+_Daca vrei sa daruiesti o bucata din natura inzapezita, buchetul "Rustic Warmth" este alegerea perfecta. Am creat o compozitie generoasa, care se indeparteaza de florile clasice si pune in valoare frumusetea texturilor de iarna. Vedetele buchetului sunt crengile de Bumbac natural, cu "bulgarii" lor albi si pufosi, care contrasteaza superb cu rosul v..._
+
+
+--------------------------------------------------
+[19:35:36] BURST USER BURST_17_7011: 1
+[19:35:36] BOT: Vrei să adăugăm *1x Cadou Praline Belgiene Valentino 220 gr*? (100.0 RON)
+--------------------------------------------------
+[19:35:38] BURST USER BURST_17_7011: da
+[19:35:38] BOT: ✅ Adăugat 1x Cadou Praline Belgiene Valentino 220 gr în coș!
+--------------------------------------------------
+[19:35:39] HEALTHY USER HEALTHY_5_7664: da
+[19:35:39] BOT: ✅ Adăugat 1x Buchet de flori 25 lalele mov în coș!
+--------------------------------------------------
+[19:35:40] BURST USER BURST_17_7011: gata
+[19:35:40] BOT: 🎉 *Comandă trimisă!*
+• 1 x Buchet "Grand Amour" â€“ 101 Trandafiri Rosii (1899.0 RON)
+• 1 x Buchet de Flori 25 Lalele Duble Multicolore (436.0 RON)
+• 1 x Cadou Praline Belgiene Valentino 220 gr (100.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 2435.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:35:40] BURST USER BURST_15_49ca: acum despre martisoare
+[19:35:40] BOT: O alegere minunată! Iată opțiunile din stoc:
+
+1. *Buchet de flori 25 lalele galbene* - Preț: 310.0 lei
+_Adu o raza de soare in viata cuiva, indiferent de vremea de afara! Buchetul este o explozie de optimism si energie pozitiva. Am selectat 25 de lalele galbene vibrante, simbolul prieteniei si al succesului. Designul este unul luminos si aerisit. Lalelele sunt imbracate intr-un ambalaj asortat, intr-o nuanta de crem-galbui (vanilie) , care ofera o el..._
+
+2. *Buchet de flori 25 lalele mov* - Preț: 310.0 lei
+_Pentru femeia care apreciaza eleganta, misterul si rafinamentul, am creat buchetul acesta. Movul este culoarea regalitatii si a admiratiei, iar aceste 25 de lalele mov sunt absolut spectaculoase. Buchetul iese in evidenta prin cromatica sa nobila. Lalelele violet intens sunt puse in valoare de un ambalaj in nuante deÂ lila/lavanda , creand un degra..._
+
+3. *Buchet de flori 99 lalele multicolore* - Preț: 854.0 lei
+_Acesta nu este doar un buchet, este evenimentul principal! Buchetul cu 99 de lalele multicolore este cel mai voluminos si spectaculos produs din colectia noastra de primavara. Datorita marimii impresionante, am optat pentru o prezentare naturala, fara hartie, care sa permita florilor sa respire si sa isi arate intreaga splendoare. Buchetul este fin..._
+
+
+--------------------------------------------------
+[19:35:41] HEALTHY USER HEALTHY_4_5a3c: da prima varianta
+[19:35:41] BOT: Vrei să adăugăm *1x Buchet de Flori 11 Trandafiri Mov si Eucalipt*? (299.0 RON)
+--------------------------------------------------
+[19:35:41] BURST USER BURST_4_1706: mai vreau si vin
+[19:35:41] BOT: 💡 *Am ajustat căutarea.* Cele mai apropiate opțiuni pornesc de la 299.0 RON:
+
+Iată selecția noastră de flori:
+
+1. *Buchet de Flori 11 Trandafiri Mov si Eucalipt* - Preț: 299.0 lei
+_Daca vrei sa oferi ceva cu adevarat memorabil, alege buchetul cu 11 trandafiri mov. Trandafirii mov transmit un mesaj puternic de admiratie profunda si incantare. Am selectat 11 fire de trandafiri dintr-un soi special (adesea bicolori, cu centrul mai deschis si petalele exterioare intr-un magenta-mov intens), care creeaza un efect vizual spectaculo..._
+
+2. *Buchet de Flori 11 Trandafiri Albi si Eucalipt* - Preț: 299.0 lei
+_Atunci cand vrei sa transmiti un mesaj clar si onest, alege albul. Buchetul cu 11 trandafiri albi si eucalipt impresioneaza nu prin stridente, ci prin liniste si armonie. Am selectat 11 trandafiri albi, recunoscuti pentru eleganta cupei si prospetime. Albul petalelor este pus in valoare de un mix de verdeata atent ales: frunze deÂ Aspidistra pliata..._
+
+3. *Buchet de Flori 11 Trandafiri Ciclam si Eucalipt* - Preț: 299.0 lei
+_Daca vrei sa impresionezi prin culoare si energie, buchetul "Magenta Love" este alegerea ideala. Am selectat 11 trandafiri intr-o nuanta intensa de ciclam (roz fuchsia) , o culoare care simbolizeaza admiratia profunda, gratia si bucuria de a trai. Designul este unul modern si monocromatic. Trandafirii catifelati sunt pusi in valoare de frunzele arg..._
+
+
+--------------------------------------------------
+[19:35:43] BURST USER BURST_4_1706: da prima varianta
+[19:35:43] BOT: Vrei să adăugăm *1x Buchet de Flori 11 Trandafiri Mov si Eucalipt*? (299.0 RON)
+--------------------------------------------------
+[19:35:44] BURST USER BURST_4_1706: atat
+[19:35:44] BOT: ✅ Adăugat 1x Buchet de Flori 11 Trandafiri Mov si Eucalipt în coș!
+--------------------------------------------------
+[19:35:45] BURST USER BURST_15_49ca: ia-le pe toate
+[19:35:45] BOT: Bună! Am găsit câteva opțiuni superbe:
+
+1. *Buchet de Iarna "Rustic Warmth"* - Preț: 230.0 lei
+_Daca vrei sa daruiesti o bucata din natura inzapezita, buchetul "Rustic Warmth" este alegerea perfecta. Am creat o compozitie generoasa, care se indeparteaza de florile clasice si pune in valoare frumusetea texturilor de iarna. Vedetele buchetului sunt crengile de Bumbac natural, cu "bulgarii" lor albi si pufosi, care contrasteaza superb cu rosul v..._
+
+2. *Cos cu Flori de Craciun "Festive Angel"* - Preț: 350.0 lei
+_Daca esti in cautarea unui cadou care sa exprime "Craciun Fericit" din toata inima, cosul "Festive Angel" este alegerea ideala. Am creat o compozitie bogata si texturata, asezata intr-un cos impletit rustic cu maner, care inspira caldura unui camin primitor. Punctul focal este explozia de rosu: trandafiri mari si o hortensie rosie spectaculoasa, ca..._
+
+3. *Kit Cadou "Winter Spice"* - Preț: 190.0 lei
+_Transforma o seara obisnuita intr-un moment magic cu Kit-ul nostru pentru Vin Fiert. Am creat acest set pentru cei care apreciaza aromele autentice si ritualul prepararii bauturilor de iarna. Setul vine intr-o cutie din lemn de calitate, cu un finisaj rustic-elegant, gravata cu mesajul "Kit Vin Fiert". Inauntru vei gasi o selectie de condimente int..._
+
+
+--------------------------------------------------
+[19:35:45] HEALTHY USER HEALTHY_5_7664: gata
+[19:35:45] BOT: 🎉 *Comandă trimisă!*
+• 1 x Buchet de flori 25 lalele mov (310.0 RON)
+━━━━━━━━━━━━━━━━━━━━━
+💰 *TOTAL: 310.0 RON*
+Mulțumim! 🌸
+--------------------------------------------------
+[19:35:46] HEALTHY USER HEALTHY_4_5a3c: atat
+[19:35:46] BOT: ✅ Adăugat 1x Buchet de Flori 11 Trandafiri Mov si Eucalipt în coș!
+--------------------------------------------------
+[19:35:46] BURST USER BURST_15_49ca: da
+[19:35:46] BOT: Vrei să adăugăm *1x Buchet de Iarna "Rustic Warmth"*? (230.0 RON)
+--------------------------------------------------
+[19:35:47] BURST USER BURST_15_49ca: da
+[19:35:47] BOT: ✅ Adăugat 1x Buchet de Iarna "Rustic Warmth" în coș!
+--------------------------------------------------
+[19:35:49] BURST USER BURST_15_49ca: da
+[19:35:49] BOT: Vrei să adăugăm *1x Buchet de Iarna "Rustic Warmth"*? (230.0 RON)
+--------------------------------------------------
+[19:35:50] BURST USER BURST_15_49ca: gata
+[19:35:50] BOT: ✅ Adăugat 1x Buchet de Iarna "Rustic Warmth" în coș!
 --------------------------------------------------

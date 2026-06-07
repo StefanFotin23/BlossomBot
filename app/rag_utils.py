@@ -49,27 +49,35 @@ def get_qdrant_client(url=None, api_key=None):
     _qdrant_client = QdrantClient(url=final_url, api_key=final_key)
     return _qdrant_client
 
+import threading
+import asyncio
+
+_model_lock = threading.Lock()
+# STRICT MEMORY GOVERNOR: Limit to 2 concurrent NLP tasks
+_nlp_semaphore = asyncio.Semaphore(2) 
+
 def get_models():
-    """Încarcă modelele direct de pe disc (Strict Offline)."""
+    """Încarcă modelele direct de pe disc (Strict Offline) - Thread Safe."""
     global _embedding_model, _reranker_model
     
-    if _embedding_model is None:
-        logger.info(f"🧠 Încărcăm modelul de Embedding de la: {EMBEDDING_MODEL_PATH}...")
-        _embedding_model = SentenceTransformer(
-            EMBEDDING_MODEL_PATH, 
-            device='cpu',
-            local_files_only=True
-        )
-        
-    if _reranker_model is None:
-        logger.info(f"🎯 Încărcăm modelul SOTA de Reranking de la: {RERANKER_MODEL_PATH}...")
-        _reranker_model = CrossEncoder(
-            RERANKER_MODEL_PATH, 
-            tokenizer_args={"use_fast": False},
-            device='cpu',
-            local_files_only=True
-        )
-        
+    with _model_lock:
+        if _embedding_model is None:
+            logger.info(f"🧠 Încărcăm modelul de Embedding de la: {EMBEDDING_MODEL_PATH}...")
+            _embedding_model = SentenceTransformer(
+                EMBEDDING_MODEL_PATH, 
+                device='cpu',
+                local_files_only=True
+            )
+            
+        if _reranker_model is None:
+            logger.info(f"🎯 Încărcăm modelul SOTA de Reranking de la: {RERANKER_MODEL_PATH}...")
+            _reranker_model = CrossEncoder(
+                RERANKER_MODEL_PATH, 
+                tokenizer_args={"use_fast": False},
+                device='cpu',
+                local_files_only=True
+            )
+            
     return _embedding_model, _reranker_model
 
 # ==========================================
@@ -106,7 +114,6 @@ def generate_files_only(df_clean: pd.DataFrame, output_json: str):
     logger.info("📦 Procesăm datele pentru fișierele locale...")
     qdrant_documents = []
     
-    # Colectăm valori unice pentru schema (pentru a ajuta Gemini)
     unique_values = {
         "categories": set(),
         "dimensiuni": set(),
@@ -188,120 +195,78 @@ def generate_files_only(df_clean: pd.DataFrame, output_json: str):
     logger.info(f"📂 Schema salvată în {schema_path}.")
 
 def build_and_index_rag(df_clean: pd.DataFrame, output_json: str = 'qdrant_payload.json', qdrant_url: str = None, qdrant_api_key: str = None):
-    # 1. Generăm fișierele (Payload + Schema) - Acest pas se execută MEREU
     generate_files_only(df_clean, output_json)
-
-    # 2. Încercăm indexarea în Qdrant (Doar dacă suntem în cluster/producție)
     try:
         logger.info(f"🔍 Încercăm conexiunea la Qdrant ({qdrant_url or DEFAULT_QDRANT_URL})...")
         client = get_qdrant_client(url=qdrant_url, api_key=qdrant_api_key)
-        
-        # Verificăm conexiunea efectivă
         client.get_collections()
-        
-        logger.info("🧠 Încărcăm modelele AI pentru embedding...")
         embed_model, _ = get_models()
-
-        logger.info(f"📁 Pregătim colecția '{COLLECTION_NAME}' în Qdrant...")
         client.recreate_collection(
             collection_name=COLLECTION_NAME,
             vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.COSINE)
         )
-
-        # Citim datele din payload-ul proaspăt generat
         with open(output_json, 'r', encoding='utf-8') as f:
             qdrant_documents = json.load(f)
-
-        logger.info("⚙️ Generăm vectorii (Embedding)...")
         texts_to_embed = [doc['text_to_embed'] for doc in qdrant_documents]
         embeddings = embed_model.encode(texts_to_embed, show_progress_bar=True)
-
         points = [
             PointStruct(id=doc['id'], vector=embeddings[i].tolist(), payload=doc['payload'])
             for i, doc in enumerate(qdrant_documents)
         ]
-
-        logger.info("🚀 Încărcăm în Qdrant...")
         client.upload_points(collection_name=COLLECTION_NAME, points=points, batch_size=100)
-        logger.info("✅ Indexarea în Qdrant a fost finalizată cu succes!")
-
     except Exception as e:
         logger.warning(f"⚠️ Nu s-a putut face indexarea în Qdrant: {e}")
-        logger.info("💡 Probabil rulezi local. Fișierele JSON au fost generate, dar upload-ul a fost sărit.")
 
 # ==========================================
-# 2. SOTA HYBRID SEARCH (CU RERANKING)
+# 2. SOTA HYBRID SEARCH (CU RERANKING) - ASYNC FRIENDLY
 # ==========================================
-def sota_hybrid_search(state_json: Dict[str, Any], filter_scores: Dict[str, int] = None, final_top_k: int = 3, qdrant_url: str = None, qdrant_api_key: str = None) -> (List[Dict], Dict[str, Any]):
+async def sota_hybrid_search(state_json: Dict[str, Any], filter_scores: Dict[str, int] = None, final_top_k: int = 3, qdrant_url: str = None, qdrant_api_key: str = None) -> (List[Dict], Dict[str, Any]):
     client = get_qdrant_client(url=qdrant_url, api_key=qdrant_api_key)
-    embed_model, reranker_model = get_models()
+    embed_model, reranker_model = await asyncio.to_thread(get_models)
     
     filters = state_json.get("filters") or {}
     semantic_query = state_json.get("semantic_query", "")
     
-    # 1. Construim condițiile de filtrare
     conditions_map = {}
     negative_map = {}
 
     def build_qdrant_condition(key, val, is_negative=False):
-        if val is None or str(val).strip() == "" or str(val).lower() == "nan":
-            return None
-            
+        if val is None or str(val).strip() == "" or str(val).lower() == "nan": return None
         try:
-            if key == "price_max" and not is_negative:
-                return FieldCondition(key="price", range=Range(lte=float(val)))
-            if key == "category":
-                return FieldCondition(key="category", match=MatchValue(value=str(val)))
-            if key == "dimensiune":
-                return FieldCondition(key="dimensiune", match=MatchValue(value=str(val)))
-            if key == "event_type":
-                return FieldCondition(key="event_type", match=MatchValue(value=str(val)))
-            if key == "colors":
-                return FieldCondition(key="colors", match=MatchValue(value=str(val)))
-            if key == "flowers_type":
-                return FieldCondition(key="flowers_type", match=MatchValue(value=str(val)))
-        except (ValueError, TypeError):
-            return None
+            if key == "price_max" and not is_negative: return FieldCondition(key="price", range=Range(lte=float(val)))
+            if key == "category": return FieldCondition(key="category", match=MatchValue(value=str(val)))
+            if key == "dimensiune": return FieldCondition(key="dimensiune", match=MatchValue(value=str(val)))
+            if key == "event_type": return FieldCondition(key="event_type", match=MatchValue(value=str(val)))
+            if key == "colors": return FieldCondition(key="colors", match=MatchValue(value=str(val)))
+            if key == "flowers_type": return FieldCondition(key="flowers_type", match=MatchValue(value=str(val)))
+        except: return None
         return None
 
-    # Filtre Pozitive
     for k, v in filters.items():
         cond = build_qdrant_condition(k, v)
         if cond: conditions_map[k] = cond
 
-    # Filtre Negative (must_not)
     negative_filters = state_json.get("negative_filters") or {}
     for k, v in negative_filters.items():
         cond = build_qdrant_condition(k, v, is_negative=True)
         if cond: negative_map[f"no_{k}"] = cond
 
-    # 2. Căutare vectorială inițială cu RELAXARE DINAMICĂ (Sinergie Pozitive + Negative)
-    pool_size = final_top_k * 5 
-    query_vector = embed_model.encode(semantic_query).tolist()
+    # Throttle Embedding
+    async with _nlp_semaphore:
+        query_vector = await asyncio.to_thread(embed_model.encode, semantic_query)
+    query_vector = query_vector.tolist()
 
-    # Combinăm toate cheile pentru sortare
     all_active_keys = list(conditions_map.keys()) + list(negative_map.keys())
     fallback_order = ["price_max", "event_type", "colors", "dimensiune", "flowers_type", "category"]
 
     def get_sort_score(key):
         score = filter_scores.get(key, 0) if filter_scores else 0
-        # Determinăm importanța de bază din fallback_order
         base_key = key.replace("no_", "")
         base_priority = fallback_order.index(base_key) if base_key in fallback_order else 99
         return (score, base_priority)
 
     sorted_keys = sorted(all_active_keys, key=get_sort_score)
-
-    # Generăm strategiile
-    search_strategies = []
-    # 1. Start cu tot (Pozitive + Negative)
-    search_strategies.append({
-        "name": "ALL", 
-        "pos": list(conditions_map.keys()), 
-        "neg": list(negative_map.keys())
-    })
-
-    # 2. Eliminăm progresiv cel mai slab scor
+    search_strategies = [{"name": "ALL", "pos": list(conditions_map.keys()), "neg": list(negative_map.keys())}]
     current_pos = list(conditions_map.keys())
     current_neg = list(negative_map.keys())
 
@@ -310,12 +275,7 @@ def sota_hybrid_search(state_json: Dict[str, Any], filter_scores: Dict[str, int]
             if key_to_remove in current_neg: current_neg.remove(key_to_remove)
         else:
             if key_to_remove in current_pos: current_pos.remove(key_to_remove)
-
-        search_strategies.append({
-            "name": f"RELAXED_{key_to_remove}", 
-            "pos": list(current_pos), 
-            "neg": list(current_neg)
-        })
+        search_strategies.append({"name": f"RELAXED_{key_to_remove}", "pos": list(current_pos), "neg": list(current_neg)})
 
     initial_results = []
     failed_filters = []
@@ -325,104 +285,50 @@ def sota_hybrid_search(state_json: Dict[str, Any], filter_scores: Dict[str, int]
         for strategy in search_strategies:
             must_cond = [conditions_map[k] for k in strategy["pos"]]
             must_not_cond = [negative_map[k] for k in strategy["neg"]]
-
-            current_filter = Filter(
-                must=must_cond if must_cond else None,
-                must_not=must_not_cond if must_not_cond else None
-            )
-
-            response = client.query_points(
-                collection_name=COLLECTION_NAME,
-                query=query_vector,
-                query_filter=current_filter if (must_cond or must_not_cond) else None,
-                limit=pool_size
-            )
-
-            
+            current_filter = Filter(must=must_cond if must_cond else None, must_not=must_not_cond if must_not_cond else None)
+            response = client.query_points(collection_name=COLLECTION_NAME, query=query_vector, query_filter=current_filter if (must_cond or must_not_cond) else None, limit=final_top_k * 5)
             if response.points:
                 initial_results = response.points
                 used_strategy = strategy["name"]
-                # Filtrele care NU sunt în strategia câștigătoare sunt cele eșuate
                 failed_filters = [k for k in all_active_keys if k not in (strategy["pos"] + strategy["neg"])]
                 break
-
     except Exception as e:
-        logger.error(f"❌ Eroare la interogarea Qdrant: {e}")
+        logger.error(f"❌ Qdrant error: {e}")
         return [], {"error": str(e)}
 
-    if not initial_results:
-        return [], {"strategy": "NONE", "failed_filters": active_keys}
+    if not initial_results: return [], {"strategy": "NONE", "failed_filters": all_active_keys}
 
-    # 3. Reranking cu Cross-Encoder
+    # Throttle Reranking
     rerank_pairs = [[semantic_query, hit.payload.get("page_content", "")] for hit in initial_results]
-    cross_scores = reranker_model.predict(rerank_pairs)
+    async with _nlp_semaphore:
+        cross_scores = await asyncio.to_thread(reranker_model.predict, rerank_pairs)
 
-    # 4. Extragem datele (Deduplicate by Title & Diversify Fallback)
     combined_results = []
-    seen_titles = set()
-    seen_categories = set()
-    
-    # Sortăm după scor inițial
+    seen_titles = set(); seen_categories = set()
     all_hits = sorted(enumerate(initial_results), key=lambda x: cross_scores[x[0]], reverse=True)
     
-    # Dacă folosim o strategie foarte relaxată (fără price_max etc.), adăugăm puțină variație (Jitter)
-    # ca să nu dăm mereu aceleași "top 3" scumpe dacă userul cere repetat ceva ce nu avem.
     if len(failed_filters) >= 2 or used_strategy == "SEMANTIC":
         import random
-        # Păstrăm primul hit ca fiind cel mai relevant semantic, dar amestecăm puțin următoarele
         if len(all_hits) > 1:
-            top_hit = all_hits[0]
-            rest_hits = all_hits[1:10] # Luăm un pool mai mare pentru amestec
-            random.shuffle(rest_hits)
+            top_hit = all_hits[0]; rest_hits = all_hits[1:10]; random.shuffle(rest_hits)
             all_hits = [top_hit] + rest_hits + all_hits[10:]
             
-    # Pas 1: Încercăm să luăm produse din categorii diferite (Diversificare)
     for i, hit in all_hits:
-        title = hit.payload.get("title")
-        category = hit.payload.get("category")
-        
+        title = hit.payload.get("title"); category = hit.payload.get("category")
         if title in seen_titles: continue
-        
-        # Dacă este un fallback (SEMANTIC), încercăm diversificarea
-        if "SEMANTIC" in used_strategy and category in seen_categories and len(combined_results) < final_top_k:
-            continue
-            
+        if "SEMANTIC" in used_strategy and category in seen_categories and len(combined_results) < final_top_k: continue
+        score_val = cross_scores[i]
+        if hasattr(score_val, "item"): score_val = score_val.item()
+        elif isinstance(score_val, (list, tuple)): score_val = score_val[0]
         combined_results.append({
-            "score": round(float(cross_scores[i]) if not isinstance(cross_scores[i], (list, tuple)) and getattr(cross_scores[i], "size", 1) == 1 else float(max(cross_scores[i])), 4),
+            "score": round(float(score_val), 4),
             "title": title,
             "price": hit.payload.get("price"),
             "handle": hit.payload.get("handle"),
             "context": hit.payload.get("page_content") 
         })
-        seen_titles.add(title)
-        seen_categories.add(category)
-        
-        if len(combined_results) >= final_top_k:
-            break
+        seen_titles.add(title); seen_categories.add(category)
+        if len(combined_results) >= final_top_k: break
             
-    # Pas 2: Dacă nu am umplut Top K din cauza diversificării prea stricte, completăm cu restul
-    if len(combined_results) < final_top_k:
-        for i, hit in all_hits:
-            title = hit.payload.get("title")
-            if title not in seen_titles:
-                combined_results.append({
-                    "score": round(float(cross_scores[i]) if not isinstance(cross_scores[i], (list, tuple)) and getattr(cross_scores[i], "size", 1) == 1 else float(max(cross_scores[i])), 4),
-                    "title": title,
-                    "price": hit.payload.get("price"),
-                    "handle": hit.payload.get("handle"),
-                    "context": hit.payload.get("page_content") 
-                })
-                seen_titles.add(title)
-            if len(combined_results) >= final_top_k: break
-
     reranked_results = sorted(combined_results, key=lambda x: x["score"], reverse=True)
-    
-    search_metadata = {
-        "strategy": used_strategy,
-        "failed_filters": failed_filters,
-        "total_found": len(reranked_results)
-    }
-        
-    return reranked_results[:final_top_k], search_metadata
-
-
+    return reranked_results[:final_top_k], {"strategy": used_strategy, "failed_filters": failed_filters, "total_found": len(reranked_results)}

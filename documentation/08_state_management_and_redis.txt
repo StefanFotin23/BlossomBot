@@ -3,27 +3,26 @@ TECHNICAL DOCUMENTATION: STATE MANAGEMENT & REDIS
 =========================================================
 
 1. THE NEED FOR STATE MANAGEMENT
-Unlike simple FAQ bots, an e-commerce chatbot like BlossomBot requires conversational memory. It must remember what products the user was looking at, what filters they insisted upon, and what items they have added to their shopping cart across multiple asynchronous Slack messages.
+Unlike simple FAQ bots, BlossomBot requires conversational memory to track product history, filter scores, and shopping cart state across asynchronous messages.
 
 2. REDIS INTEGRATION
-To support horizontal scaling (running multiple replicas of the `chat-app` pod) and ensure that user context survives application restarts, the state is persisted in a Redis database.
-- Key Structure: States are stored as JSON strings with the key format `user:{user_id}`, ensuring complete isolation between different Slack users interacting with the bot simultaneously.
-- TTL (Time To Live): To prevent memory leaks and clear abandoned carts, every update to a user's state in Redis sets an expiration timer (TTL) of 24 hours (`ex=3600*24`). If a user does not interact with the bot for a day, their session is automatically purged.
+- Key Structure: `user:{user_id}` for complete isolation.
+- TTL: 24-hour expiration (`ex=3600*24`) to clear abandoned sessions.
+- Idempotency Layer: `evt:{msg_id}` (10m TTL) to ignore Slack retries and prevent double-ordering.
 
 3. STATE PAYLOAD STRUCTURE & SELF-HEALING
-The JSON object stored for each user contains:
-- `state`: The current node in the state machine (e.g., `SEARCH_PRODUCTS`, `AWAITING_CONFIRMATION`).
-- `history`: An array of previous messages and states, passed to the LLM to provide conversational context.
-- `filter_scores`: A dictionary mapping filter keys (like `price_max`) to integer scores. These scores dictate the RAG engine's dynamic relaxation logic.
-- `cart`: An array of product objects (name, quantity, price) representing the user's pending order.
-- `pending_item`: A temporary object holding the item currently awaiting Yes/No confirmation from the user.
-- SELF-HEALING MECHANISM: BlossomBot implements a "Structure Repair" layer. Every time a user's state is read from Redis, the system automatically verifies and repairs any missing or corrupted keys (e.g., converting a `None` cart to an `[]`). This ensures the state machine never crashes due to unexpected data types.
+- `state`: Current state machine node.
+- `history`: Previous interactions for LLM context.
+- `filter_scores`: Dynamic relaxation weights.
+- `cart`: Array of pending items.
+- SELF-HEALING MECHANISM: Every read from Redis includes a "Structure Repair" layer that restores missing or corrupted keys (e.g., `None` -> `[]`), ensuring stability.
 
-4. FALLBACK MECHANISM (RESILIENCE)
-If the Redis service becomes unreachable (e.g., due to a network partition or pod crash), the application is designed to degrade gracefully rather than fail entirely.
-- In `app/bot.py`, the initialization code wraps the Redis connection in a `try/except` block.
-- If the connection fails, the application falls back to `_local_user_states`, an in-memory Python dictionary.
-- While in-memory storage does not persist across pod restarts and does not support multi-pod scaling, it guarantees that the bot remains functional and can continue serving users while infrastructure issues are resolved.
+4. ATOMIC PERSISTENCE (TECHNICAL INTEGRITY)
+- IMMEDIATE SAVING: `set_user_state` is called immediately after every significant data change (search results, cart additions, confirmations).
+- SOURCE OF TRUTH: The bot works on a single, passed user-state object to prevent "State Clobbering" where parallel background tasks might overwrite each other's Redis updates.
 
-5. CONVERSATIONAL CHECKPOINTS (HARD RESET)
-When a user completes an order (`FINISH_ORDER`) or manually requests a restart (`RESTART`), the `set_user_state` function is called with a deeply cleaned dictionary (empty history, empty cart, empty scores, state set to `GREETING`). This effectively creates a strict conversational boundary, proving the user with a fresh context for their next interaction.
+5. FALLBACK MECHANISM (RESILIENCE)
+If Redis is unreachable, the bot falls back to an in-memory Python dictionary (`_local_user_states`). While this doesn't support multi-pod scaling, it keeps the bot functional during downtime.
+
+6. CONVERSATIONAL CHECKPOINTS (HARD RESET)
+Order completion or manual restarts overwrite memory with a clean, empty dictionary to provide a fresh start for the next interaction.

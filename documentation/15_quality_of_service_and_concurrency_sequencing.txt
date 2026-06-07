@@ -3,26 +3,19 @@ TECHNICAL DOCUMENTATION: QUALITY OF SERVICE (QoS) & CONCURRENCY
 =========================================================
 
 1. INTRODUCTION
-BlossomBot is designed to handle "Traffic Bursts" that exceed the rate limits of external AI APIs (like Gemini). Instead of dropping requests or providing inaccurate fallbacks, the system implements a proprietary Quality of Service (QoS) layer that prioritizes consistency and accuracy over immediate response time.
+BlossomBot implements a proprietary Quality of Service (QoS) layer to manage high-concurrency bursts and prioritize sequential integrity for every user.
 
-2. THE SEQUENTIAL AI TASK QUEUE & PARALLEL WORKERS
-To manage the 15-30 RPM (Requests Per Minute) limit of the Gemini Free Tier, the application utilizes an `asyncio.Queue` called `vital_task_queue`.
-- Failure Interception: When a `GeminiOverloadedError` (HTTP 429) is caught during intent routing or filter extraction, the current execution is suspended and moved to the background.
-- 10-WORKER PARALLEL POOL: To handle high-concurrency bursts (multiple users messaging at once), the bot spawns 10 parallel `background_task_worker` instances. This allows 10 different user tasks to be processed simultaneously across the worker pool, drastically reducing the "Ocupat" backlog seen in single-worker architectures.
-- WORKER VISIBILITY: Each worker is assigned a unique ID (e.g., `[W0]` to `[W9]`), allowing for perfect observability in the logs during high-fidelity stress tests.
-- Background Buffering: The raw Slack payload and user context are wrapped into a "Task Object" and pushed into the queue.
-- Rate-Limit Resets (Optimized Throttling): The workers introduce an optimized forced delay of 1.5 seconds between tasks (reduced from 4.0s). This provides a significant boost in responsiveness while remaining safely within the Gemini Free Tier quotas.
+2. THE PARALLEL AI WORKER POOL
+- 10-WORKER POOL: The bot spawns 10 parallel background workers to handle high-traffic bursts. This ensures that 10 different users can be processed simultaneously without backlog.
+- VITAL TASK QUEUE: Overloaded AI requests are queued to manage Gemini's Requests Per Minute (RPM) limits safely.
+- RATE-LIMIT THROTTLING: Workers introduce a 1.5s forced delay between tasks to stay within free-tier quotas while maintaining high responsiveness.
 
 3. ATOMIC USER-LEVEL SEQUENCING (BUSY-WAIT LOCKING)
-High-load scenarios often lead to race conditions where a user's second message (e.g., "Confirm Order") is processed before their first message (e.g., "Add to Cart") if the first was queued due to rate limits.
-- ATOMIC PENDING COUNTER: To solve this, we implemented a `pending:{user_id}` counter in Redis. If a user has *any* task already in the queue or being processed, all new messages from that user are **forced into the queue** behind it, ensuring they are processed in exact chronological order.
-- THE BUSY-WAIT LOCK: The background worker implements a "Busy-Wait" mechanism. Before starting a task, it checks for a global `busy:{user_id}` lock. It will wait up to 30 seconds for the lock to clear, ensuring that Task 1 (e.g., Search) is **100% saved and persisted to Redis** before Task 2 (e.g., Selection) ever tries to read the results.
-- CONSISTENCY GUARANTEE: This architecture ensures that even in a multi-pod cluster, an individual user's "Conversational Timeline" is preserved in strict FIFO (First-In, First-Out) order.
-- SELECTION GRACE PERIOD: To prevent "State Desynchronization" errors (e.g., "Select a flower first"), the bot implements a logic-based grace period. If a user says "yes" or "first one" and the bot has search results in memory, it will automatically route the message to the purchase logic, even if the internal state machine hasn't fully transitioned yet. This ensures a seamless UX even under high concurrency.
+- PENDING COUNTER: A Redis-based `pending:{user_id}` counter tracks a user's active tasks. If > 0, all new messages are forced into the queue, ensuring they are processed in exact chronological order.
+- THE BUSY-WAIT LOCK: Workers wait up to 30 seconds for a user's previous task to finish and save to Redis. This eliminates the "Selection Blindness" bug where selections were processed before search results were saved.
+- FIFO GUARANTEE: This architecture guarantees that even in a multi-pod cluster, a user's conversation remains strictly sequential.
 
-4. USER TRANSPARENCY & LATENCY FEEDBACK
-Queuing messages can lead to user anxiety if they receive no feedback. 
-- SILENT QUEUEING: For normal users, the bot remains silent while waiting for small queues (1-2 messages), providing a seamless feel.
-- POSITION FEEDBACK: If the queue for a user exceeds 2 messages, the bot provides a specific holding message ("🌸 Te rog să aștepți un moment, procesez mesajul tău anterior...") to manage expectations.
-- Wait Time Estimation: Based on the worker's processing speed (1.5s/task), the bot provides a mathematical time estimate if the total wait exceeds 5 seconds.
-- Keep-Alive Heartbeats: For waits exceeding 15 seconds, a separate background task can be spawned to send periodic updates to the user, ensuring they remain informed of the processing status.
+4. USER FEEDBACK & LATENCY UX
+- Position Feedback: If the queue size exceeds 2, the bot informs the user ("Position 3 in queue").
+- Thinking Heartbeat: For non-fast-path requests, the bot acknowledges the user immediately with "🌸 Analizez cererea ta...".
+- Silent Queueing: For normal human typing speeds, the queueing is invisible, providing a premium real-time feel.
