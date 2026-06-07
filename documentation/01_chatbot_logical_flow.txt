@@ -11,32 +11,26 @@ Each user's state is tracked persistently (via Redis) using their unique Slack `
 - GREETING: The initial state. The bot introduces itself and invites the user to browse. It also acts as a "soft reset" point.
 - CATALOG_DISCOVERY: Triggered by broad questions (e.g., "What products do you have?"). It bypasses strict filtering to offer a diverse, representative sample of the catalog.
 - SEARCH_PRODUCTS: The core RAG state. It extracts filters from the user's input, searches the vector database, and returns the most relevant products while applying dynamic relaxation if necessary.
-- PRODUCT_DETAILS: When a user asks for more information about a previously displayed product (e.g., "Tell me more about the first one"). The bot expands the product's metadata into a highly readable list and shows the full narrative description.
-- PURCHASE_INTENT: The user selects a product to add to their cart. The LLM extracts the target product's index and the requested quantity.
-- AWAITING_CONFIRMATION: The bot explicitly asks the user to confirm the item, quantity, and price. A fast-track LLM classifier (temperature 0.0) reads the input to detect a "Yes" (handling slang like "yep", "k") or "No", updating the shopping cart accordingly.
-- VIEW_CART: Allows the user to check their pending order (e.g., "What's in my cart?"). The bot formats and displays the internal cart array and the total order value.
-- FINISH_ORDER: Triggers the asynchronous dispatch of the shopping cart payload to RabbitMQ. Upon success, it executes a "Hard Reset".
-- GENERAL_INQUIRY: Handles small-talk and status questions ("Who are you?", "Are you there?"). It returns instant, deterministic responses based on predefined categories.
-- RESTART: Allows the user to manually clear their cart and memory, reverting the state to GREETING.
+- PRODUCT_DETAILS: When a user asks for more information about a previously displayed product. The bot expands metadata into a readable list and shows full descriptions.
+- PURCHASE_INTENT: The user selects a product. The LLM extracts index and quantity.
+- AWAITING_CONFIRMATION: The bot asks for confirmation. Detects "Yes" (handling "afirmativ", "da", "vreau") or "No" (handling "negativ", "nu").
+- VIEW_CART: Displays internal cart array and total value.
+- FINISH_ORDER: Triggers RabbitMQ dispatch and executes a "Hard Reset".
+- RESTART: Clears cart and memory, reverting to GREETING.
 
 3. INTENT ROUTING & SMART UX FALLBACKS
-The core of the interaction lies in the `decompose_intents` and `classify_intent` functions (`app/llm_agent.py`).
-
-- COMMAND FAST-PATH (DETERMINISTIC BYPASS): To ensure maximum reliability and speed, BlossomBot implements a deterministic command layer that intercepts messages BEFORE they reach the LLM. 
-- SMART SELECTION PIVOT: If a user attempts to select a product (PURCHASE_INTENT) but the previous search results were lost or are empty, the bot proactively **pivots to a search mode**. Instead of an error, it uses the user's message as a search query to find the products they likely intended to pick.
-- UX-FIRST SEARCH FALLBACK: If a specific product search returns zero results, the bot automatically triggers a fallback to "Popular Products". This ensures the user is always presented with options and prevents "dead-end" conversations.
-- MULTI-INTENT DECOMPOSITION: BlossomBot splits complex messages (e.g., "Salut, arată-mi trandafiri") into atomic tasks. These tasks are executed sequentially via a background QoS queue.
-- "THINKING" INDICATORS: For operations requiring heavy AI processing, the bot manages expectations by acknowledging the user before the LLM round-trip.
+- COMMAND FAST-PATH: Deterministic interception before LLM for basic commands.
+- REFINED SELECTION REGEX: Manual index matching ignores numbers followed by quantity keywords (e.g., "5 bucăți"), preventing misrouting quantities as item indices.
+- SMART SELECTION PIVOT: If a user says "da" but no index is found (e.g., results were lost), the bot asks for clarification ("What product do you want to add?") instead of random search.
+- UX-FIRST SEARCH FALLBACK: If a search returns zero results, the bot automatically shows "Popular Products".
+- MULTI-INTENT DECOMPOSITION: Splits complex messages into sequential tasks via background QoS queue.
 
 4. SHOPPING CART AND CONTEXT RESET ("HARD RESET")
-- The `cart` array lives inside the user's state dictionary. It accumulates items across the conversation. 
-- PERSISTENT SEARCH MEMORY: BlossomBot preserves the `last_results` in memory even after an item is added to the cart, allowing multi-item selections from a single search.
-- Submitting an order acts as a major conversational checkpoint. BlossomBot responds with a strong visual delimiter (━━━━━━━━) to indicate order completion.
-- Following this visual cue, the memory associated with the `user_id` is overwritten with an empty dictionary. This "Hard Reset" ensures that the next interaction starts with a clean slate.
+- Persistent Search Memory: Preserves `last_results` even after adding an item, allowing multi-item selection.
+- visual delimiter (━━━━━━━━) indicates order completion.
+- Immediate Persistence: Memory is overwritten with an empty dictionary upon "Hard Reset".
 
 5. CONVERSATIONAL PACING & CONTINUATIONS
-To maintain a natural rhythm in multi-part conversations, BlossomBot implements strategic pacing and acknowledgment triggers:
-
-- THE CONTINUE INTENT: Users can manually trigger the next item in their `deferred_tasks` queue using keywords like "ok" or "continuă".
-- EMBEDDED CONTEXT RESUMPTION: When a task is resumed after a pause, the bot provides an explicit bridge message: "Acum să ne ocupăm de: [următoarea cerință]...".
-- PACED DELIVERY: A strategic 1.0 - 1.5 second delay is introduced between sequential task executions. This prevents "Message Flooding" and ensures the user has enough time to read the previous response.
+- THE CONTINUE INTENT: Users can trigger the next task using "ok" or "continuă".
+- EMBEDDED CONTEXT RESUMPTION: Uses bridge messages like "Acum să ne ocupăm de: [task]...".
+- PACED DELIVERY: Strategic 1.0 - 1.5s delay between tasks to prevent message flooding.
