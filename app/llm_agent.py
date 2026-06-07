@@ -245,7 +245,7 @@ def generate_detailed_product_info(product: Dict[str, Any]) -> str:
 # ==========================================
 async def extract_purchase_selection(user_message: str, titles: List[str] = None, api_key: str = None) -> Dict[str, Any]:
     client = getApiClient(api_key)
-    default = {"index": 0, "quantity": 1}
+    default = {"index": None, "quantity": 1}
     msg_cl = user_message.lower().strip()
     
     ordinal_map = {r'\bv1\b': 0, r'varianta 1': 0, r'primul': 0, r'prima': 0, r'\bv2\b': 1, r'varianta 2': 1, r'doilea': 1, r'doua': 1, r'\bv3\b': 2, r'varianta 3': 2, r'treilea': 2, r'treia': 2}
@@ -255,7 +255,7 @@ async def extract_purchase_selection(user_message: str, titles: List[str] = None
     if not client: return default
     context_titles = ""
     if titles: context_titles = "\nProduse afișate anterior:\n" + "\n".join([f"{i}. {t}" for i, t in enumerate(titles)])
-    system_prompt = f"Ești un asistent de vânzări. Identifică produsul ales de utilizator dintr-o listă.\n{context_titles}\nExtrage JSON: 'index' (0-based) și 'quantity' (default 1)."
+    system_prompt = f"Ești un asistent de vânzări. Identifică produsul ales de utilizator dintr-o listă. Dacă nu ești sigur sau mesajul e ambiguu, pune index null.\n{context_titles}\nExtrage JSON: 'index' (0-based) și 'quantity' (default 1)."
     
     try:
         response = await asyncio.to_thread(
