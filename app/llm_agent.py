@@ -141,8 +141,13 @@ def manual_extract_filters(msg: str) -> Dict[str, Any]:
     
     p_match = re.search(r'(\d+)\s*(lei|ron)', msg_cl)
     if p_match:
-        filters["price_max"] = float(p_match.group(1))
-        mentioned.append("price_max")
+        val = float(p_match.group(1))
+        if any(w in msg_cl for w in ["peste", "mai mult", "minim", "maxim", "cel putin"]):
+            filters["price_min"] = val
+            mentioned.append("price_min")
+        else:
+            filters["price_max"] = val
+            mentioned.append("price_max")
     
     flowers_map = {"Trandafiri": ["trandafir", "rose"], "Lalele": ["lalea", "lalele", "tulip"], "Hortensii": ["hortensi", "hydrange"], "Frezii": ["frezii", "freesia"], "Mimosa": ["mimosa", "mimoza"], "Bujori": ["bujor", "peony"]}
     for f_name, keys in flowers_map.items():
@@ -179,6 +184,8 @@ async def extract_filters(user_message: str, history: List[Dict] = None, api_key
     system_prompt = (
         "Ești un expert în extragerea de informații din text. "
         "Extrage JSON cu: 'filters', 'negative_filters', 'semantic_query', 'mentioned_now'.\n"
+        "REGULI FILTRE:\n"
+        "1. Preț: Dacă cere 'sub X lei' -> filters['price_max'] = X. Dacă cere 'peste X lei' -> filters['price_min'] = X.\n"
         f"{schema_info}\n"
         "Regulă: Mărțișoarele -> 'event_type': '1 Martie'."
     )
