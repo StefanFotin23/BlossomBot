@@ -38,6 +38,7 @@ async def get_user_state(user_id):
             data = redis_client.get(f"user:{user_id}")
             if data:
                 state = json.loads(data)
+                # Cleanup and validation
                 for k in ["last_results", "cart", "deferred_tasks", "history"]:
                     if k not in state or not isinstance(state[k], list): state[k] = []
                 if "filter_scores" not in state or not isinstance(state["filter_scores"], dict): state["filter_scores"] = {}
@@ -51,6 +52,8 @@ async def set_user_state(user_id, state_data):
     if redis_client:
         try:
             redis_client.set(f"user:{user_id}", json.dumps(state_data), ex=3600*24)
+            # CRITICAL: Micro-delay to ensure write propagation before next task acquires lock
+            await asyncio.sleep(0.05)
             return
         except Exception as e:
             logger.error(f"Redis set error: {e}")
@@ -70,16 +73,15 @@ def find_best_contextual_match(user_text, products):
     text_clean = re.sub(r'[^\w\s]', ' ', user_text.lower()).strip()
     words = text_clean.split()
     
-    # 1. MATCH PE ORDINALE (Prioritate Maxima)
+    # 1. MATCH PE ORDINALE (Extins pentru fraze de tip "al doilea e frumos")
     ordinal_map = {"primul": 0, "prima": 0, "unu": 0, "1": 0, "doilea": 1, "doua": 1, "doi": 1, "2": 1, "treilea": 2, "treia": 2, "trei": 2, "3": 2, "ultimul": len(products)-1, "ultima": len(products)-1}
     for w in words:
         if w in ordinal_map:
             idx = ordinal_map[w]
             if 0 <= idx < len(products): return idx
 
-    # 2. MATCH PE ATRIBUTE (Titlu, Culoare, Categorie)
+    # 2. MATCH PE ATRIBUTE
     GLOBAL_STOPWORDS = {"un", "o", "de", "cu", "din", "la", "pe", "pentru", "si", "și", "vrea", "vreau", "caut", "arata", "imi", "îmi", "place", "detalii", "despre", "multumesc", "mulțumesc"}
-    
     user_keywords = set([normalize_ro_word(w) for w in words if w not in GLOBAL_STOPWORDS and len(w) > 2])
     if not user_keywords: return None
 
@@ -92,17 +94,14 @@ def find_best_contextual_match(user_text, products):
 
     scores = []
     for feat_words in product_features:
-        # Punctaj bonus pentru cuvinte care apar DOAR la acest produs de pe ecran
         match_score = sum([(2 if word_freq.get(w, 0) == 1 else 1) for w in user_keywords.intersection(feat_words)])
         scores.append(match_score)
 
-    if max(scores) > 0:
-        best_idx = scores.index(max(scores))
-        if scores.count(max(scores)) == 1: return best_idx
-        
+    if scores and max(scores) > 0 and scores.count(max(scores)) == 1:
+        return scores.index(max(scores))
     return None
 
-# --- ATOMIC LOCKING & SERIALIZATION ---
+# --- ATOMIC LOCKING ---
 async def acquire_user_lock(user_id):
     if not redis_client: return True
     return redis_client.set(f"busy:{user_id}", "1", nx=True, ex=30)
@@ -144,7 +143,7 @@ async def background_task_worker(worker_id, client, publish_purchase_callback):
                 except llm.GeminiOverloadedError:
                     retries += 1; await asyncio.sleep(2 * retries)
                 except Exception as e:
-                    logger.error(f"❌ [W{worker_id}] Error: {e}"); break
+                    logger.error(f"❌ [W{worker_id}] Logic Error: {e}"); break
         finally:
             decrement_pending(user_id); release_user_lock(user_id); vital_task_queue.task_done()
 
@@ -216,7 +215,6 @@ async def handle_message(body, say, client, publish_purchase_callback=None, is_m
             await smart_say("Bună! Cu ce te pot ajuta astăzi?"); user_data["state"] = "SEARCH_PRODUCTS"; await set_user_state(user_id, user_data)
             return mock_responses if is_mock else None
 
-        # 4. CONTEXTUAL MATCHING (Prioritate Maximă)
         context_idx = find_best_contextual_match(full_text, last_results)
         
         # 5. STATE MACHINE (CONFIRMATION)
@@ -226,31 +224,35 @@ async def handle_message(body, say, client, publish_purchase_callback=None, is_m
             is_finish = any(w in K_FINISH for w in words)
             m_num = re.search(r'^(\d+)$', text_cl)
             
-            # Smart "Yes": If user says "gata/atat" while confirming, assume they want the item ADDED first.
-            is_implicit_y = is_finish 
+            is_finish_add = is_finish and not is_n
             
-            is_shift = (any(k in text_cl for k in ["finalizeaza", "cos", "pune", "caut"]) or (context_idx is not None and not is_y and not is_implicit_y))
+            # SOFT SHIFT: Viewing cart shouldn't kill pending item
+            is_view_cart = any(k in text_cl for k in ["cos", "coș", "cosul", "coșul"])
+            is_shift = (not is_view_cart and (any(k in text_cl for k in ["pune", "caut", "scoate", "șterge", "sterge", "elimin"]) or (context_idx is not None and not is_y and not is_finish_add)))
 
             if is_n and not is_shift: 
                 await smart_say("Am anulat. Mai dorești altceva?"); user_data["state"] = "SEARCH_PRODUCTS"; user_data["pending_item"] = None; await set_user_state(user_id, user_data)
                 return mock_responses if is_mock else None
             
-            if (is_y or m_num or is_implicit_y or is_shift):
+            if (is_y or m_num or is_finish_add or is_shift):
                 p = user_data.get("pending_item")
-                if p and not is_n and (is_y or m_num or is_implicit_y):
+                if p and not is_n and (is_y or m_num or is_finish_add):
                     if m_num: p["qty"] = int(m_num.group(1))
                     user_data["cart"] = user_data.get("cart", []) + [p]
                     user_data["pending_item"] = None; user_data["state"] = "SEARCH_PRODUCTS"
-                    await set_user_state(user_id, user_data); await smart_say(f"✅ Adăugat {p['qty']}x {p['name']} în coș!")
-                    await asyncio.sleep(0.05) # Breath for Redis
+                    await set_user_state(user_id, user_data)
+                    await smart_say(f"✅ Adăugat {p['qty']}x {p['name']} în coș!")
+                    if is_finish: current_state = "SEARCH_PRODUCTS"
+                    else: return mock_responses if is_mock else None
                 
-                if is_shift and not is_implicit_y: 
+                if is_shift and not is_finish_add: 
                     user_data["pending_item"] = None; user_data["state"] = "SEARCH_PRODUCTS"; await set_user_state(user_id, user_data)
                 
-                if not is_shift and user_data.get("deferred_tasks"):
+                if not is_shift and not is_finish_add and user_data.get("deferred_tasks"):
                     next_t = user_data["deferred_tasks"].pop(0); await set_user_state(user_id, user_data)
                     return await handle_message({"event": {"user": user_id, "text": next_t.get('text', ''), "channel": channel_id}, "is_deferred": True, "intent": next_t.get('intent')}, say, client, publish_purchase_callback, is_mock, is_retry=True)
-                if not is_shift: return mock_responses if is_mock else None
+                
+                if not is_finish: return mock_responses if is_mock else None
 
         # 6. TASK DECOMPOSITION
         if not is_retry and not body.get("is_deferred"):
@@ -262,10 +264,14 @@ async def handle_message(body, say, client, publish_purchase_callback=None, is_m
         new_intent = current_task.get("intent", "SEARCH_PRODUCTS")
         text_t = current_task.get("text", full_text)
 
-        # 7. EXECUTION (With Context Override)
+        # 7. EXECUTION POLISH
         is_asking_details = any(w in text_cl for w in ["detalii", "info", "spune-mi", "arata-mi", "arată-mi"])
         if context_idx is not None and new_intent not in ["FINISH_ORDER", "VIEW_CART", "REMOVE_FROM_CART"]:
             new_intent = "PRODUCT_DETAILS" if is_asking_details else "PURCHASE_INTENT"
+            
+        # INTELLIGENCE: If user says "yes" to a list with no pending item, pick the first one.
+        if new_intent == "PURCHASE_INTENT" and context_idx is None and text_cl in ["da", "da da", "ok", "k", "perfect", "baga"]:
+            if last_results: context_idx = 0
 
         if new_intent == "SEARCH_PRODUCTS":
             resp, res = await process_recommendations(user_data, text_t)
@@ -296,11 +302,41 @@ async def handle_message(body, say, client, publish_purchase_callback=None, is_m
                 user_data["state"] = "AWAITING_CONFIRMATION"; await set_user_state(user_id, user_data)
                 await smart_say(f"Vrei să adăugăm *{qty}x {p.get('title')}*? ({p.get('price', 0.0) * qty} RON)")
             else:
-                resp, res = await process_recommendations(user_data, text_t)
-                user_data["last_results"] = res; await set_user_state(user_id, user_data); await smart_say(resp)
+                if text_cl in ["da", "dap", "ok"]: await smart_say("Spune-mi te rog numele produsului sau varianta dorită (1, 2 sau 3).")
+                else:
+                    resp, res = await process_recommendations(user_data, text_t)
+                    user_data["last_results"] = res; await set_user_state(user_id, user_data); await smart_say(resp)
+
+        elif new_intent == "REMOVE_FROM_CART":
+            cart = user_data.get("cart", [])
+            if not cart:
+                await smart_say("Coșul tău este deja gol.")
+            else:
+                if any(w in text_t.lower() for w in ["ultimul", "ultima", "tot"]):
+                    removed = cart.pop() if "tot" not in text_t.lower() else None
+                    if "tot" in text_t.lower(): 
+                        cart = []; await smart_say("✅ Am golit coșul de cumpărături.")
+                    else:
+                        await smart_say(f"✅ Am scos {removed['qty']}x {removed['name']} din coș.")
+                else:
+                    found_idx = -1
+                    for i, item in enumerate(cart):
+                        if any(normalize_ro_word(w) in normalize_ro_word(item['name']) for w in words if len(w) > 3):
+                            found_idx = i; break
+                    if found_idx != -1:
+                        removed = cart.pop(found_idx)
+                        await smart_say(f"✅ Am scos {removed['qty']}x {removed['name']} din coș.")
+                    else:
+                        await smart_say("Nu am găsit produsul în coș. Te rog să-mi spui exact numele lui sau 'ultimul'.")
+            user_data["cart"] = cart
+            user_data["state"] = "SEARCH_PRODUCTS"
+            await set_user_state(user_id, user_data)
 
         elif new_intent == "VIEW_CART":
             cart = user_data.get("cart", [])
+            if not cart:
+                await asyncio.sleep(0.1) # Sync wait
+                user_data = await get_user_state(user_id); cart = user_data.get("cart", [])
             if not cart: await smart_say("🛒 Coșul tău este gol momentan.")
             else:
                 items_s = "\n".join([f"• {i['qty']} x {i['name']} ({i['price']*i['qty']} RON)" for i in cart])
@@ -308,7 +344,11 @@ async def handle_message(body, say, client, publish_purchase_callback=None, is_m
 
         elif new_intent == "FINISH_ORDER":
             cart = user_data.get("cart", [])
-            if not cart: await smart_say("Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!")
+            if not cart:
+                await asyncio.sleep(0.1) # Propagation safety
+                user_data = await get_user_state(user_id); cart = user_data.get("cart", [])
+            if not cart: 
+                await smart_say("Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!")
             else:
                 total = sum(i['price'] * i['qty'] for i in cart); items_s = "\n".join([f"• {i['qty']} x {i['name']} ({i['price']*i['qty']} RON)" for i in cart])
                 if await publish_purchase_callback({"user_id": user_id, "items": items_s, "price": total, "timestamp": str(time.time())}, queue_name=Config.PURCHASE_QUEUE):
@@ -317,7 +357,7 @@ async def handle_message(body, say, client, publish_purchase_callback=None, is_m
 
         user_data["history"].append({"user": text_cl, "state": new_intent}); await set_user_state(user_id, user_data)
         if user_data.get("deferred_tasks"):
-            next_t = user_data["deferred_tasks"].pop(0); await set_user_state(user_id, user_data); await smart_say(f"Trecem la: \"{next_t.get('text', '')}\"...")
+            next_t = user_data["deferred_tasks"].pop(0); await set_user_state(user_id, user_data)
             await handle_message({"event": {"user": user_id, "text": next_t.get('text', ''), "channel": channel_id}, "is_deferred": True, "intent": next_t.get('intent')}, say, client, publish_purchase_callback, is_mock, is_retry=True)
 
     except Exception as e: 
