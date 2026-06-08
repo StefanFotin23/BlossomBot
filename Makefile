@@ -134,6 +134,7 @@ scale-chat:
 
 # Builds the application image.
 build-app-image:
+	@sudo apt-get install docker-buildx-plugin
 	@echo "--- Building Docker image (forcing app layer refresh for all .py files) ---"
 	@find app -name "*.py" -exec touch {} +
 	@DOCKER_BUILDKIT=1 docker build --build-arg BUILDKIT_INLINE_CACHE=1 -t $(PROD_IMAGE_NAME) .

@@ -22,6 +22,12 @@ def main():
     df = eda.clean_column_names(df)
     df = eda.drop_empty_columns(df)
     
+    # Fix encoding issues (Mojibake)
+    logger.info("🔧 Fixing encoding issues (Mojibake)...")
+    for col in ['Title', 'Body (HTML)', 'Variant Price', 'Type', 'Tags', 'Option1 Value', 'Custom Label #1', 'Custom Label #2', 'Custom Label #3', 'Custom Label #4', 'Custom Label #5', 'Event Type', 'Flowers Type']:
+        if col in df.columns:
+            df[col] = df[col].apply(eda.fix_mojibake)
+    
     # Specific notebook drops
     cols_to_drop = [
         'Published', 'Option1 Name', 'Option2 Name', 'Variant Taxable', 

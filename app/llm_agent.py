@@ -138,24 +138,24 @@ def manual_extract_filters(msg: str) -> Dict[str, Any]:
     msg_cl = msg.lower()
     filters = {}
     mentioned = []
-    
+
     p_match = re.search(r'(\d+)\s*(lei|ron)', msg_cl)
     if p_match:
         val = float(p_match.group(1))
-        if any(w in msg_cl for w in ["peste", "mai mult", "minim", "maxim", "cel putin"]):
+        if any(w in msg_cl for w in ["peste", "mai mult", "minim", "maxim", "cel putin", "scump"]):
             filters["price_min"] = val
             mentioned.append("price_min")
         else:
             filters["price_max"] = val
             mentioned.append("price_max")
-    
+
     flowers_map = {"Trandafiri": ["trandafir", "rose"], "Lalele": ["lalea", "lalele", "tulip"], "Hortensii": ["hortensi", "hydrange"], "Frezii": ["frezii", "freesia"], "Mimosa": ["mimosa", "mimoza"], "Bujori": ["bujor", "peony"]}
     for f_name, keys in flowers_map.items():
         if any(k in msg_cl for k in keys):
             filters["flowers_type"] = f_name
             mentioned.append("flowers_type")
             break
-            
+
     if any(k in msg_cl for k in ["vin", "prosecco", "bautura", "ciocolata", "praline", "dulce"]):
         filters["category"] = "Cadouri"
         mentioned.append("category")
@@ -167,7 +167,7 @@ def manual_extract_filters(msg: str) -> Dict[str, Any]:
 
 async def extract_filters(user_message: str, history: List[Dict] = None, api_key: str = None, force_manual: bool = False) -> Dict[str, Any]:
     if force_manual: return manual_extract_filters(user_message)
-    
+
     client = getApiClient(api_key)
     schema_path = os.path.join(Config.TEMPLATE_DIR, "schema.json")
     schema_info = ""
@@ -185,7 +185,7 @@ async def extract_filters(user_message: str, history: List[Dict] = None, api_key
         "Ești un expert în extragerea de informații din text. "
         "Extrage JSON cu: 'filters', 'negative_filters', 'semantic_query', 'mentioned_now'.\n"
         "REGULI FILTRE:\n"
-        "1. Preț: Dacă cere 'sub X lei' -> filters['price_max'] = X. Dacă cere 'peste X lei' -> filters['price_min'] = X.\n"
+        "1. Preț: Dacă cere 'sub X lei' sau ieftin -> filters['price_max'] = X. Dacă cere 'peste X lei', minim sau scump -> filters['price_min'] = X. ATENȚIE, NU LE ÎNCURCA!\n"
         f"{schema_info}\n"
         "Regulă: Mărțișoarele -> 'event_type': '1 Martie'."
     )
@@ -255,9 +255,12 @@ async def extract_purchase_selection(user_message: str, titles: List[str] = None
     default = {"index": None, "quantity": 1}
     msg_cl = user_message.lower().strip()
     
+    qty_match = re.search(r'(\d+)\s*(buc|bucati|bucăți|x)', msg_cl)
+    qty = int(qty_match.group(1)) if qty_match else 1
+    
     ordinal_map = {r'\bv1\b': 0, r'varianta 1': 0, r'primul': 0, r'prima': 0, r'\bv2\b': 1, r'varianta 2': 1, r'doilea': 1, r'doua': 1, r'\bv3\b': 2, r'varianta 3': 2, r'treilea': 2, r'treia': 2}
     for pattern, idx in ordinal_map.items():
-        if re.search(pattern, msg_cl): return {"index": idx, "quantity": 1}
+        if re.search(pattern, msg_cl): return {"index": idx, "quantity": qty}
 
     if not client: return default
     context_titles = ""

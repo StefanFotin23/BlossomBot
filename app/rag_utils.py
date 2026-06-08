@@ -258,7 +258,8 @@ async def sota_hybrid_search(state_json: Dict[str, Any], filter_scores: Dict[str
     query_vector = query_vector.tolist()
 
     all_active_keys = list(conditions_map.keys()) + list(negative_map.keys())
-    fallback_order = ["price_max", "price_min", "event_type", "colors", "dimensiune", "flowers_type", "category"]
+    # Critical: Keep Category and Flowers Type at the end of the fallback list
+    fallback_order = ["price_max", "price_min", "colors", "dimensiune", "event_type", "flowers_type", "category"]
 
     def get_sort_score(key):
         score = filter_scores.get(key, 0) if filter_scores else 0
@@ -266,12 +267,16 @@ async def sota_hybrid_search(state_json: Dict[str, Any], filter_scores: Dict[str
         base_priority = fallback_order.index(base_key) if base_key in fallback_order else 99
         return (score, base_priority)
 
+    # Sort so that items with lower priority (index in fallback_order) are removed first
     sorted_keys = sorted(all_active_keys, key=get_sort_score)
     search_strategies = [{"name": "ALL", "pos": list(conditions_map.keys()), "neg": list(negative_map.keys())}]
     current_pos = list(conditions_map.keys())
     current_neg = list(negative_map.keys())
 
     for key_to_remove in sorted_keys:
+        # HARD CONSTRAINT: Prețul nu se relaxează niciodată
+        if key_to_remove in ["price_max", "price_min"]: continue
+        
         if key_to_remove.startswith("no_"):
             if key_to_remove in current_neg: current_neg.remove(key_to_remove)
         else:
