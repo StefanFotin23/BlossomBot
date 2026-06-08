@@ -221,6 +221,35 @@ def analyze_column(df, col_name, top_n=10):
         logger.info(f"  ... plus {remaining} other unique values.")
     logger.info("="*50 + "\n")
 
+def fix_mojibake(text):
+    """
+    Fixes common Mojibake encoding issues (UTF-8 bytes read as Windows-1252/ISO-8859-1).
+    """
+    if pd.isna(text) or not isinstance(text, str):
+        return text
+    
+    try:
+        # Pass 1: Attempt to recover from double-encoded UTF-8
+        # This fixes cases like 'Ã¢' -> 'â' automatically
+        clean = text.encode('cp1252').decode('utf-8')
+        return clean
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        # Pass 2: Manual fallback for specific stubborn sequences
+        replacements = {
+            '\u00c4\u0192': 'ă', # Äƒ
+            '\u00c2\u00a0': ' ',  # Â 
+            '\u00e2\u20ac\u201c': '–', # â€“
+            '\u00e2\u20ac\u201d': '—', # â€”
+            '\u00e2\u20ac\u2122': '’', # â€™
+            '\u00c3\u00ae': 'î', # Ã®
+            '\u00c3\u00a2': 'â', # Ã¢
+            '\u00c8\u0219': 'ș', # È™
+            '\u00c8\u021b': 'ț', # È›
+        }
+        for old, new in replacements.items():
+            text = text.replace(old, new)
+        return text
+
 def clean_html_column(df, column_name='Body (HTML)'):
     """
     Parcurge o coloană cu format HTML și extrage doar textul simplu.

@@ -87,7 +87,8 @@ def find_best_contextual_match(user_text, products):
 
     word_freq = {}; product_features = []
     for p in products:
-        raw_feat = f"{p.get('title', '')} {p.get('category', '')} {p.get('context', '')}"
+        # Match only on Title and Category to prevent false positives from descriptions
+        raw_feat = f"{p.get('title', '')} {p.get('category', '')}"
         feat_words = set([normalize_ro_word(w) for w in re.sub(r'[^\w\s]', ' ', raw_feat.lower()).split() if len(w) > 2])
         product_features.append(feat_words)
         for w in feat_words: word_freq[w] = word_freq.get(w, 0) + 1
@@ -162,6 +163,9 @@ async def process_recommendations(user_data, user_query, force_manual: bool = Fa
     user_data["filter_scores"] = filter_scores
     results, metadata = await rag.sota_hybrid_search(extracted_data, filter_scores=filter_scores, qdrant_url=Config.QDRANT_URL)
     if not results:
+        filters = extracted_data.get("filters", {})
+        if "price_min" in filters or "price_max" in filters:
+            return "Ne pare rău, dar momentan nu avem produse care să se încadreze în acest buget strict. Dorești să cauți altceva?", []
         results, _ = await rag.sota_hybrid_search({"semantic_query": "produse populare flori"}, filter_scores={}, qdrant_url=Config.QDRANT_URL)
         if not results: return "Nu am găsit nimic momentan. Te rog să încerci o altă căutare!", []
         return "Nu am găsit exact ce căutai, dar iată cele mai populare alegeri:\n\n" + llm.generate_hybrid_response(results), results
@@ -267,8 +271,11 @@ async def handle_message(body, say, client, publish_purchase_callback=None, is_m
                     user_data["pending_item"] = None; user_data["state"] = "SEARCH_PRODUCTS"
                     await set_user_state(user_id, user_data)
                     await smart_say(f"✅ Adăugat {p['qty']}x {p['name']} în coș!")
-                    if is_finish: current_state = "SEARCH_PRODUCTS"; forced_intent = "FINISH_ORDER"
-                    else: return mock_responses if is_mock else None
+                    if is_finish: 
+                        # Continuăm spre finalizare cu noul coș
+                        current_state = "SEARCH_PRODUCTS"; forced_intent = "FINISH_ORDER"
+                    else: 
+                        return mock_responses if is_mock else None
                 
                 if is_shift and not is_finish_add: 
                     user_data["pending_item"] = None; user_data["state"] = "SEARCH_PRODUCTS"; await set_user_state(user_id, user_data)
@@ -292,7 +299,7 @@ async def handle_message(body, say, client, publish_purchase_callback=None, is_m
         text_t = current_task.get("text", full_text)
 
         # --- 4. EXECUTION ---
-        if new_intent == "SEARCH_PRODUCTS":
+        if new_intent in ["SEARCH_PRODUCTS", "CATALOG_DISCOVERY"]:
             resp, res = await process_recommendations(user_data, text_t)
             user_data["last_results"] = res; user_data["state"] = "SEARCH_PRODUCTS"; await set_user_state(user_id, user_data)
             await smart_say(resp)
@@ -303,20 +310,28 @@ async def handle_message(body, say, client, publish_purchase_callback=None, is_m
                 sel = await llm.extract_purchase_selection(text_t, titles=[r.get('title') for r in last_results], api_key=Config.GEMINI_API_KEY)
                 idx = sel.get("index")
             if isinstance(idx, int) and 0 <= idx < len(last_results):
+                user_data["last_detailed_index"] = idx
                 await smart_say(llm.generate_detailed_product_info(last_results[idx]))
             else:
                 resp, res = await process_recommendations(user_data, text_t)
                 user_data["last_results"] = res; await set_user_state(user_id, user_data); await smart_say(resp)
             user_data["state"] = "SEARCH_PRODUCTS"; await set_user_state(user_id, user_data)
             
+        elif new_intent == "CONTINUE":
+            await smart_say("Sigur, cu ce te mai pot ajuta?")
+            user_data["state"] = "SEARCH_PRODUCTS"; await set_user_state(user_id, user_data)
+
         elif new_intent == "PURCHASE_INTENT":
             if not last_results:
                 await asyncio.sleep(0.05); user_data = await get_user_state(user_id); last_results = user_data.get("last_results", [])
             idx = context_idx
             qty = 1
-            if idx is None and last_results:
-                sel = await llm.extract_purchase_selection(text_t, titles=[r.get('title') for r in last_results], api_key=Config.GEMINI_API_KEY)
-                idx = sel.get("index"); qty = sel.get("quantity", 1)
+            if idx is None:
+                if "last_detailed_index" in user_data and any(w in text_cl for w in K_YES + ["vreau", "il", "îl"]):
+                    idx = user_data["last_detailed_index"]
+                elif last_results:
+                    sel = await llm.extract_purchase_selection(text_t, titles=[r.get('title') for r in last_results], api_key=Config.GEMINI_API_KEY)
+                    idx = sel.get("index"); qty = sel.get("quantity", 1)
             
             if isinstance(idx, int) and 0 <= idx < len(last_results):
                 p = last_results[idx]
@@ -348,14 +363,14 @@ async def handle_message(body, say, client, publish_purchase_callback=None, is_m
             user_data["cart"] = cart; user_data["state"] = "SEARCH_PRODUCTS"; await set_user_state(user_id, user_data)
 
         elif new_intent == "VIEW_CART":
-            await asyncio.sleep(0.1); user_data = await get_user_state(user_id); cart = user_data.get("cart", [])
+            await asyncio.sleep(0.1); cart = user_data.get("cart", [])
             if not cart: await smart_say("🛒 Coșul tău este gol momentan.")
             else:
                 items_s = "\n".join([f"• {i['qty']} x {i['name']} ({i['price']*i['qty']} RON)" for i in cart])
                 await smart_say(f"🛒 *Coșul tău:*\n{items_s}\n━━━━━━━━━━━━━━━━━━━━━\n💰 *Total: {sum(i['price']*i['qty'] for i in cart)} RON*")
 
         elif new_intent == "FINISH_ORDER":
-            await asyncio.sleep(0.2); user_data = await get_user_state(user_id); cart = user_data.get("cart", [])
+            await asyncio.sleep(0.2); cart = user_data.get("cart", [])
             if not cart: await smart_say("Coșul tău este gol. Adaugă ceva frumos înainte de a finaliza!")
             else:
                 total = sum(i['price'] * i['qty'] for i in cart); items_s = "\n".join([f"• {i['qty']} x {i['name']} ({i['price']*i['qty']} RON)" for i in cart])
