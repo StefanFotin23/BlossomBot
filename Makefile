@@ -16,7 +16,26 @@ PROD_IMAGE_NAME := $(DOCKER_HUB_USER)/blossombot
         build-app-image load-app-image-to-kind push-app-image \
         status update install-ingress build-and-push-docker-images \
         restart-chat restart-qdrant restart-rabbitmq restart-all \
-		clean-apps pause-cluster resume-cluster restart-cluster
+		clean-apps pause-cluster resume-cluster restart-cluster install-dependencies
+
+install-dependencies:
+	sudo apt-get update
+	# Install base prerequisites and Docker
+	sudo apt-get install -y docker.io ca-certificates curl gnupg
+	# Add Kubernetes repository & Install kubectl
+	sudo mkdir -p /etc/apt/keyrings
+	curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor --yes -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+	echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+	# Add Ngrok repository & Install ngrok
+	curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null
+	echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list
+	# Update package index and install kubectl + ngrok
+	sudo apt-get update
+	sudo apt-get install -y kubectl ngrok
+	# Download and install kind binary
+	curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.23.0/kind-linux-amd64
+	chmod +x ./kind
+	sudo mv ./kind /usr/local/bin/kind
 
 # ==============================================================================
 # KIND LOCAL SIMULATION
@@ -72,6 +91,7 @@ status:
 	@kubectl get all -o wide
 
 create-cluster:
+	@make install-dependencies
 	@echo "--- Creating kind cluster with Ingress ports ---"
 	@kind create cluster --name $(CLUSTER_NAME) --config kind-config.yaml
 	@make install-ingress
@@ -134,7 +154,7 @@ scale-chat:
 
 # Builds the application image.
 build-app-image:
-	@sudo apt-get install docker-buildx-plugin
+	@sudo apt-get install -y docker-buildx || sudo apt-get install -y docker-buildx-plugin
 	@echo "--- Building Docker image (forcing app layer refresh for all .py files) ---"
 	@find app -name "*.py" -exec touch {} +
 	@DOCKER_BUILDKIT=1 docker build --build-arg BUILDKIT_INLINE_CACHE=1 -t $(PROD_IMAGE_NAME) .
