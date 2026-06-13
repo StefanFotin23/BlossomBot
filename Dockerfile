@@ -13,16 +13,16 @@ COPY app/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # --- 2. Model Layer (Very Heavy, but Static) ---
-# Cream folderul pentru modele
+# Create a directory for models and download them during build time
 RUN mkdir -p /app/models
-# Copiem DOAR scriptul de download și structura minimă de pachet
+# Copy only the download script and minimal package structure
 COPY app/build/download_models.py app/build/
 RUN touch app/__init__.py app/build/__init__.py
-# Descarcă modelele și le salvează în /app/models
+# Download the models and save them in /app/models
 RUN python -m app.build.download_models
 
 # --- 3. Application Layer (Light, changes often) ---
-# Copiem restul codului sursă
+# Copy rest of the application code (except models)
 COPY app/ /app/app/
 COPY scripts/stress_test.py /app/scripts/stress_test.py
 
@@ -30,7 +30,7 @@ COPY scripts/stress_test.py /app/scripts/stress_test.py
 ENV PYTHONPATH=/app
 
 # --- 4. Runtime Settings ---
-# Activăm offline mode DOAR pentru runtime
+# Activate offline mode for transformers and Hugging Face Hub
 ENV TRANSFORMERS_OFFLINE=1 \
     HF_HUB_OFFLINE=1
 
