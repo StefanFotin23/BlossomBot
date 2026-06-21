@@ -6,15 +6,17 @@ TECHNICAL DOCUMENTATION: TESTING & VALIDATION
 Rigorous validation is essential for distributed systems. BlossomBot's testing strategy covers individual component reliability, e-commerce flow correctness, and multi-user concurrency.
 
 2. MULTI-USER STRESS TESTING
-To ensure that the architecture (specifically the Redis state management and Kubernetes pod scaling) correctly isolates user sessions, we developed a dedicated simulation tool.
+To ensure that the architecture (specifically the Redis state management, RabbitMQ queues, and local routing gates) handles extreme traffic spike loads, we developed a high-fidelity concurrent simulation.
 - Script: `scripts/stress_test.py`
-- Mechanism: Utilizing the `httpx` asynchronous library, the script spawns 5 concurrent virtual users.
-- Scenarios: Each user follows a unique "Buyer Journey":
-   * User 1: Search for red roses, select the first, confirm, and finish.
-   * User 2: Seek a gift under 150 RON, select the second, and finish.
-   * User 3: General catalog discovery, request product details, and finalize.
-- Execution: Managed via `make stress-test`. 
-- Result: This validates that User A's shopping cart never leaks into User B's session, demonstrating the robustness of our Redis-based session isolation.
+- Mechanism: Simulates 40 concurrent virtual users (Phase 1: 15 steady users; Phase 2: 25 burst users) invoking the asynchronous bot handler.
+- Scenarios: Executes 28 unique, complex, and lazy user paths, testing specific features like:
+   * Anniversary flows with budget limits and add-ons.
+   * Negation filters ("without roses", "no tulips").
+   * Romanian jargon selections ("baga", "k", "dap").
+   * Empathetic small talk and catalog discovery.
+- Execution: Managed via `make stress-test`, which copies execution logs to `scripts/stress_test.txt`.
+- Result: Validates that concurrent shopping carts remain completely isolated, RabbitMQ receives all finalized orders, and the local routing safeguards prevent false-positive failures during rate-limiting phases.
+
 
 3. INFRASTRUCTURE HEALTH CHECKS
 The system incorporates an automated self-monitoring mechanism via the `/healthz` endpoint.

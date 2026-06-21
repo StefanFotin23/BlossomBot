@@ -158,7 +158,10 @@ async def process_recommendations(user_data, user_query, force_manual: bool = Fa
     filter_scores = user_data.get("filter_scores", {})
     history = user_data.get("history", [])
     extracted_data = await llm.extract_filters(user_query, history=history, api_key=Config.GEMINI_API_KEY, force_manual=force_manual)
-    for f_key in extracted_data.get("mentioned_now", []):
+    mentioned = extracted_data.get("mentioned_now", [])
+    if not isinstance(mentioned, list):
+        mentioned = []
+    for f_key in mentioned:
         filter_scores[f_key] = filter_scores.get(f_key, 0) + 2
     user_data["filter_scores"] = filter_scores
     results, metadata = await rag.sota_hybrid_search(extracted_data, filter_scores=filter_scores, qdrant_url=Config.QDRANT_URL)

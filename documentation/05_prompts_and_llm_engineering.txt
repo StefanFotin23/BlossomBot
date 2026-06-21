@@ -3,10 +3,13 @@ TECHNICAL DOCUMENTATION: PROMPTS & LLM ENGINEERING
 =========================================================
 
 1. INTENT ROUTING PHILOSOPHY
-BlossomBot uses Gemini (Flash-Lite) as a "Central Brain" or Intent Router. Instead of relying on open-ended generation, it enforces Strict Classification guided by business logic.
-- Defined States: The system operates on a closed set of intents (e.g., `GREETING`, `SEARCH_PRODUCTS`, `PRODUCT_DETAILS`, `FINISH_ORDER`).
-- System Prompts: The prompt provides explicit rules (e.g., "Rule 1: Any request for a specific product is SEARCH_PRODUCTS").
-- Zero Temperature: To ensure lightning-fast responses and 100% deterministic outputs (zero hallucinations), the Gemini configuration enforces `temperature: 0.0` and limits the output to a few tokens (just the state name).
+BlossomBot employs a Hybrid Two-Tier Intent Gateway. Instead of relying solely on expensive external LLM API calls, it routes queries locally via a sub-millisecond local GRU intent classifier, checking contextual state priors and applying semantic guardrails before delegating to Gemini.
+- Local GRU Classifier (Tier 1): Classifies simple queries locally in <0.5ms. If the classifier yields highly confident results and passes semantic guardrails, it routes the message instantly without calling the external API.
+- Bayesian Context Updates: Modifies raw GRU probability predictions by applying prior probability state weights derived from the user's current conversational state, boosting contextual state retention.
+- Gemini HTTP API Integration (Tier 2): Queried directly via HTTP POST requests (eliminating external client library dependencies and minimizing deployment complexity) for complex or multi-intent requests.
+- Defined States: Operates on a closed set of intents (e.g., `GREETING`, `SEARCH_PRODUCTS`, `PRODUCT_DETAILS`, `FINISH_ORDER`).
+- Zero Temperature: Enforces `temperature: 0.0` to ensure highly deterministic outputs and eliminate hallucinations.
+
 
 2. DYNAMIC FILTER EXTRACTION
 Converting natural language ("I want cheap purple tulips, but no roses") into structured database queries (JSON).
