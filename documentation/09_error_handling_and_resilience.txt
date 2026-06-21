@@ -6,9 +6,10 @@ TECHNICAL DOCUMENTATION: ERROR HANDLING & RESILIENCE
 BlossomBot implements a multi-layer resilience strategy to handle AI downtime, rate limits, and network volatility without degrading the user experience.
 
 2. AI DOWNTIME & RATE LIMIT HANDLING (HTTP 429/503)
-- CUSTOM EXCEPTIONS: API errors are mapped to `GeminiOverloadedError`.
-- IN-PLACE WORKER RETRIES: Background workers hold the user's conversation lock and retry internally (3s, 6s delays). This prevents "Line-Cutting" by newer messages during an overload.
-- MANUAL EXTRACTION FALLBACK (GOD MODE): On the final retry attempt, or if Gemini is completely down, the bot switches to a **Manual Regex Filter Extractor**. This guarantees a product response even with 0% AI availability.
+- CUSTOM EXCEPTIONS: HTTP API errors are mapped to `GeminiOverloadedError`.
+- INSTANT OFFLINE FALLBACK (GOD MODE): If the Gemini HTTP API returns a rate-limit (429) or overload (503/500) error, the system instantly catches the exception and falls back to the manual offline parsers (`manual_fallback` and `manual_extract_filters`). This ensures a 100% reliable, zero-latency response even under heavy API load.
+- IN-PLACE WORKER RETRIES: Background Slack workers retry processing if necessary to ensure message delivery.
+
 
 3. SLACK EVENT IDEMPOTENCY
 To prevent double-ordering from Slack's automatic 3-second retries, the bot tracks `event_id` in Redis. Retries are silently dropped if the original is still processing.

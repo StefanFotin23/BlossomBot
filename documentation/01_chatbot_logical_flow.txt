@@ -19,11 +19,14 @@ Each user's state is tracked persistently (via Redis) using their unique Slack `
 - RESTART: Clears cart and memory, reverting to GREETING.
 
 3. INTENT ROUTING & SMART UX FALLBACKS
+- HYBRID TWO-TIER INTENT GATEWAY: Routes queries locally using a sub-millisecond local GRU classifier (Tier 1) with contextual Bayesian prior adjustments based on previous conversational state. Delegates to Gemini HTTP API (Tier 2) only for complex or multi-intent requests.
+- SEMANTIC KEYWORD GUARDRAILS: Implements heuristic keyword checks on critical GRU-predicted intents (FINISH_ORDER, REMOVE_FROM_CART, VIEW_CART, RESTART, GREETING) to prevent false positives from out-of-vocabulary (OOV) overfitting and politeness bias.
 - COMMAND FAST-PATH: Deterministic interception before LLM for basic commands.
 - REFINED SELECTION REGEX: Manual index matching ignores numbers followed by quantity keywords (e.g., "5 bucăți"), preventing misrouting quantities as item indices.
 - SMART SELECTION PIVOT: If a user says "da" but no index is found (e.g., results were lost), the bot asks for clarification ("What product do you want to add?") instead of random search.
 - UX-FIRST SEARCH FALLBACK: If a search returns zero results, the bot automatically shows "Popular Products".
 - MULTI-INTENT DECOMPOSITION: Splits complex messages into sequential tasks via background QoS queue.
+
 
 4. SHOPPING CART AND CONTEXT RESET ("HARD RESET")
 - Persistent Search Memory: Preserves `last_results` even after adding an item, allowing multi-item selection.
